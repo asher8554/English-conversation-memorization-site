@@ -102,7 +102,7 @@ select:focus {
 }
 
 .answer {
-    font-size: 1.5rem;
+    font-size: 2.2rem;
     color: var(--primary-color);
     font-weight: 600;
     opacity: 0;
@@ -187,6 +187,13 @@ select:focus {
     user-select: none;
     white-space: nowrap;
     color: var(--text-color);
+}
+
+.checkbox-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
 }
 
 .day-selector {
