@@ -39,19 +39,28 @@ $data = $parser->parse($filename);
 </head>
 
 <body>
+    <div class="font-controls">
+        <button id="decreaseFont" class="btn-circle" title="Decrease Font Size">-</button>
+        <button id="increaseFont" class="btn-circle" title="Increase Font Size">+</button>
+    </div>
     <div class="container">
-        <header>
-            <h1>English Master</h1>
-            <div class="day-selector">
-                <select id="daySelect">
-                    <?php foreach ($data as $day => $questions): ?>
-                        <option value="<?php echo htmlspecialchars($day); ?>"><?php echo htmlspecialchars($day); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+        <div class="day-selector">
+            <select id="daySelect">
+                <?php foreach ($data as $day => $questions): ?>
+                    <option value="<?php echo htmlspecialchars($day); ?>"><?php echo htmlspecialchars($day); ?></option>
+                <?php endforeach; ?>
+            </select>
+            <label class="checkbox-container">
+                <input type="checkbox" id="reverseOrder"> Reverse Order
+            </label>
+        </div>
         </header>
 
         <main class="card-area">
+            <div class="controls">
+                <button class="btn btn-secondary" id="prevBtn">Previous</button>
+                <button class="btn btn-secondary" id="nextBtn">Next</button>
+            </div>
             <div id="cardContent" class="fade-in">
                 <div class="question" id="questionText"></div>
                 <button class="btn btn-primary" id="showAnswerBtn">Show Answer</button>
@@ -60,11 +69,6 @@ $data = $parser->parse($filename);
                 </div>
             </div>
         </main>
-
-        <footer class="controls">
-            <button class="btn btn-secondary" id="prevBtn">Previous</button>
-            <button class="btn btn-secondary" id="nextBtn">Next</button>
-        </footer>
     </div>
 
     <script>
