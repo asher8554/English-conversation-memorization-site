@@ -1,64 +1,59 @@
-# API & Data Reference
+# API Reference
 
-## Data Source: `content.md`
+This document describes the internal structure and key classes of the English Conversation Memorization Site.
 
-The application does not use a traditional database. Instead, it parses a markdown file.
+## Backend (PHP)
 
-### Format Structure
+### `App\Parser`
 
-```markdown
-## Day001 : Title text
+Located in `src/Parser.php`.
+Responsible for reading the `content.md` file and parsing it into a structured JSON-compatible array.
 
-**[Section Name]**
+#### Methods
 
-Korean Sentence
-English Sentence
+- **`parse(string $filename): array`**
+  - Reads the file at `$filename`.
+  - Splits content by `## Day` sections.
+  - Returns an associative array where keys are Day titles and values are arrays of questions.
+  - **Structure**:
+    ```php
+    [
+      "Day 01" => [
+        ["q" => "Korean Question", "a" => "English Answer"],
+        ...
+      ],
+      ...
+    ]
+    ```
 
-Korean Sentence 2
-English Sentence 2
+## Frontend (JavaScript)
 
----
+Located in `script.js`.
+Handles the interactive quiz logic.
 
-**[Next Section]**
-...
-```
+### `QuizApp`
 
-- **Day Header**: Must start with `## Day`.
-- **Sections**: Separated by `---` (horizontal rule).
-- **Pairs**: Content lines are read in pairs. Line N is the Question (Korean), Line N+1 is the Answer (English).
+The main application class that orchestrates the UI and logic.
 
-### Supported Markdown Syntax
+#### Properties
 
-The parser supports a subset of Markdown for formatting text within questions and answers:
+- `data`: The parsed quiz data passed from PHP.
+- `currentDayData`: Array of questions for the currently selected day.
+- `currentIndex`: Index of the current question being displayed.
 
-- `***text***` → **_Bold Italic_**
-- `**text**` → **Bold**
-- `*text*` → _Italic_
+#### Key Methods
 
-## Frontend API (`script.js`)
+- **`loadDay(day, startAtEnd = false)`**: Loads questions for the specified day. `startAtEnd` determines if we start at the first or last question (useful for backward navigation).
+- **`sortOptions()`**: Handles sorting of Day options. Supports:
+  - **Reverse**: Reverses the order of days.
+  - **Random**: Shuffles the order of days using Fisher-Yates algorithm.
+- **`handleNext()` / `handlePrev()`**: Navigates between questions. Automatically switches to the next/previous day when boundaries are reached.
 
-The frontend logic is handled by vanilla JavaScript.
+### `FontSizeManager`
 
-### Global Variables
+Manages font size preferences for the question and answer text.
 
-- `quizData` (Object): Injected by PHP. Contains the parsed content from `content.md`.
-  - Key: Day Title (e.g., "Day001 : ...")
-  - Value: Array of objects `{ q: "Korean", a: "English" }`
+#### Features
 
-### Functions
-
-#### `loadDay(day)`
-
-Loads the quiz data for a specific day.
-
-- **Parameters**: `day` (string) - Key from `quizData`.
-- **Behavior**: Resets `currentIndex` to 0 and calls `updateCard()`.
-
-#### `updateCard()`
-
-Renders the current question card.
-
-- **Behavior**:
-  - Updates DOM elements with current question/answer.
-  - Resets visibility of the answer.
-  - Updates button states (Previous/Next enable/disable).
+- **Persistence**: Saves user's font size preference to `localStorage`.
+- **Range**: Limits font size between `1.0rem` and `4.0rem`.

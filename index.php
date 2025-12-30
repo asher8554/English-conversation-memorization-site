@@ -1,5 +1,5 @@
 <?php
-// Read content.md
+
 /**
  * Main Entry Point
  * 
@@ -50,9 +50,14 @@ $data = $parser->parse($filename);
                     <option value="<?php echo htmlspecialchars($day); ?>"><?php echo htmlspecialchars($day); ?></option>
                 <?php endforeach; ?>
             </select>
-            <label class="checkbox-container">
-                <input type="checkbox" id="reverseOrder"> Reverse Order
-            </label>
+            <div class="checkbox-wrapper">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="reverseOrder"> Reverse
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="randomOrder"> Random
+                </label>
+            </div>
         </div>
         </header>
 

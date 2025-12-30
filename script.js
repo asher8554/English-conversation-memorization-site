@@ -1,11 +1,71 @@
 document.addEventListener('DOMContentLoaded', () => {
+    /**
+     * Manages font size for question and answer text, persisting preferences to localStorage.
+     */
+    class FontSizeManager {
+        /**
+         * @param {HTMLElement} questionEl - The element displaying the question.
+         * @param {HTMLElement} answerEl - The element displaying the answer.
+         */
+        constructor(questionEl, answerEl) {
+            this.questionEl = questionEl;
+            this.answerEl = answerEl;
+            this.qSize = parseFloat(localStorage.getItem('questionFontSize')) || 2.0;
+            this.aSize = parseFloat(localStorage.getItem('answerFontSize')) || 1.5;
+            this.init();
+        }
+
+        init() {
+            this.update();
+            const increaseBtn = document.getElementById('increaseFont');
+            const decreaseBtn = document.getElementById('decreaseFont');
+            increaseBtn.addEventListener('click', () => this.changeSize(0.2));
+            decreaseBtn.addEventListener('click', () => this.changeSize(-0.2));
+        }
+
+        /**
+         * Changes font size by a delta value.
+         * @param {number} delta - Amount to change (e.g. 0.2).
+         */
+        changeSize(delta) {
+            const newQSize = this.qSize + delta;
+            
+            // Limit 1.0 to 4.0
+            if (newQSize >= 1.0 && newQSize <= 4.0) {
+                this.qSize += delta;
+                this.aSize += delta;
+                this.update();
+            }
+        }
+
+        update() {
+            this.questionEl.style.fontSize = `${this.qSize}rem`;
+            this.answerEl.style.fontSize = `${this.aSize}rem`;
+            localStorage.setItem('questionFontSize', this.qSize);
+            localStorage.setItem('answerFontSize', this.aSize);
+        }
+    }
+
+    /**
+     * Main application logic for the Quiz.
+     * Handles navigation, day loading, and option sorting.
+     */
     class QuizApp {
+        /**
+         * @param {Object} data - The quiz data structure.
+         */
         constructor(data) {
             this.data = data;
             this.currentDayData = [];
             this.currentIndex = 0;
             
-            // UI Elements
+            this.cacheDOM();
+            this.originalOptions = Array.from(this.daySelect.options);
+            
+            this.init();
+        }
+
+        cacheDOM() {
             this.daySelect = document.getElementById('daySelect');
             this.questionText = document.getElementById('questionText');
             this.answerText = document.getElementById('answerText');
@@ -14,15 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
             this.nextBtn = document.getElementById('nextBtn');
             this.cardContent = document.getElementById('cardContent');
             this.reverseOrderCheckbox = document.getElementById('reverseOrder');
-
-            this.originalOptions = Array.from(this.daySelect.options);
-
-            this.init();
+            this.randomOrderCheckbox = document.getElementById('randomOrder');
         }
 
         init() {
             this.initEventListeners();
-            this.initFontControls();
+            
+            // Initialize Font Manager
+            new FontSizeManager(this.questionText, this.answerText);
             
             if (this.daySelect.options.length > 0) {
                 this.loadDay(this.daySelect.value);
@@ -40,10 +99,50 @@ document.addEventListener('DOMContentLoaded', () => {
             this.prevBtn.addEventListener('click', () => this.handlePrev());
             this.nextBtn.addEventListener('click', () => this.handleNext());
             
-            this.reverseOrderCheckbox.addEventListener('change', () => {
-                this.sortOptions();
-                this.updateCard();
-            });
+            this.reverseOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.randomOrderCheckbox));
+            this.randomOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.reverseOrderCheckbox));
+        }
+
+        handleSortChange(event, otherCheckbox) {
+            if (event.target.checked) {
+                otherCheckbox.checked = false;
+            }
+            this.sortOptions();
+            this.updateCard();
+        }
+
+        sortOptions() {
+            const isReverse = this.reverseOrderCheckbox.checked;
+            const isRandom = this.randomOrderCheckbox.checked;
+            const currentVal = this.daySelect.value;
+            
+            let optionsToSort = [...this.originalOptions];
+            
+            if (isRandom) {
+                this.shuffleArray(optionsToSort);
+            } else if (isReverse) {
+                optionsToSort.reverse();
+            }
+            
+            this.daySelect.innerHTML = '';
+            optionsToSort.forEach(opt => this.daySelect.add(opt));
+            
+            this.daySelect.value = currentVal;
+            
+            // Handle edge case where selection is lost
+            if (this.daySelect.selectedIndex === -1 && this.daySelect.options.length > 0) {
+                this.daySelect.selectedIndex = 0;
+                this.loadDay(this.daySelect.value);
+            } else {
+                this.updateNavButtons();
+            }
+        }
+
+        shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
         }
 
         loadDay(day, startAtEnd = false) {
@@ -109,58 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.daySelect.selectedIndex++;
                 this.loadDay(this.daySelect.value);
             }
-        }
-
-        sortOptions() {
-            const isReverse = this.reverseOrderCheckbox.checked;
-            const currentVal = this.daySelect.value;
-            
-            const optionsToSort = [...this.originalOptions];
-            if (isReverse) {
-                optionsToSort.reverse();
-            }
-            
-            this.daySelect.innerHTML = '';
-            optionsToSort.forEach(opt => this.daySelect.add(opt));
-            this.daySelect.value = currentVal;
-        }
-
-        initFontControls() {
-            const increaseFontBtn = document.getElementById('increaseFont');
-            const decreaseFontBtn = document.getElementById('decreaseFont');
-            
-            // Helper to manage font size
-            const fontManager = {
-                qSize: parseFloat(localStorage.getItem('questionFontSize')) || 2.0,
-                aSize: parseFloat(localStorage.getItem('answerFontSize')) || 1.5,
-                
-                update: () => {
-                    this.questionText.style.fontSize = `${fontManager.qSize}rem`;
-                    this.answerText.style.fontSize = `${fontManager.aSize}rem`;
-                    localStorage.setItem('questionFontSize', fontManager.qSize);
-                    localStorage.setItem('answerFontSize', fontManager.aSize);
-                },
-                
-                increase: () => {
-                    if (fontManager.qSize < 4.0) {
-                        fontManager.qSize += 0.2;
-                        fontManager.aSize += 0.2;
-                        fontManager.update();
-                    }
-                },
-                
-                decrease: () => {
-                    if (fontManager.qSize > 1.0) {
-                        fontManager.qSize -= 0.2;
-                        fontManager.aSize -= 0.2;
-                        fontManager.update();
-                    }
-                }
-            };
-
-            fontManager.update(); // Initial apply
-            increaseFontBtn.addEventListener('click', () => fontManager.increase());
-            decreaseFontBtn.addEventListener('click', () => fontManager.decrease());
         }
     }
 
