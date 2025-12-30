@@ -53,3 +53,8 @@ PHP를 지원하는 웹 호스팅 서버(예: Dothome)에 파일들을 업로드
 ## 📝 라이선스
 
 This project is open source.
+
+## 📚 Documentation
+
+- [API & Data Format](API.md)
+- [Contributing Guide](CONTRIBUTING.md)

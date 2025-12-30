@@ -1,5 +1,11 @@
 <?php
 // Read content.md
+/**
+ * Main Entry Point
+ * 
+ * Parses local content.md file and renders the memorization UI.
+ * Data is passed to frontend via json_encode injected into a script tag.
+ */
 $filename = __DIR__ . '/content.md';
 if (!file_exists($filename)) {
     // Fallback to relative path if __DIR__ fails or for some hosting environments
