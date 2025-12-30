@@ -1,10 +1,13 @@
 <?php
 
 /**
- * Main Entry Point
+ * 메인 진입점 (Main Entry Point)
  * 
- * Parses local content.md file and renders the memorization UI.
- * Data is passed to frontend via json_encode injected into a script tag.
+ * 로컬 content.md 파일을 파싱하고 암기 UI를 렌더링합니다.
+ * 데이터는 script 태그 내에 json_encode를 통해 주입되어 프론트엔드로 전달됩니다.
+ * 
+ * @package EnglishConversationMemorization
+ * @version 1.0.0
  */
 $filename = __DIR__ . '/content.md';
 if (!file_exists($filename)) {
