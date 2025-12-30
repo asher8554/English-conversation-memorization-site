@@ -17,65 +17,15 @@ if (!file_exists($filename)) {
     }
 }
 
-$content = file_get_contents($filename);
 
-// Normalize newlines
-$content = str_replace("\r\n", "\n", $content);
 
-// Split by '## Day'
-// The regex /^## /m matches lines starting with "## " (markdown headers)
-$days = preg_split('/^## /m', $content);
+// Use the Parser class
+require_once __DIR__ . '/src/Parser.php';
 
-$data = [];
+use App\Parser;
 
-foreach ($days as $dayBlock) {
-    if (trim($dayBlock) === '')
-        continue;
-
-    // Extract Title (First line)
-    $lines = explode("\n", $dayBlock);
-    $titleLine = array_shift($lines);
-
-    // Check if it really looks like a Day title (starts with Day or similar)
-    // The user format is "Day001 : ..." so just using the line as Key is fine.
-    $dayTitle = trim($titleLine);
-    if (empty($dayTitle))
-        continue;
-
-    $data[$dayTitle] = [];
-
-    // Rejoin the rest to split by '---'
-    $restContent = implode("\n", $lines);
-    $chunks = explode('---', $restContent);
-
-    foreach ($chunks as $chunk) {
-        $chunkLines = explode("\n", $chunk);
-        $cleanLines = [];
-
-        // Filter lines
-        foreach ($chunkLines as $line) {
-            $line = trim($line);
-            if ($line === '')
-                continue;
-            if (strpos($line, '**[') === 0)
-                continue; // Skip headers like **[Model Examples]**
-            $cleanLines[] = $line;
-        }
-
-        $count = count($cleanLines);
-        if ($count > 0 && $count % 2 === 0) {
-            $half = $count / 2;
-            for ($i = 0; $i < $half; $i++) {
-                $question = $cleanLines[$i];       // Korean
-                $answer = $cleanLines[$i + $half]; // English
-                $data[$dayTitle][] = [
-                    'q' => $question,
-                    'a' => $answer
-                ];
-            }
-        }
-    }
-}
+$parser = new Parser();
+$data = $parser->parse($filename);
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -120,7 +70,7 @@ foreach ($days as $dayBlock) {
     <script>
         const quizData = <?php echo json_encode($data); ?>;
     </script>
-    <script src="script.js"></script>
+    <script src="script.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>

@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const currentItem = currentDayData[currentIndex];
-        questionText.textContent = currentItem.q;
-        answerText.textContent = currentItem.a;
+        questionText.innerHTML = currentItem.q;
+        answerText.innerHTML = currentItem.a;
         showAnswerBtn.style.display = 'block';
         showAnswerBtn.textContent = 'Show Answer';
 

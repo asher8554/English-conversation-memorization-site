@@ -46,6 +46,7 @@ PHP를 지원하는 웹 호스팅 서버(예: Dothome)에 파일들을 업로드
 ## 📂 파일 구조 (File Structure)
 
 - `index.php`: `content.md`를 파싱하고 HTML 구조를 렌더링하는 메인 파일
+- `src/Parser.php`: `content.md` 파싱 및 마크다운 변환 로직 처리
 - `content.md`: 학습 데이터가 담긴 마크다운 파일 (형식: `## Day...` > `한국어` > `영어`)
 - `script.js`: 프론트엔드 로직 (퀴즈 인터랙티브 기능)
 - `style.css`: 전체 스타일링

@@ -27,6 +27,14 @@ English Sentence 2
 - **Sections**: Separated by `---` (horizontal rule).
 - **Pairs**: Content lines are read in pairs. Line N is the Question (Korean), Line N+1 is the Answer (English).
 
+### Supported Markdown Syntax
+
+The parser supports a subset of Markdown for formatting text within questions and answers:
+
+- `***text***` → **_Bold Italic_**
+- `**text**` → **Bold**
+- `*text*` → _Italic_
+
 ## Frontend API (`script.js`)
 
 The frontend logic is handled by vanilla JavaScript.
