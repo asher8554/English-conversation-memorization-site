@@ -17,10 +17,7 @@ if (!file_exists($filename)) {
     }
 }
 
-$content = file_get_contents($filename);
 
-// Normalize newlines
-// $content = str_replace("\r\n", "\n", $content);
 
 // Use the Parser class
 require_once __DIR__ . '/src/Parser.php';
