@@ -48,6 +48,23 @@ foreach ($days as $dayBlock) {
     $restContent = implode("\n", $lines);
     $chunks = explode('---', $restContent);
 
+    // Helper to escape HTML and parse key Markdown syntax
+    function parseMarkdown($text)
+    {
+        $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+
+        // ***Bold Italic***
+        $text = preg_replace('/(\*\*\*)(.*?)\1/', '<strong><em>$2</em></strong>', $text);
+
+        // **Bold**
+        $text = preg_replace('/(\*\*)(.*?)\1/', '<strong>$2</strong>', $text);
+
+        // *Italic*
+        $text = preg_replace('/(\*)(.*?)\1/', '<em>$2</em>', $text);
+
+        return $text;
+    }
+
     foreach ($chunks as $chunk) {
         $chunkLines = explode("\n", $chunk);
         $cleanLines = [];
@@ -69,8 +86,8 @@ foreach ($days as $dayBlock) {
                 $question = $cleanLines[$i];       // Korean
                 $answer = $cleanLines[$i + $half]; // English
                 $data[$dayTitle][] = [
-                    'q' => $question,
-                    'a' => $answer
+                    'q' => parseMarkdown($question),
+                    'a' => parseMarkdown($answer)
                 ];
             }
         }
