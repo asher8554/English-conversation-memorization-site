@@ -1,6 +1,6 @@
-# English Conversation Memorization Site
+# 영어 회화 암기 사이트
 
-This project aims to help users memorize English conversations.
+이 프로젝트는 사용자가 영어 회화를 암기하는 것을 돕기 위해 만들어졌습니다.
 
-## Features
-- TBD
+## 주요 기능
+- 추후 추가 예정
