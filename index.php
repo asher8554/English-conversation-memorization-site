@@ -20,86 +20,15 @@ if (!file_exists($filename)) {
 $content = file_get_contents($filename);
 
 // Normalize newlines
-$content = str_replace("\r\n", "\n", $content);
+// $content = str_replace("\r\n", "\n", $content);
 
-// Split by '## Day'
-// The regex /^## /m matches lines starting with "## " (markdown headers)
-$days = preg_split('/^## /m', $content);
+// Use the Parser class
+require_once __DIR__ . '/src/Parser.php';
 
-// Helper to escape HTML and parse key Markdown syntax
-/**
- * Parses a subset of Markdown into HTML.
- * Supported: ***bold italic***, **bold**, *italic*
- * Escapes all other HTML to prevent XSS.
- */
-function parseMarkdown($text)
-{
-    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+use App\Parser;
 
-    // ***Bold Italic***
-    $text = preg_replace('/(\*\*\*)(.*?)\1/', '<strong><em>$2</em></strong>', $text);
-
-    // **Bold**
-    $text = preg_replace('/(\*\*)(.*?)\1/', '<strong>$2</strong>', $text);
-
-    // *Italic*
-    $text = preg_replace('/(\*)(.*?)\1/', '<em>$2</em>', $text);
-
-    return $text;
-}
-
-$data = [];
-
-foreach ($days as $dayBlock) {
-    if (trim($dayBlock) === '')
-        continue;
-
-    // Extract Title (First line)
-    $lines = explode("\n", $dayBlock);
-    $titleLine = array_shift($lines);
-
-    // Check if it really looks like a Day title (starts with Day or similar)
-    // The user format is "Day001 : ..." so just using the line as Key is fine.
-    $dayTitle = trim($titleLine);
-    if (empty($dayTitle))
-        continue;
-
-    $data[$dayTitle] = [];
-
-    // Rejoin the rest to split by '---'
-    $restContent = implode("\n", $lines);
-    $chunks = explode('---', $restContent);
-
-
-
-    foreach ($chunks as $chunk) {
-        $chunkLines = explode("\n", $chunk);
-        $cleanLines = [];
-
-        // Filter lines
-        foreach ($chunkLines as $line) {
-            $line = trim($line);
-            if ($line === '')
-                continue;
-            if (strpos($line, '**[') === 0)
-                continue; // Skip headers like **[Model Examples]**
-            $cleanLines[] = $line;
-        }
-
-        $count = count($cleanLines);
-        if ($count > 0 && $count % 2 === 0) {
-            $half = $count / 2;
-            for ($i = 0; $i < $half; $i++) {
-                $question = $cleanLines[$i];       // Korean
-                $answer = $cleanLines[$i + $half]; // English
-                $data[$dayTitle][] = [
-                    'q' => parseMarkdown($question),
-                    'a' => parseMarkdown($answer)
-                ];
-            }
-        }
-    }
-}
+$parser = new Parser();
+$data = $parser->parse($filename);
 ?>
 <!DOCTYPE html>
 <html lang="ko">
