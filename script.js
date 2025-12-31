@@ -4,15 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     class FontSizeManager {
         /**
-         * @param {HTMLElement} questionEl - The element displaying the question.
-         * @param {HTMLElement} answerEl - The element displaying the answer.
+         * @param {HTMLElement} questionEl - 질문을 표시할 요소
+         * @param {HTMLElement} answerEl - 정답을 표시할 요소
          */
         constructor(questionEl, answerEl) {
             this.questionEl = questionEl;
             this.answerEl = answerEl;
-            // 저장된 설정을 불러오거나 기본값(rem 단위)을 사용합니다.
             this.qSize = parseFloat(localStorage.getItem('questionFontSize')) || 2.0;
-            this.aSize = parseFloat(localStorage.getItem('answerFontSize')) || 2.2;
+            this.aSize = parseFloat(localStorage.getItem('answerFontSize')) || 2.0;
             this.init();
         }
 
@@ -25,13 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         /**
-         * 폰트 크기를 주어진 값만큼 변경합니다.
-         * @param {number} delta - 변경할 크기 (예: 0.2).
+         * 델타 값만큼 글자 크기를 변경합니다.
+         * @param {number} delta - 변경할 크기 (예: 0.2)
          */
         changeSize(delta) {
             const newQSize = this.qSize + delta;
             
-            // Limit 1.0 to 4.0
+            // 1.0에서 4.0 사이로 제한
             if (newQSize >= 1.0 && newQSize <= 4.0) {
                 this.qSize += delta;
                 this.aSize += delta;
@@ -39,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        /**
+         * 변경된 글자 크기를 DOM 요소에 적용하고 localStorage에 저장합니다.
+         */
         update() {
             this.questionEl.style.fontSize = `${this.qSize}rem`;
             this.answerEl.style.fontSize = `${this.aSize}rem`;
@@ -48,12 +50,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * 퀴즈의 메인 애플리케이션 로직입니다.
+     * 다크 모드를 전환하고 설정을 localStorage에 저장합니다.
+     */
+    class DarkModeManager {
+        constructor() {
+            this.toggleBtn = document.getElementById('darkModeToggle');
+            this.body = document.body;
+            this.isDarkMode = localStorage.getItem('useDarkMode') === 'true';
+            this.init();
+        }
+
+        /**
+         * 초기화 메서드입니다. 저장된 설정이 있으면 적용하고 이벤트를 바인딩합니다.
+         */
+        init() {
+            // 초기 상태 적용
+            if (this.isDarkMode) {
+                this.enableDarkMode();
+            }
+
+            this.toggleBtn.addEventListener('click', () => this.toggle());
+        }
+
+        toggle() {
+            this.isDarkMode = !this.isDarkMode;
+            if (this.isDarkMode) {
+                this.enableDarkMode();
+            } else {
+                this.disableDarkMode();
+            }
+            localStorage.setItem('useDarkMode', this.isDarkMode);
+        }
+
+        enableDarkMode() {
+            this.body.classList.add('dark-mode');
+            this.toggleBtn.textContent = '☀️'; // 라이트 모드로 전환하는 해 아이콘
+        }
+
+        disableDarkMode() {
+            this.body.classList.remove('dark-mode');
+            this.toggleBtn.textContent = '🌙'; // 다크 모드로 전환하는 달 아이콘
+        }
+    }
+
+    /**
+     * 퀴즈 앱의 메인 로직입니다.
      * 네비게이션, Day 로딩, 옵션 정렬 등을 처리합니다.
      */
     class QuizApp {
         /**
-         * @param {Object} data - The quiz data structure.
+         * @param {Object} data - 퀴즈 데이터 구조
          */
         constructor(data) {
             this.data = data;
@@ -81,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
         init() {
             this.initEventListeners();
             
-            // Initialize Font Manager
+            // 매니저 초기화
+            new DarkModeManager();
             new FontSizeManager(this.questionText, this.answerText);
             
             if (this.daySelect.options.length > 0) {
@@ -130,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             this.daySelect.value = currentVal;
             
-            // Handle edge case where selection is lost
+            // 선택이 사라지는 엣지 케이스 처리
             if (this.daySelect.selectedIndex === -1 && this.daySelect.options.length > 0) {
                 this.daySelect.selectedIndex = 0;
                 this.loadDay(this.daySelect.value);
@@ -140,23 +187,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         /**
-         * 피셔-예이츠(Fisher-Yates) 알고리즘을 사용하여 배열을 섞습니다.
-         * 모든 순열이 동일한 확률로 나타나도록 무작위로 섞습니다.
+         * Fisher-Yates 알고리즘을 사용하여 배열을 무작위로 섞습니다.
+         * 모든 가능한 순열이 동일한 확률로 나타나도록 보장합니다.
          * 
-         * @param {Array} array - 제자리(in-place)에서 섞을 배열.
+         * @param {Array} array - 제자리에서 섞을 배열
          */
         shuffleArray(array) {
-            // 피셔-예이츠 셔플 알고리즘 (Fisher-Yates Shuffle Algorithm)
-            // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-            // 마지막 요소부터 역순으로 순회합니다
+            // 마지막 요소부터 역순으로 반복
             for (let i = array.length - 1; i > 0; i--) {
-                // Pick a random index from 0 to i
+                // 0부터 i 사이의 무작위 인덱스 선택
                 const j = Math.floor(Math.random() * (i + 1));
-                // Swap elements at i and j
+                // i와 j 위치의 요소 교환
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
 
+        /**
+         * 특정 Day의 데이터를 로드하고 화면을 갱신합니다.
+         * 
+         * @param {string} day - 선택된 Day 식별자
+         * @param {boolean} [startAtEnd=false] - true일 경우 마지막 문제부터 시작 (이전 Day에서 넘어올 때 사용)
+         */
         loadDay(day, startAtEnd = false) {
             this.currentDayData = this.data[day] || [];
             this.currentIndex = startAtEnd && this.currentDayData.length > 0 ? this.currentDayData.length - 1 : 0;
@@ -164,10 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         updateCard() {
-            // Reset state
+            // 상태 초기화
             this.answerText.classList.remove('visible');
             this.cardContent.classList.remove('fade-in');
-            void this.cardContent.offsetWidth; // Trigger reflow
+            void this.cardContent.offsetWidth; // 리플로우 트리거
             this.cardContent.classList.add('fade-in');
 
             if (this.currentDayData.length === 0) {
@@ -185,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         renderEmptyState() {
-            this.questionText.textContent = "No questions for this day.";
+            this.questionText.textContent = "이 날짜에 해당하는 질문이 없습니다.";
             this.answerText.textContent = "";
             this.showAnswerBtn.style.display = 'none';
             this.prevBtn.disabled = true;
@@ -202,31 +253,39 @@ document.addEventListener('DOMContentLoaded', () => {
             this.nextBtn.disabled = isLastQuestion && isLastDay;
         }
 
+        /**
+         * '이전' 버튼 클릭 시 처리를 담당합니다.
+         * 현재 Day의 첫 문제라면 이전 Day로 이동합니다.
+         */
         handlePrev() {
             if (this.currentIndex > 0) {
-                // Move to previous question in current day
+                // 현재 Day의 이전 질문으로 이동
                 this.currentIndex--;
                 this.updateCard();
             } else if (this.daySelect.selectedIndex > 0) {
-                // If at start of day, move to previous day's LAST question
+                // Day의 시작이면, 이전 Day의 마지막 질문으로 이동
                 this.daySelect.selectedIndex--;
                 this.loadDay(this.daySelect.value, true); // true = startAtEnd
             }
         }
 
+        /**
+         * '다음' 버튼 클릭 시 처리를 담당합니다.
+         * 현재 Day의 마지막 문제라면 다음 Day로 이동합니다.
+         */
         handleNext() {
             if (this.currentIndex < this.currentDayData.length - 1) {
-                // Move to next question in current day
+                // 현재 Day의 다음 질문으로 이동
                 this.currentIndex++;
                 this.updateCard();
             } else if (this.daySelect.selectedIndex < this.daySelect.options.length - 1) {
-                // If at end of day, move to next day's FIRST question
+                // Day의 끝이면, 다음 Day의 첫 번째 질문으로 이동
                 this.daySelect.selectedIndex++;
                 this.loadDay(this.daySelect.value);
             }
         }
     }
 
-    // Initialize App
+    // 앱 초기화
     const app = new QuizApp(quizData);
 });
