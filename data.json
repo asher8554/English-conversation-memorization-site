@@ -1,0 +1,1458 @@
+[
+  {
+    "Day": "Day001",
+    "MainSentence": "Working from home isn’t for me.",
+    "ModelExamples": [
+      {
+        "ko": "저는 재택근무 체질이 아니에요. 늘 딴짓하게 되거든요.",
+        "en": "Working from home isn’t for me.  I always get distracted."
+      },
+      {
+        "ko": "소개팅은 저랑 안 맞아요.",
+        "en": "Going on blind dates isn’t for me."
+      },
+      {
+        "ko": "노트북은 저랑 좀 안맞아요. 키보드가 뭔가 엄청 불편하거든요.",
+        "en": "Laptops aren’t really for me. Something about the keyboards is super uncomfortable."
+      },
+      {
+        "ko": "전기차는 좀 별로에요. 충전소는 요즘 늘었지만, 여전히 엄청 귀찮게 느껴져요.",
+        "en": "Electric cars aren’t for me. we have more charging station around now. but It still feels like too much of a hassle."
+      },
+      {
+        "ko": "그 사람 직업이 좋은 건 아는데, 그런 남자는 나는 별로야.",
+        "en": "I know that he has a decent job. but guys like him aren’t really for me."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "우리 나가서 맛난 회 먹을까? 내가 살게.",
+        "en": "Why we don’t go out and get some nice sashimi? My treat!"
+      },
+      {
+        "ko": "너무 고맙긴 한데. 난 회를 별로 안 좋아해. 식감이 적응이 안돼.",
+        "en": "It’s kind of you to offer. but raw fish isn’t for me. I can’t get used to the taxture."
+      },
+      {
+        "ko": "청취 연습을 위해 <기묘한 이야기>를 시청할 것을 추천합니다.",
+        "en": "I recommand watching <Stranger Things> to practice listening."
+      },
+      {
+        "ko": "좋은 생각이긴 한데, 저는 미국 프로그램이 체질에 안 맞아요. 스토리에 재미가 안 붙어요.",
+        "en": "It’s a good idea. but American shows aren’t for me. I can’t really get into the stories."
+      },
+      {
+        "ko": "애들하고 정말 잘 노는군요. 선생님 할 생각은 해 보셨나요?",
+        "en": "You’re really great around kids. have you thought of being a teacher."
+      },
+      {
+        "ko": "아니요. 저는 가르치는 거랑 잘 안 맞아요. 애들이랑 노는건 좋은데, 공부시키는게 너무 힘들듯 해요.",
+        "en": "No no. teacher isn’t for me. I like to play with them. but trying to make them study seems like hard work."
+      }
+    ]
+  },
+  {
+    "Day": "Day002",
+    "MainSentence": "I can’t wait to move into new house.",
+    "ModelExamples": [
+      {
+        "ko": "다음 에피소드는 어떤 내용일지 궁금해 미치겠어.",
+        "en": "I can’t wait to see what the next episode will bring."
+      },
+      {
+        "ko": "아내가 제 선물을 개봉할 때 어떤 표정일지 궁금해 죽겠습니다.",
+        "en": "I can’t wait to see the look on my wife’s face when she opens my gift."
+      },
+      {
+        "ko": "이 프로젝트가 빨리 끝났으면 좋겠어요. 너무 오래 걸립니다.",
+        "en": "I can’t wait to be done with this project. It’s taking forever."
+      },
+      {
+        "ko": "여보, 저녁 식사가 너무 맛있는 냄새가 나네. 어서 먹고 싶어.",
+        "en": "That dinner smells deliciouse, honey. I can’t wait."
+      },
+      {
+        "ko": "<베이비 드라이버>가 미국에서는 몇 달 전에 개봉했어. 이곳에서도 어서 개봉했으면 좋겠다.",
+        "en": "<Baby driver> was released months ago in United States. I can’t wait for it to come out here."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "그 책 드디어 영화로 만들었다며?",
+        "en": "Did you hear that they finally made that book into a movie."
+      },
+      {
+        "ko": "응! 어서 보고 싶어. 내가 제일 좋아하는 장면들이 다 포함되어 있었으면 좋겠다.",
+        "en": "Yes! I can’t wait to see it. I hope they include all my favorite scenes."
+      },
+      {
+        "ko": "프로젝트는 잘 되어 가나요? 한동안 매달려 있으신 것 같은데.",
+        "en": "How’s that project going? It seems like you’ve been working on it for a while."
+      },
+      {
+        "ko": "네, 일주일 내내 이것을 하고 있습니다. 어서 끝내고 뭔가 다른 걸로 넘어가고 싶어요.",
+        "en": "Yeah. I’ve been working on it all weeks. I can’t wait to finished it and finally move on to something else."
+      },
+      {
+        "ko": "네가 뜨개질 할 수 있는 걸 몰랐네. 뭐 만들고 있니?",
+        "en": "I didn’t know you could knit. What are you making?"
+      },
+      {
+        "ko": "여동생에게 줄 스카프를 만들고 있어요. 내가 자기 주려고 이걸 만든 걸 알면 어떤 표정일까 궁금해 죽겠어요.",
+        "en": "I’m making a scarf for my little sister. I can’t wait to see the look on her face when she realized what I made this for her."
+      }
+    ]
+  },
+  {
+    "Day": "Day003",
+    "MainSentence": "Do you mind keeping it a bit short?",
+    "ModelExamples": [
+      {
+        "ko": "제가 마지막 남은 피자 한 조각 먹어도 될까요?",
+        "en": "Do you mind if I finish off the last piece of pizza?"
+      },
+      {
+        "ko": "미안한데, 오는 길에 커피 좀 사다 줄 수 있나요?",
+        "en": "Do you mind grabbing me some coffee on your way?"
+      },
+      {
+        "ko": "제가 여유 시간이 겨우 5분 있어요. 짧게 해 주실 수 있을까요?",
+        "en": "I’ve got only five minute to spare. do you mind keeping it short?"
+      },
+      {
+        "ko": "에어컨 온도를 좀 낮추면 안 될까요? 좀 추워서요.",
+        "en": "Do you mind turning down the air-conditioning. I feel a bit cold."
+      },
+      {
+        "ko": "개인적인 질문 하나 해도 될까요?",
+        "en": "Do you mind if I ask you a personal question?"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "죄송한데, 회의를 금요일로 옮겨도 될까요?",
+        "en": "Do you mind if we move the meeting to Friday?"
+      },
+      {
+        "ko": "네, 괜찮습니다. 사실 저희에겐 금요일이 더 좋아요.",
+        "en": "Sure. Friday works better for us, actually."
+      },
+      {
+        "ko": "죄송한데, 꼭대기 선반에 있는 저 시리얼 상자들 중 하나를 내려 줄 수 있을까요?",
+        "en": "Excuse me, do you mind grabbing me one of those cereal boxes on the top shelf?"
+      },
+      {
+        "ko": "당연하죠. 얼마든지요!",
+        "en": "Sure. Always happy to help!"
+      },
+      {
+        "ko": "어디서 만나면 될까요?",
+        "en": "Where would you like to meet?"
+      },
+      {
+        "ko": "제가 그쪽 사무실로 가도 상관없습니다.",
+        "en": "I don’t mind comming over to your office."
+      }
+    ]
+  },
+  {
+    "Day": "Day004",
+    "MainSentence": "Everything is getting super expensive.",
+    "ModelExamples": [
+      {
+        "ko": "그 여자분 키 엄청 커요.",
+        "en": "She is super tall."
+      },
+      {
+        "ko": "그 사람이 무지 바쁘거나, 아니면 저에 대한 관심이 식고 있는거겠죠.",
+        "en": "Either he has been super busy, or he is losing interest in me."
+      },
+      {
+        "ko": "제가 요즘 이사 준비 때문에 엄청 바빴어요.",
+        "en": "I’ve been super busy with my upcoming move."
+      },
+      {
+        "ko": "우와. 연세 있으신 분 치고는 몸매가 너무 좋으시네요.",
+        "en": "Wow, You’re in super good shape for an old guy."
+      },
+      {
+        "ko": "서울은 어디라도 다 너무 비싸. 근데 후암동은 상대적으로 저렴한 편이지.",
+        "en": "All the neighborhoods in Seoul are super expensive, but 후암동 is relatively cheap."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "무슨 점심 값이 만 원이 넘는거야.",
+        "en": "I never thought I’d have to pay over 10,000 won for lunch."
+      },
+      {
+        "ko": "그러게. 요새 물가가 너무너무 비싸.",
+        "en": "Yeah, Everything is getting super expensive."
+      },
+      {
+        "ko": "제주도에서 선물 사 갈까?",
+        "en": "Want me to get you a souvenir from Jeju?"
+      },
+      {
+        "ko": "오! 그럼 귤 한 박스 사다 줄래? 지금 제철이니 엄청 쌀 거야.",
+        "en": "Oh! How about a box of tangerines? They should be super cheap, since they’re in-season."
+      },
+      {
+        "ko": "11월 말치고는 너무 따뜻하다. 지금쯤이면 보통은 훨씬 더 추운데.",
+        "en": "It’s unusally warming for late November. It’s usally much colder by now."
+      },
+      {
+        "ko": "맞아. 가을이 점점 짧아지고는 있는데 올해는 엄청 길다.",
+        "en": "Right. Autumn has been getting shorter. but this year, It’s been super long."
+      }
+    ]
+  },
+  {
+    "Day": "Day005",
+    "MainSentence": "How do you feel about buying something second-hand, like a used car?",
+    "ModelExamples": [
+      {
+        "ko": "중매업체에 등록해 보는 게 어때요?",
+        "en": "How do you feel about signing up for a matchmaking service?"
+      },
+      {
+        "ko": "교회에 가 보는 게 어때요?",
+        "en": "How do you feel about going to church?"
+      },
+      {
+        "ko": "등산 모임에 가입해 보는 게 어떨까요?",
+        "en": "How do you feel about joining a hiking club?"
+      },
+      {
+        "ko": "성형 수술 하는거 어떻게 생각하세요?",
+        "en": "How do you feel about plastic surgery?"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "코치가 전 동료였는데, 그런 팀에 합류하는 기분이 어떠신가요?",
+        "en": "How do you feel about joining a team when the coach is your ex-teammate?"
+      },
+      {
+        "ko": "전혀 문제 없습니다. 좋은 코치가 될 자질을 갖춘 분이라 믿어 의심치 않습니다.",
+        "en": "I don’t mind at all. I totally believe he has what it takes to be a good coach."
+      },
+      {
+        "ko": "저녁 먹고 우리집에 가서 <컨저링>볼까 하는데. 공포 영화 어때?",
+        "en": "After dinner, I was thinking we could go to my place and watch <The Conjuring>. How do you feel about horror movies?"
+      },
+      {
+        "ko": "싫어, 공포 영화는 못 보겠어. 무서운 거 보는 게 뭐가 재미있다고.",
+        "en": "No, I can’t stand horror movie. Watching something scary isn’t my idea for fun."
+      }
+    ]
+  },
+  {
+    "Day": "Day006",
+    "MainSentence": "There is nothing like camping to recharge your batteries.",
+    "ModelExamples": [
+      {
+        "ko": "안 좋았던 한 주를 날려 버리려면 친구들과 맛있는 식사를 하는 게 최고지.",
+        "en": "There’s nothing like a nice meal with friends to turn a bad week around."
+      },
+      {
+        "ko": "주말 내내 넷플릭스 드라마 보는 게 최고야.",
+        "en": "There’s nothing like binging a show on Netflix all weekend."
+      },
+      {
+        "ko": "크리스마스에는 칠면조 저녁 식사와 풍미 좋은 와인만 한 게 없지.",
+        "en": "There’s nothing like a turkey dinner and spiced wine for Chrismas."
+      },
+      {
+        "ko": "다시 콘서트에 갈 수 있어서 너무 좋아. 가장 좋아하는 밴드의 라이브 공연을 보는 것만큼 좋은 것은 없지.",
+        "en": "I’m so glad we can go to concerts again. There’s nothing like seeing your favorite band live."
+      },
+      {
+        "ko": "팬케이크에는 진짜 메이플 시럽을 얹어 먹어야 제맛이야.",
+        "en": "There’s nothing like real maple syrup on pancakes."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "회사에서 힘든 하루를 보내고 나면 시원한 맥주가 최고지. 퇴근하고 한잔하러 갈까?",
+        "en": "There’s nothing like a cold beer after a long day of work. How about we go grab one when we get off?"
+      },
+      {
+        "ko": "좋지! 네가 산다면.",
+        "en": "Sure! As long as you’re buying."
+      },
+      {
+        "ko": "내가 좀 쳐져 보인다면 미안. 남자 친구랑 잠시 안 보기로 했거든. 근데 정말 보고 싶어.",
+        "en": "Sorry if I seem a little depressed. My boyfriend and I decided to take a little break. I really miss him."
+      },
+      {
+        "ko": "아, 그랬구나. 그럼 쇼핑하러 가자. 내가 널 알잖아. 기분 전환에는 옷 사는 게 최고야.",
+        "en": "Aww, I’m sorry. Come on, let’s go shopping. I know you. There’s nothing like buying clothes to cheer you up."
+      },
+      {
+        "ko": "어서 집에 가고 싶어. 남편이 특별한 음식을 해 준다고 했거든.",
+        "en": "I can’t wait to get home. My husband said he would cook me something special."
+      },
+      {
+        "ko": "오, 멋지다! 힘든 하루를 보낸 후에는 기운을 차리는 데 집밥만 한 게 없지.",
+        "en": "Oh, that’s perfect then! There’s nothing like a home-cooked meal to lift your spirits after a long day."
+      }
+    ]
+  },
+  {
+    "Day": "Day007",
+    "MainSentence": "I am up for anything, as long as it’s not too spicy.",
+    "ModelExamples": [
+      {
+        "ko": "미슐랭 스타를 받은 음식이라면 뭐든 좋아.",
+        "en": "I’m up for anything with a Michelin star."
+      },
+      {
+        "ko": "뭐 하고 싶어? 난 뭐든 다 좋아.",
+        "en": "What do you feel like doing? I’d be up for just about anything."
+      },
+      {
+        "ko": "나 맥주 탁구 파트너 찾고 있는데. 관심 있어?",
+        "en": "I’m looking for a beer pong partner. Are you down?"
+      },
+      {
+        "ko": "나 프라이드치킨이 무지 먹고 싶어. 오늘 밤에 같이 먹을 사람?",
+        "en": "I’ve been craving fried chicken. Is anyone down for some tonight?"
+      },
+      {
+        "ko": "토요일 아침에 북한산 등산 갈까 하는데 같이 갈 사람이 필요해. 관심 있을까?",
+        "en": "I was thinking of hiking Bukhan Mountain on Saturday morning, and I need a buddy. Do you think you’d be down?"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "오늘 저녁에 뭐 먹고 싶어?",
+        "en": "What do you want to have tonight?"
+      },
+      {
+        "ko": "뭐라도 좋아. 너무 매운 것만 아니면.",
+        "en": "I’m up for anything, as long as It’s not too spicy."
+      },
+      {
+        "ko": "안녕 얘들아, 나랑 고든 램지 버거 먹으러 갈 사람 있을까?",
+        "en": "Hey guys-anyone want to go with me to try Gordon Ramsey’s burger place?"
+      },
+      {
+        "ko": "나 갈게! 네가 산다면 말이야.",
+        "en": "I’m down, as long as you’re paying."
+      },
+      {
+        "ko": "얘들아, 오늘 밤에 애들 집에 불러서 게임할까 하는데. 같이 할 사람?",
+        "en": "Guys, I was thinking about having people over for a game night. Who’s in?"
+      },
+      {
+        "ko": "음, 이따가 약속이 있긴 한데, 얼굴 정도는 비출 수 있어.",
+        "en": "Well, I have plans later, but I am down for saying hello, at least."
+      }
+    ]
+  },
+  {
+    "Day": "Day008",
+    "MainSentence": "I don’t feel quite right today.",
+    "ModelExamples": [
+      {
+        "ko": "나도 가고는 싶은데, 오늘 몸이 좀 안 좋아.",
+        "en": "I wish I could come, but I don’t feel quite right today."
+      },
+      {
+        "ko": "저녁을 같이 못 할 것 같습니다. 오늘 몸이 좀 안 좋네요.",
+        "en": "I’m afraid I can’t join you for dinner. I don’t feel quite right today."
+      },
+      {
+        "ko": "여보, 나 오늘 몸이 좀 안 좋아. 수진이 학교에서 좀 데려와 줄래?",
+        "en": "Honey, I don’t feel quite right today. Can you pick up Sujin from school?"
+      },
+      {
+        "ko": "오늘은 저녁 안 먹을래. 오늘 속이 좀 안 좋아서.",
+        "en": "I think I’ll skip dinner. My stomach dosen’t feel quite right today."
+      },
+      {
+        "ko": "너희 딸 파티에 나는 안 가는 게 좋을 것 같아. 오늘 몸이 좀 안 좋네.",
+        "en": "I don’t think it’s good idea for me to come to your daughter’s party. I don’t feel quite right today."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "뭔지는 모르겠는데, 오늘 몸이 안 좋아.",
+        "en": "I’m not sure what it is, but I don’t feel quite right today."
+      },
+      {
+        "ko": "아침에 먹은 국에 문제가 있었을지도, 좀 상한 냄새가 났거든.",
+        "en": "Maybe there was something wrong with that soup you had for breakfast. It smelled a little funny."
+      },
+      {
+        "ko": "Sam, 우리 점심 약속 유효한 거지?",
+        "en": "Sam, are you still able to meet for lunch?"
+      },
+      {
+        "ko": "미안해, 사실 오늘 몸이 좀 안 좋아. 집에 있어야 할 것 같아. 다음에 먹어도 될까?",
+        "en": "Sorry, actually I don’t feel quite right today. I think I need to stay home. Can we take a rain check?"
+      },
+      {
+        "ko": "오늘 밤에 우리 밖에 나가 놀기로 한 건 아는데, 오늘 뭔가 몸이 좀 이상해.",
+        "en": "I know we’re supposed to go out tonight, but I don’t feel quite right today."
+      },
+      {
+        "ko": "이런. 괜찮은 거야? 그냥 음식 포장해 와서 집에서 영화 보면서 쉬는 건 어때?",
+        "en": "Oh, no. Are you ok? How about we get takeout and rest at home with a movie instead?"
+      }
+    ]
+  },
+  {
+    "Day": "Day009",
+    "MainSentence": "Would you like me to grab you some coffee while I’m at Starbucks?",
+    "ModelExamples": [
+      {
+        "ko": "제가 첫 번째 문장을 읽을까요?",
+        "en": "Would you like me to read the first sentence?"
+      },
+      {
+        "ko": "제가 일어난 김에 물 좀 가져다 드릴까요?",
+        "en": "Would you like me to get you some water while I’m up?"
+      },
+      {
+        "ko": "수정본 보내드릴까요?",
+        "en": "Would you like me to send you the revised version?"
+      },
+      {
+        "ko": "내가 따라가 줄까?",
+        "en": "Do you want me to come along with you?"
+      },
+      {
+        "ko": "내가 너희 둘 자리 마련해 줄까?",
+        "en": "Do you want me to set you two up on a date?"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "지금 역에서 걸어가고 있는데요. 커피 사다 드릴까요?",
+        "en": "I’m walking from the station. Would you like me to pick up any coffee?"
+      },
+      {
+        "ko": "좋습니다. 고마워요",
+        "en": "That would be great. Thanks"
+      },
+      {
+        "ko": "아직 다 하지는 못했는데, 지금까지 작업한 거 보내 드릴까요?",
+        "en": "I’m not done yet, but would you like me to send you what I have so far?"
+      },
+      {
+        "ko": "고마워요. 그러면 언제까지 완성할 수 있을 것 같나요?",
+        "en": "Thanks. So, when do you think you will be able to complete the materials?"
+      },
+      {
+        "ko": "방금 인천에 도착했어요! 그나저나 면세점에 들를까 하는데요. 아빠랑 엄마 뭐 사다 드릴까요?",
+        "en": "I just landed at Incheon! By the way, I think I’ll go by a duty-free shop. Do you want me to get you or Mom anything?"
+      },
+      {
+        "ko": "말만이라도 고맙다, 내 딸.",
+        "en": "Thanks for offering, Sweetie."
+      }
+    ]
+  },
+  {
+    "Day": "Day010",
+    "MainSentence": "What price range do you have in mind?",
+    "ModelExamples": [
+      {
+        "ko": "주연 배우로 생각하고 있는 분 있으신가요?",
+        "en": "Do you have any actor in mind for the lead role?"
+      },
+      {
+        "ko": "괜찮은 소고깃집 생각해 둔 데 있나요?",
+        "en": "Do you have any good beef place in mind?"
+      },
+      {
+        "ko": "딱히 염두에 둔 차는 없습니다. 상태만 좋으면 뭐라도 사겠습니다.",
+        "en": "I don’t really have any car in mind. I will go with pretty much anything as long as it’s in good shape."
+      },
+      {
+        "ko": "특별히 염두에 둔 건 없습니다.",
+        "en": "I have nothing particular in mind."
+      },
+      {
+        "ko": "다른 안이 없으시면 제가 제안을 하고 싶습니다.",
+        "en": "I’d like to make a suggestion, unless you have something in mind."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "가격대는 어느 정도 생각하세요?",
+        "en": "What price range do you have in mind?"
+      },
+      {
+        "ko": "십만원 미만이면 다 괜찮아요.",
+        "en": "Anything under 100,000 won would be fine."
+      },
+      {
+        "ko": "포르쉐를 받으려면 2년을 기다리셔야 합니다. 그것도 보증금으로 오백만원을 걸 때 이야기고요.",
+        "en": "You will have to wait two years to get a Porsche. And that’s only if you put down five million won as a deposit."
+      },
+      {
+        "ko": "그건 문제가 되지 않아요. 전 포르쉐 외에는 살 생각이 없거든요.",
+        "en": "It really doesn’t matter. A Porsche is the only car I have in mind."
+      },
+      {
+        "ko": "올해 여름휴가는 어디로 가고 싶어?",
+        "en": "Where do you want to go for our summer vacation this year?"
+      },
+      {
+        "ko": "몇 군데 생각하고 있는 곳이 있는데, 장시간 비행기 타도 괜찮아?",
+        "en": "I have a few places in mind. Are you ok taking a long flight?"
+      }
+    ]
+  },
+  {
+    "Day": "Day011",
+    "MainSentence": "I was thinking of going to translation grad school.",
+    "ModelExamples": [
+      {
+        "ko": "연휴 때 호주로 여행을 갈까 생각 중입니다.",
+        "en": "I was thinking of traveling to Australia for the holiday."
+      },
+      {
+        "ko": "오늘 저녁 약속 있어? 동료가 추천해 준 피자 가게 가 볼까 하는데.",
+        "en": "Do you already have dinner plans? I was thinking of trying a pizza place that my coworker recommended."
+      },
+      {
+        "ko": "다음 여행은 몽골을 생각 중이었는데, 안 가기로 했습니다.",
+        "en": "I was thinking of Mongolia for my next trip, but I decided not to go there."
+      },
+      {
+        "ko": "제가 생각하던 가격대보다 조금 비싸네요. 게다가 저는 좀 더 기본형인 것을 생각하고 있었거든요.",
+        "en": "It’s a little out of my price range. Besides, I was thinking of going with something more basic."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "지난달에 내가 소개팅했다고 이야기했었나? 완전 내 스타일이야. 그녀 생일에 시계를 선물할까 고민 중이야.",
+        "en": "Did I mention that I had a blind date last month? She is really my cup of tea. I was thinking of getting her a watch for her birthday."
+      },
+      {
+        "ko": "너무 과하지 않아? 앞으로 눈만 더 높아질거야.",
+        "en": "Isn’t that a bit much? You are going to spoil her."
+      },
+      {
+        "ko": "여보, 벌써 요리 시작했어? 저녁으로 피자를 먹을까 하는데.",
+        "en": "Honey, have you already started cooking? I was thinking of pizza for dinner."
+      },
+      {
+        "ko": "안 돼, 또 정크푸드 먹으면 안 된다고. 내가 살찌는 거 보고 싶어?",
+        "en": "No, but we shouldn’t have junk food again. You don’t want me getting fat."
+      },
+      {
+        "ko": "토요일 밤에 약속 있어? 노원에 새로 생긴 초밥집에 가 볼까 하는데, 같이 갈 사람이 없네.",
+        "en": "Do you have any plans for Saturday night? I was thinking of trying a new sushi place in 노원 and I need someone to go with me."
+      },
+      {
+        "ko": "좋아. 원래는 집에서 좀 쉴까 했는데. 초밥 먹는게 훨씬 더 좋지.",
+        "en": "Oh, sure. I was just planning on chilling at home. Getting sushi sounds more fun."
+      }
+    ]
+  },
+  {
+    "Day": "Day012",
+    "MainSentence": "I wish I had that much money.",
+    "ModelExamples": [
+      {
+        "ko": "너의 자신감이 참 부럽다.",
+        "en": "I wish I had your confidence."
+      },
+      {
+        "ko": "저도 같이 가고 싶긴 한데, 시간이 안 나네요.",
+        "en": "I wish I could go with you. but I can’t find the time."
+      },
+      {
+        "ko": "제가 해산물을 못 먹어서 너무 아쉽네요.",
+        "en": "I wish I could eat seafood."
+      },
+      {
+        "ko": "항상 가족들이랑 시간을 좀 더 많이 보내고 싶은데 그러질 못하네요.",
+        "en": "I always wish I could spend more time with my family."
+      },
+      {
+        "ko": "내가 한 말을 주워 담을 수도 없고.",
+        "en": "I wish I could take back what I said."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "이번주에 Jessica 뭐 하는지 들었니? 콘서트도 두 군데 가고 일본 여행도 간대!",
+        "en": "did you hear what Jessica is doing this week? She’s going to two concerts and taking a trip to Japan!"
+      },
+      {
+        "ko": "와우, 나도 그럴 시간이 있었으면.. 풀타임으로 일하니 너무 힘들고, 내가 좋아하는 걸 할 시간이 없어.",
+        "en": "Wow, I wish I had time for that. It’s so hard having a full-time job, and there’s never enough time to do things I really enjoy."
+      },
+      {
+        "ko": "이백만원짜리 이 의자 좀 실망스러워. 반품도 안되니, 원..",
+        "en": "I am actually quite disappointed with this two million won chair. I wish I could take it back."
+      },
+      {
+        "ko": "언제라도 당근마켓에 되팔면 되지 뭐.",
+        "en": "You can always resell it on 당근마켓."
+      },
+      {
+        "ko": "날도 추워지고 하니 어릴 때 생각이 많이 나네. 혹시 후회되는 거 있어?",
+        "en": "The weather’s getting cold and that always makes me look back on my youth. Do you have any regrets?"
+      },
+      {
+        "ko": "응, 어릴 때 1년을 더 기다렸다 대학에 갔어야 했어.",
+        "en": "Yeah, when I was younger, I wish I had waited a year before going to college."
+      }
+    ]
+  },
+  {
+    "Day": "Day013",
+    "MainSentence": "How does 2:30 sound?",
+    "ModelExamples": [
+      {
+        "ko": "요리하고 싶지 않아. 프라이드 치킨 먹는건 어때?",
+        "en": "I don’t feel like cooking. How does fried chicken sound?"
+      },
+      {
+        "ko": "오늘 저녁에는 인도 음식 먹을까 싶은데, 어때?",
+        "en": "I was thinking about having Indian food tonight. How does that sound?"
+      },
+      {
+        "ko": "월요일 월차 못 내면 그냥 경기도 가서 휴가 보내야 할 듯해, 어때?",
+        "en": "If I can’t take Monday off, maybe we could just vacation in 경기도, How does that sound?"
+      },
+      {
+        "ko": "다음 주는 줌에서 만나면 어떨까 하는데요. 어떠세요?",
+        "en": "I thought maybe we could meet on Zoom next week. How does that sound?"
+      },
+      {
+        "ko": "다음 주 크리스마스 때는 가게 문 닫을까 하는 데, 당신 생각은 어때?",
+        "en": "I was thinking of closing the store next week for Christmas. How does that sound to you?"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "죄송한데 조개가 다 떨어졌어요. 그래도 주방장님이 특별 홍합요리를 만들어 드릴 수 있습니다. 어떠세요?",
+        "en": "I’m afraid we’re out of clams. but the chef can cook a special mussel dish, instead. How does that sound?"
+      },
+      {
+        "ko": "좋죠! 사실 홍합이 더 좋아요.",
+        "en": "That would be great! I actually prefer mussels."
+      },
+      {
+        "ko": "야간 비행기는 이백달러정도 싸대, 어때?",
+        "en": "The overnight flight is about $200 cheaper. How does that sound?"
+      },
+      {
+        "ko": "하아.. 난 밤 비행기 못 타. 더 이상 20-30대가 아니잖아.",
+        "en": "Ugh. I can’t stand overnight flights. I’m not in my 20s or 30s anymore."
+      },
+      {
+        "ko": "그 호텔이 우리 예약을 혼동했어. 도심이 보이는 방밖에 안 남았다는데, 그 방 선택하면 저녁은 공짜로 주겠대. 어떻게 생각해?",
+        "en": "The hotel mixed up our reservation. They only have city view rooms left, but if we take one, they’re willing to throw in a free dinner. How does that sound?"
+      },
+      {
+        "ko": "좋아. 난 어차피 전망은 크게 상관없거든.",
+        "en": "That sounds nice. I don’t care much about the view anyway."
+      }
+    ]
+  },
+  {
+    "Day": "Day014",
+    "MainSentence": "There is something different about BTS.",
+    "ModelExamples": [
+      {
+        "ko": "이번에 면접 봤는데 뭔가 이상했어요.",
+        "en": "There was something weird about the interview."
+      },
+      {
+        "ko": "이 브랜드에 사람들이 열광하는 이유가 있지.",
+        "en": "There is something about this brand people are crazy about."
+      },
+      {
+        "ko": "그 사람에게는 뭔가 끌리는 점이 있어요.",
+        "en": "There is something about him that I am attracted to."
+      },
+      {
+        "ko": "유재석은 뭔가 사람을 편하게 해 주는 게 있어.",
+        "en": "There is something about 유재석 that puts people at ease."
+      },
+      {
+        "ko": "그 코치에게는 선수들의 잠재력을 이끌어내는 뭔가가 있어.",
+        "en": "There is something about the coach that brings out the best in players."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "요즘 차 알아보고 있는데, 포르쉐에는 거부할 수 없는 뭔가가 있어.",
+        "en": "I’ve been shopping around for a car, and there’s something about Porsches that I can’t resist."
+      },
+      {
+        "ko": "스포츠카에 그렇게 큰돈을 쓸 생각을 하다니. 돈 모으고 투자해서 빨리 은퇴해야지.",
+        "en": "I can’t believe you’re thinking about spending so much money on a sports car. You should just save, invest, and retire early."
+      },
+      {
+        "ko": "터치스크린이 딸린 기기에는 익숙하지 않은 것 같네, 그렇지?",
+        "en": "It looks like you’re not used to devices with a touch screen, right?"
+      },
+      {
+        "ko": "응. 실물 마우스랑 키보드가 뭔가 더 편해.",
+        "en": "Yes. There’s just something about a real mouse and keyboard that makes me more comfortable."
+      },
+      {
+        "ko": "그 사람은 뭔가 달라. 내가 만난 다른 남자들이랑 달라.",
+        "en": "There is something different about him. He is not like other guys I have met."
+      },
+      {
+        "ko": "그렇긴 하지만 이제 겨우 한 번 만난 거잖아. 좀 천천히 시간을 가진 다음에 공식적으로 만나.",
+        "en": "Sure, but it was only one date. Give it more time before you become official."
+      }
+    ]
+  },
+  {
+    "Day": "Day015",
+    "MainSentence": "Are you done with your plate?",
+    "ModelExamples": [
+      {
+        "ko": "이 스쾃 기구 다 쓰신 거죠? 제가 써도 될까요?",
+        "en": "Are you done with this squat rack? Is it alright if I use it?"
+      },
+      {
+        "ko": "샌드위치 그만 먹을래. 너무 커.",
+        "en": "I think I’m done with my sandwich. It’s just way too big."
+      },
+      {
+        "ko": "제가 빌려준 책 다 읽은 거죠? 그럼 돌려주세요.",
+        "en": "Are you done with the book I lent you? I’d like to have it back."
+      },
+      {
+        "ko": "차량 점검 마쳤습니다. 어디가 고장인지 말씀드릴게요.",
+        "en": "I’m done taking a look at your car. I’ll tell you what you’ve got here."
+      },
+      {
+        "ko": "들어오지 마! 나 아직 옷 덜 갈아입었다고.",
+        "en": "Don’t come in! I’m not done changing."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "컴퓨터는 다 쓴 거야?내 회사 이메일 확인해야 하는데.",
+        "en": "Are you done with the computer? I need to check my work emails."
+      },
+      {
+        "ko": "근데 이 게임 너무 재미있어. 당신 전화기로 확인하면 안 돼?",
+        "en": "I‘m really into this game, though. Can’t you just check them on your phone?"
+      },
+      {
+        "ko": "옷은 다 입어 본 거야? 여기 너한테 어울리는 옷이 없는 것 같아.",
+        "en": "Are you done trying on clothes? I don’t think anything here really suits you."
+      },
+      {
+        "ko": "응, 거의 다 입어 봤어. 잠깐만! 이 스커트 너무 귀엽다!",
+        "en": "Yeah, just about. Wait! Look at this cute skirt!"
+      },
+      {
+        "ko": "신규 환자분들이 작성해야 하는 양식 세 장 여기 있습니다. 다 작성하시면 말해 주세요.",
+        "en": "Here are three forms we ask all new patients to fill out. Please let me know when you are done."
+      },
+      {
+        "ko": "네. 근데 펜이 있을까요?",
+        "en": "Alright. Oh do you have a pen I could use?"
+      }
+    ]
+  },
+  {
+    "Day": "Day016",
+    "MainSentence": "This t-shirt looks good on you.",
+    "ModelExamples": [
+      {
+        "ko": "이 옷 너한테 잘 어울린다.",
+        "en": "This t-shirt looks good on you."
+      },
+      {
+        "ko": "제가 목이 짧아서 터틀넥은 저한테 안 어울려요.",
+        "en": "Turtlenecks never look good on me because my neck is too short."
+      },
+      {
+        "ko": "안경이 비싸다고 잘 어울리는 건 아닙니다.",
+        "en": "Just because glasses are expensive, that doesn’t mean they would look good on you."
+      },
+      {
+        "ko": "처음 이 모자를 봤을 때 남자 친구가 쓰면 잘 어울리겠다고 생각했어요.",
+        "en": "When I first looked at this hat, I thought ‘That would look good on my boyfriend.’"
+      },
+      {
+        "ko": "어떻게 이렇게 잘 어울리죠? 저한테도 잘 어울릴까요?",
+        "en": "How does she pull that off? Would it look good on me?"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "안녕하세요. 모자를 보다가 이게 눈에 띄어서요. 할인 중인가요?",
+        "en": "No, sir. I’m afraid it isn’t, but it looks very good on you!"
+      },
+      {
+        "ko": "어떤 게 더 나아?회색 카디건 아님 파란색?",
+        "en": "Which fits me better, the grey cardigan or the blue one?"
+      },
+      {
+        "ko": "둘 다 잘 어울려. 그냥 싼 걸로 사.",
+        "en": "They both look good on you. I say just go with whatever’s cheaper."
+      },
+      {
+        "ko": "이 옷 어때? 사람들이 그러는데 내 피부색이 너무 어두워서 이런 핑크색은 안 어울린대.",
+        "en": "How does this dress look? I’ve been told that my skin is too dark for pink stuff like this."
+      },
+      {
+        "ko": "누가 그래? 너 핑크 엄청 잘 어울려.",
+        "en": "Who told you that? You look great in pink."
+      }
+    ]
+  },
+  {
+    "Day": "Day017",
+    "MainSentence": "Does Tuesday work for you?",
+    "ModelExamples": [
+      {
+        "ko": "사실 화요일이 더 좋습니다.",
+        "en": "Actually, Tuesday works better for me."
+      },
+      {
+        "ko": "수요일 괜찮은가요?",
+        "en": "Does Wed work for you?"
+      },
+      {
+        "ko": "제안 주신 날짜가 저희랑은 하나도 안 맞습니다.",
+        "en": "None of the dates you proposed work for us."
+      },
+      {
+        "ko": "1시 이후에는 다 좋습니다.",
+        "en": "Anytime after 1pm would work for me."
+      },
+      {
+        "ko": "일요일은 안 되고요, 토요일은 하루 종일 시간 됩니다.",
+        "en": "Sunday doesn’t work for me, but I am available all day Saturday."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "안녕, Mark. 반가워. 나는 월요일은 저녁 식사 무조건 가능해. 어때?",
+        "en": "Ah. I already have plans for Monday. Tuesday works better for me. Would that be alright?"
+      },
+      {
+        "ko": "최 선생님, 일요일 수업에 참석 못 할 것 같아요. 다른 날에 해도 될까요?",
+        "en": "Mr. Choi, I’m afraid I won’t be able to attend our class on Sunday. Could we meet another day?"
+      },
+      {
+        "ko": "저는 월요일부터 수요일까지 오후 시간은 다 괜찮아요. 어떤 요일이 제일 좋으세요?",
+        "en": "I’m actually free every afternoon from Monday to Wednesday. What day works best for you?"
+      }
+    ]
+  },
+  {
+    "Day": "Day018",
+    "MainSentence": "Speaking of which, what happened with you and Nicole last night?",
+    "ModelExamples": [
+      {
+        "ko": "돈 이야기가 나왔으니 말인데, 너한테 십만 원 갚을 거 있어.",
+        "en": "Speaking of money, I owe you 100,000 won."
+      },
+      {
+        "ko": "날씨 이야기가 나왔으니 말인데, 이번 가을은 유난히 따뜻했어. 그렇지?",
+        "en": "Speaking of the weather, this autumn was unusually warm, wasn’t it?"
+      },
+      {
+        "ko": "장보는 이야기가 나왔으니 말인데, 신촌역 부근에 대형 마트가 생겼다는 거 들었어요?",
+        "en": "Speaking of grocery shopping, did you hear that there’s this new megastore near 신촌Station?"
+      },
+      {
+        "ko": "아, Teri 이야기가 나왔으니 말인데, 그 친구 어때요? 새 아파트는 구했대요?",
+        "en": "Oh, speaking of Teri, how has she been? Has she found a new apartment?"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "내가 교수님에게 상황을 다 설명했더니, 기말시험 하루 늦게 보게 해 주시는 데 동의하셨어.",
+        "en": "I’m glad things worked out for you. By the way, speaking of scheduling, did you make a reservation at the Italian place for dinner tonight?"
+      },
+      {
+        "ko": "오늘 Karen 옷 입은거 봤어? 회사에서 입기엔 좀 그렇지 않아?",
+        "en": "Did you see what Karen is wearing today? Is it really appropriate for the office?"
+      },
+      {
+        "ko": "맞아. 너무 야해. 근데 Karen 이야기가 나왔으니 말인데, 다음 주 목요일에 그 친구 생일이야",
+        "en": "Right. It’s a little too revealing. By the way, speaking of Karen, her birthday is coming up next Thursday."
+      }
+    ]
+  },
+  {
+    "Day": "Day019",
+    "MainSentence": "I’m taking tomorrow off.",
+    "ModelExamples": [
+      {
+        "ko": "너 진짜 당분간 일 좀 쉬어야 해.",
+        "en": "You really need to take some time off."
+      },
+      {
+        "ko": "John, 제가 오후 반차를 좀 내도 될까요? 편두통이 오는 것 같아서요.",
+        "en": "John, do you mind if I take the afternoon off? I think I’m getting a migraine."
+      },
+      {
+        "ko": "너 올해는 단 하루도 안 쉬었구나.",
+        "en": "You haven’t even taken a single day off this year."
+      },
+      {
+        "ko": "Shawna가 다음 주 초에는 출근을 안 합니다. 간단한 수술 후에 3일 휴가를 쓸 예정이라서요.",
+        "en": "Shawna won’t be here at the beginning of next week. She’s taking three days off to recover after minor surgery."
+      },
+      {
+        "ko": "면접 장소가 아산이라서요. 오후 반차를 내야 할 것 같아요.",
+        "en": "The interview is all the way in Asan. I’ll have to take the whole afternoon off."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "Hutchinson씨, 제가 어제부터 기침이 좀 나고 미열이 있습니다. 코로나 자가 진단 검사를 해 보니 음성이 나오긴 했는데요. 그래도 내일은 하루 쉴까 합니다.",
+        "en": "Hi, Steve. That will be fine. Thank you for letting me know in advance."
+      },
+      {
+        "ko": "나 커피 좀 더 마셔야 할 것 같아. 자꾸 졸려서, 아기 본다고 계속 바빴거든.",
+        "en": "I think I’ll need even more coffee. I can barely stay awake. I’ve been so busy taking care of the baby."
+      },
+      {
+        "ko": "그럴 만도 하지. 당분간 좀 쉬어야겠다.",
+        "en": "That makes sense. Maybe you should take some time off."
+      },
+      {
+        "ko": "우리 회사에서는 매년 한 달여간 유급휴가를 쓸 수 있어.",
+        "en": "I can take over a month of paid time off each year in my job."
+      },
+      {
+        "ko": "우와. 혹시 너희 회사에 자리 있을까?",
+        "en": "Wow, Does your company have any openings?"
+      }
+    ]
+  },
+  {
+    "Day": "Day020",
+    "MainSentence": "I’m busy working on my dissertation.",
+    "ModelExamples": [
+      {
+        "ko": "워크숍 준비하느라 바쁩니다.",
+        "en": "I’m busy preparing for the workshop."
+      },
+      {
+        "ko": "공부하느라 요새 무첩 바쁩니다.",
+        "en": "I’ve been busy with my studies."
+      },
+      {
+        "ko": "제가 곧 이사해서 요즘 엄청 바쁩니다.",
+        "en": "I’ve been super busy with my upcoming move."
+      },
+      {
+        "ko": "내 행정 업무 하느라 무지 바빠!",
+        "en": "I am busy with all this admin work!"
+      },
+      {
+        "ko": "학교 다닐 때 숙제랑 학원 학교 방과 후 활동 같은 거 하느라고 엄청 바빴어요.",
+        "en": "When I was in school, they would always keep us busy with homework, academies, and after-school activities."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "Daniel은 늘 피곤하다고 해",
+        "en": "Daniel says he’s always tired."
+      },
+      {
+        "ko": "그럴 만도 하지. 책 두 권을 동시에 쓰느라 바쁘잖아.",
+        "en": "Well, that makes sense. He’s so busy working on two books at the same time."
+      },
+      {
+        "ko": "안녕하세요, Samantha. 어떻게 지내는지 안부 궁금해서 연락드려요.",
+        "en": "Hi, Samantha. I’m just checking in to see if you’re doing ok."
+      },
+      {
+        "ko": "안녕하세요. 다음 달 있을 워크숍 준비 때문에 정신이 없네요.",
+        "en": "Good afternoon. I’ve actually been really busy working on arrangements for next month’s workshop."
+      },
+      {
+        "ko": "어떻게 지냈어, Julie? 문자 보냈는데 답도 없더라.",
+        "en": "How are you, Julie? You know, you never texted me back."
+      },
+      {
+        "ko": "미안해. 일 때문에 너무 바빴어.",
+        "en": "I’m sorry. I’ve just been so busy with work."
+      }
+    ]
+  },
+  {
+    "Day": "Day021",
+    "MainSentence": "Have you ever been to Hawaii?",
+    "ModelExamples": [
+      {
+        "ko": "거기 가 본 적 있니?",
+        "en": "Have you ever been there?"
+      },
+      {
+        "ko": "TV에 나와 본 적 있나요?",
+        "en": "Have you ever been on TV?"
+      },
+      {
+        "ko": "전에 이탈리아 음식 드셔 보신 적 있나요? 이거 꽤 맛있는데요.",
+        "en": "Have you ever had Italian food before? This is pretty good."
+      },
+      {
+        "ko": "유령을 본 적이 있니?",
+        "en": "Have you ever seen a ghost?"
+      },
+      {
+        "ko": "살면서 복권 당첨되어 본 적 있니?",
+        "en": "Have you ever won the lottery in your life?"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "전에는 하와이라고 하면 껌뻑 죽었는데, 이제는 모르겠어. 관광객이 너무 많아.",
+        "en": "I used to love Hawaii, but now I don’t know. It’s just too touristy."
+      },
+      {
+        "ko": "나는 한 번도 안 가 봤어. 여전히 내 버킷 리스트에 있어.",
+        "en": "I’ve never been there. It’s still on my bucket list."
+      },
+      {
+        "ko": "BTS 콘서트 가 본 적 있어?",
+        "en": "Have you ever been to a BTS concert?"
+      },
+      {
+        "ko": "아니, 근데 내 친구는 가 봤대. 표 구하기가 하늘의 별 따기야.",
+        "en": "No, but my friend has. It’s almost impossible to get tickets."
+      },
+      {
+        "ko": "이 식당 와 본 적 있어? 꽤 좋은데.",
+        "en": "Have you ever been to this restaurant before? It’s pretty nice."
+      },
+      {
+        "ko": "응, 전에 와 봤어. 사실 여기 꽤 자주 와.",
+        "en": "Yeah, I’ve been here before. Actually, I come here quite often."
+      }
+    ]
+  },
+  {
+    "Day": "Day022",
+    "MainSentence": "I saw it coming.",
+    "ModelExamples": [
+      {
+        "ko": "나는 그럴 줄 알았어.",
+        "en": "I saw it coming."
+      },
+      {
+        "ko": "난 그들이 이혼할 줄 알았어. 그들은 1년 넘게 서로 말도 안 하고 살았어.",
+        "en": "I saw their divorce coming. They haven’t spoken to each other in over a year."
+      },
+      {
+        "ko": "코로나는 전혀 예상치 못했죠. 아무도 예상하지 못했습니다.",
+        "en": "I didn’t see COVID coming. No one saw it coming."
+      },
+      {
+        "ko": "그가 나에게 청혼할 줄은 꿈에도 몰랐어. 정말 감동이야.",
+        "en": "I never saw his proposal coming. I was so moved."
+      },
+      {
+        "ko": "어쩐지 이런 일이 생길 것 같더라.",
+        "en": "I sort of saw this coming."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "놀라게 해 줘서 고마워. 나 정말 몰랐어.",
+        "en": "Thank you for the surprise. I really didn’t see it coming."
+      },
+      {
+        "ko": "다행이다! 네가 눈치챌까 봐 조마조마했어.",
+        "en": "I’m glad! I was afraid you’d figure it out."
+      },
+      {
+        "ko": "Sam이 어제 해고당했다는 소식 들었어?",
+        "en": "Did you hear that Sam got fired yesterday?"
+      },
+      {
+        "ko": "응, 근데 놀랍지도 않아. 예견된 일이었어. 거의 맨날 지각했잖아.",
+        "en": "Yeah, but I’m not surprised. I saw it coming. He was late almost every day."
+      },
+      {
+        "ko": "Tony가 Karen한테 데이트 신청했다가 차였대.",
+        "en": "I heard Tony asked Karen out on a date and got turned down."
+      },
+      {
+        "ko": "난 알 것 같았어. Tony는 Karen 타입이 아냐.",
+        "en": "I saw that coming. Tony isn’t really Karen’s type."
+      }
+    ]
+  },
+  {
+    "Day": "Day023",
+    "MainSentence": "Why don’t we call it a day?",
+    "ModelExamples": [
+      {
+        "ko": "오늘은 그만 마무리하죠?",
+        "en": "Why don’t we call it a day?"
+      },
+      {
+        "ko": "오늘은 이만하고 집에 가서 좀 쉬자.",
+        "en": "Let’s call it a day and go home and get some rest."
+      },
+      {
+        "ko": "이제 그만 자는 게 어때?",
+        "en": "Why don’t we call it a night?"
+      },
+      {
+        "ko": "오늘 업무는 여기서 마치겠습니다.",
+        "en": "I think I’m going to call it a day."
+      },
+      {
+        "ko": "저녁도 먹었고 영화도 봤으니 오늘 데이트는 이만 마치지.",
+        "en": "We had dinner and watched a movie, so let’s call it a night."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "오늘 아주 생산적이었어. 이제 마무리하는 게 어떨까?",
+        "en": "We were very productive today. Why don’t we call it a day?"
+      },
+      {
+        "ko": "좋아. 가서 맥주나 한잔하자.",
+        "en": "Sounds good. Let’s go grab a beer."
+      },
+      {
+        "ko": "이제 더는 못 하겠어. 오늘은 마무리하자.",
+        "en": "I can’t do this anymore. Let’s call it a day."
+      },
+      {
+        "ko": "그래. 내일 아침 일찍 다시 하자.",
+        "en": "Yeah. Let’s pick this up again early tomorrow morning."
+      },
+      {
+        "ko": "새벽 2시야. 너무 피곤하다. 이제 자자.",
+        "en": "It’s 2 am. I’m so tired. Let’s call it a night."
+      },
+      {
+        "ko": "그래. 나 운전하다가 잠들 것 같아.",
+        "en": "Yeah. I feel like I am going to fall asleep at the wheel."
+      }
+    ]
+  },
+  {
+    "Day": "Day024",
+    "MainSentence": "That’s what I’m saying.",
+    "ModelExamples": [
+      {
+        "ko": "내 말이.",
+        "en": "That’s what I’m saying."
+      },
+      {
+        "ko": "걔 짠돌이 맞아. 내 말이 그 말이라니까.",
+        "en": "He IS cheap. That’s what I’m saying."
+      },
+      {
+        "ko": "내 말이 그 말이야. 그 영화는 과대평가 됐어.",
+        "en": "That’s what I’m saying. The movie is overrated."
+      },
+      {
+        "ko": "아니요, 제 말은 그게 아니라 우리가 돈이 없다는 말입니다.",
+        "en": "No, that’s not what I’m saying. I’m saying that we don’t have any money."
+      },
+      {
+        "ko": "제 말은 그게 아닙니다. 오해하신 것 같네요.",
+        "en": "That is not what I am saying. I think you misunderstood."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "이 프로젝트는 시간이 좀 더 필요해. 금요일까지는 절대 못 끝내.",
+        "en": "We need more time for this project. We can never finish it by Friday."
+      },
+      {
+        "ko": "내 말이 그 말이야. 상사한테 이야기 좀 해 줘.",
+        "en": "That’s what I’m saying. Please tell the boss."
+      },
+      {
+        "ko": "여기는 가격에 비해 양이 너무 적어. 다신 안 와.",
+        "en": "The portions here are too small for the price. I’m not coming back."
+      },
+      {
+        "ko": "내 말이.",
+        "en": "That’s what I’m saying."
+      },
+      {
+        "ko": "사장님 기분이 안 좋아 보이셔. 연봉 협상하기엔 좋은 타이밍이 아니야.",
+        "en": "The boss seems like he is in a bad mood. It’s not a good time to negotiate our salaries."
+      },
+      {
+        "ko": "내 말이 그 말이야. 다음 주까지 기다리자.",
+        "en": "That’s what I’m saying. Let’s wait until next week."
+      }
+    ]
+  },
+  {
+    "Day": "Day025",
+    "MainSentence": "I know a place that is perfect for a date.",
+    "ModelExamples": [
+      {
+        "ko": "나 데이트하기 딱 좋은 장소를 알고 있어.",
+        "en": "I know a place that is perfect for a date."
+      },
+      {
+        "ko": "나 끝내주는 멕시코 식당 알고 있어.",
+        "en": "I know a place that serves killer Mexican food."
+      },
+      {
+        "ko": "스트레스 풀기 딱 좋은 곳을 알고 있지.",
+        "en": "I know a place that is good for relieving stress."
+      },
+      {
+        "ko": "아이들이 놀기 딱 좋은 곳을 알고 있어요.",
+        "en": "I know a place that is perfect for kids to play."
+      },
+      {
+        "ko": "전망이 끝내주는 곳을 한 군데 알고 있어.",
+        "en": "I know a place that has a killer view."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "여기 너무 시끄러워서 대화가 안 되네. 좀 조용한 데 없을까?",
+        "en": "It’s too noisy to talk in here. Is there anywhere quiet?"
+      },
+      {
+        "ko": "얘기 나누기 딱 좋은 곳을 알고 있어. 내가 데리고 갈게.",
+        "en": "I know a place that is perfect for talking. I’ll take you there."
+      },
+      {
+        "ko": "오늘 밤 외식하고 싶은데, 어디 갈까?",
+        "en": "I want to eat out tonight, but where should we go?"
+      },
+      {
+        "ko": "새로 생긴 베트남 식당을 아는데 쌀국수가 끝내줘.",
+        "en": "I know a new Vietnamese place that has killer Pho."
+      },
+      {
+        "ko": "나 진짜 머리 좀 해야겠어. 이 동네 미용실 아는 데 있어?",
+        "en": "I really need to get my hair done. Do you know any salons in this area?"
+      },
+      {
+        "ko": "커트 잘하는 곳 알고 있어. 예약 도와줄까?",
+        "en": "I know a place that is really good at haircuts. Do you want me to help you make a reservation?"
+      }
+    ]
+  },
+  {
+    "Day": "Day026",
+    "MainSentence": "I’ve been trying to keep busy.",
+    "ModelExamples": [
+      {
+        "ko": "그냥 뭐 좀 하느라고 바빴어.",
+        "en": "I was just trying to keep busy."
+      },
+      {
+        "ko": "잡생각 안 하려고 계속 바쁘게 지냈어요.",
+        "en": "I’ve been trying to keep myself busy to keep my mind off things."
+      },
+      {
+        "ko": "아이들이 방학이라 계속 뭘 하게 해 줘야 해요.",
+        "en": "The kids are on vacation, so I have been trying to keep them busy."
+      },
+      {
+        "ko": "은퇴하신 후에 아버지는 소일거리를 찾으시려고 노력하셨다.",
+        "en": "After he retired, my father tried to find things to keep him busy."
+      },
+      {
+        "ko": "손님들이 줄을 서서 기다리는 동안 지루하지 않게 해 드릴 방법이 필요합니다.",
+        "en": "We need to find a way to keep our customers busy while they wait in line."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "요즘 어떻게 지내?",
+        "en": "What have you been up to lately?"
+      },
+      {
+        "ko": "그냥 이것저것 하면서 바쁘게 지내려고 노력 중이야.",
+        "en": "Not much. I’ve just been trying to keep busy."
+      },
+      {
+        "ko": "은퇴 생활은 좀 어떠세요, 김 선생님? 지루하지는 않으세요?",
+        "en": "How are you enjoying your retirement. Mr. Kim? Are you getting bored?"
+      },
+      {
+        "ko": "전혀요. 정원에 손볼 게 아주 많아요. 그것만으로도 아주 바쁘게 지내고 있습니다.",
+        "en": "Not at all. My garden needs a lot of work. That’s been keeping me plenty busy."
+      },
+      {
+        "ko": "요즘 바빠 보이네. 얼굴 보기도 힘들다.",
+        "en": "You seem busy lately. I barely see you anymore."
+      },
+      {
+        "ko": "응, 잡생각이 많아져서 그냥 일만 열심히 하고 있어.",
+        "en": "Yeah, I’ve had a lot on my mind, so I’ve just been trying to keep busy with work."
+      }
+    ]
+  },
+  {
+    "Day": "Day027",
+    "MainSentence": "She was like, “I don’t want to see you anymore.”",
+    "ModelExamples": [
+      {
+        "ko": "그녀가 ‘나 너 더 이상 보기 싫어.’라고 하더라고.",
+        "en": "She was like, “I don’t want to see you anymore.”"
+      },
+      {
+        "ko": "그래서 내가 ‘상관 안 해. 네 맘대로 해.’라고 했지.",
+        "en": "And I was like, “I don’t care. Do whatever you want.”"
+      },
+      {
+        "ko": "그랬더니 걔가 ‘내가 낼게.’라고 하더라고. 그래서 내가 ‘아냐, 내가 낼게.’라고 했지.",
+        "en": "He was like, “I got this.” and I was like, “No, It’s on me.”"
+      },
+      {
+        "ko": "사장님이 ‘자네, 해고야!’라고 하시길래, 내가 ‘상관없어요! 저도 그만두려고 했거든요.’라고 했지.",
+        "en": "The boss was like, “You are fired!” and I was like, “I don’t care! I was going to quit anyway.”"
+      },
+      {
+        "ko": "내가 ‘사랑해’라고 말했더니 걔가 ‘뭐라고?’라고 하더라고.",
+        "en": "I was like, “I love you.” and she was like, “What?”"
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "어젯밤 데이트 어땠어?",
+        "en": "How was your date last night?"
+      },
+      {
+        "ko": "최악이었어. 식당에 들어갔는데, 걔가 ‘여기 별로다. 딴 데 가자.’라고 하더라고. 예의라고는 눈곱만큼도 없어.",
+        "en": "It was terrible. We walked into the restaurant and he was like, “I hate this place. Let’s go somewhere else.” He had no manners."
+      },
+      {
+        "ko": "어제 그 진상 손님 어떻게 처리했어?",
+        "en": "How did you handle that rude customer yesterday?"
+      },
+      {
+        "ko": "나한테 소리 지르길래, 그냥 ‘나가 주세요.’라고 했지.",
+        "en": "She was screaming at me, so I was just like, “Please leave.”"
+      },
+      {
+        "ko": "와, 너 진짜 머리 완전히 망쳤네. 미용사한테 항의 안 했어?",
+        "en": "Wow, your hair is really messed up. Did you complain to the hairdresser?"
+      },
+      {
+        "ko": "못 했어. 그녀가 ‘머리 너무 예쁘게 잘 됐네요.’라고 하는데, 내가 거기다 대고 뭐라고 해. 그냥 ‘고마워요.’라고 하고 나왔지.",
+        "en": "I couldn’t. She was like, “It looks so beautiful.” What could I say to that? I was just like, “Thank you.”"
+      }
+    ]
+  },
+  {
+    "Day": "Day028",
+    "MainSentence": "You might want to check the weather forecast before you go.",
+    "ModelExamples": [
+      {
+        "ko": "사장님께 먼저 여쭤보는 게 좋을 것 같아.",
+        "en": "You might want to ask the boss first."
+      },
+      {
+        "ko": "이거 입어 보는 게 좋을걸. 사이즈가 작게 나온 것 같아.",
+        "en": "You might want to try this on. It looks like it runs small."
+      },
+      {
+        "ko": "그거 안 먹는 게 좋을걸. 맛이 좀 간 것 같아.",
+        "en": "You might not want to eat that. It smells a little funky."
+      },
+      {
+        "ko": "택시 타는 게 좋을 거야. 지금 가면 차 막혀.",
+        "en": "You might want to take a taxi. Traffic is bad right now."
+      },
+      {
+        "ko": "그 사람한테는 돈 안 빌리는 게 좋을걸. 갚는 꼴을 못 봤어.",
+        "en": "You might not want to lend him any money. I’ve never seen him pay anyone back."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "나 정말 승진하고 싶어.",
+        "en": "I really want to get a promotion."
+      },
+      {
+        "ko": "음, 그러면 지각 그만하고, 일할 때 유튜브 좀 그만 보는 게 좋을걸.",
+        "en": "Well, you might want to stop coming in late and watching YouTube at work."
+      },
+      {
+        "ko": "어머니 생신 선물로 현금 드리려고.",
+        "en": "I’m giving my mother cash for her birthday."
+      },
+      {
+        "ko": "다시 생각하는 게 좋을걸. 성의 없어 보일 수 있잖아.",
+        "en": "You might want to rethink that. It can seem thoughtless."
+      },
+      {
+        "ko": "거기 면접 보러 갈 때 정장 입고 갈 거야.",
+        "en": "I’m going to wear a suit to the interview there."
+      },
+      {
+        "ko": "음, 거기 스타트업이라 다들 편하게 입고 다니거든. 너무 차려입지 않는 게 좋을 수도 있어.",
+        "en": "Well, it’s a startup company and everyone dresses casually. You might not want to overdress."
+      }
+    ]
+  },
+  {
+    "Day": "Day029",
+    "MainSentence": "I don’t really see myself doing that.",
+    "ModelExamples": [
+      {
+        "ko": "저는 그 일을 못 할 것 같아요.",
+        "en": "I don’t really see myself doing that job."
+      },
+      {
+        "ko": "전 제가 결혼하는 모습이 잘 안 그려져요.",
+        "en": "I don’t really see myself getting married."
+      },
+      {
+        "ko": "저는 제가 서울에 사는 모습이 상상이 안 가요.",
+        "en": "I don’t really see myself living in Seoul."
+      },
+      {
+        "ko": "10년 뒤에 어떤 모습일 것 같습니까?",
+        "en": "Where do you see yourself in 10 years?"
+      },
+      {
+        "ko": "저는 제가 은퇴하는 모습이 상상이 안 갑니다. 저는 죽는 날까지 일할 겁니다.",
+        "en": "I don’t see myself ever retiring. I’m going to work until the day I die."
+      }
+    ],
+    "SmallTalk": [
+      {
+        "ko": "와, 너 아이들 정말 잘 다루네. 선생님 하면 되겠다.",
+        "en": "Wow, you are so good with kids. You should be a teacher."
+      },
+      {
+        "ko": "에이, 난 못 해. 난 인내심이 부족하거든.",
+        "en": "Nah, I don’t really see myself doing that. I don’t have enough patience."
+      },
+      {
+        "ko": "너네 커플 정말 귀엽다. 둘이 결혼할 거야?",
+        "en": "You two are such a cute couple. Are you going to get married?"
+      },
+      {
+        "ko": "글쎄, 걔랑 결혼하는 건 상상이 안 가. 우린 너무 달라.",
+        "en": "Well, I don’t really see myself marrying him. We are just too different."
+      },
+      {
+        "ko": "너 골프 시작했담? 어때?",
+        "en": "I heard you started playing golf. How do you like it?"
+      },
+      {
+        "ko": "음, 내가 계속할 것 같지는 않아. 너무 비싸고 시간도 많이 걸려.",
+        "en": "Well, I don’t really see myself continuing with it. It’s too expensive and time-consuming."
+      }
+    ]
+  }
+]
