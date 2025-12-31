@@ -1,78 +1,74 @@
-# API 레퍼런스
+# API 문서
 
-이 문서는 영어 회화 암기 사이트의 내부 구조와 주요 클래스를 설명합니다.
+이 문서는 영어 회화 암기 사이트 프로젝트의 주요 파일 및 함수에 대한 설명을 포함합니다.
 
-## 백엔드 (데이터 소스)
+## 목차
 
-### `data.json`
+1. [개요](#개요)
+2. [백엔드 (PHP)](#백엔드-php)
+3. [프론트엔드 (JavaScript)](#프론트엔드-javascript)
+4. [유틸리티 (Node.js)](#유틸리티-nodejs)
 
-루트 디렉토리에 위치합니다.
-Notion에서 추출된 구조화된 퀴즈 데이터를 포함합니다.
+## 개요
 
-#### 구조 (Structure)
+이 프로젝트는 PHP 기반의 간단한 웹 애플리케이션으로, Notion에서 스크랩한 데이터를 JSON 형식으로 저장하고 이를 프론트엔드에서 퀴즈 형태로 제공합니다.
 
-Day 객체들의 배열입니다.
+## 백엔드 (PHP)
 
-```json
-[
-  {
-    "Day": "Day001",
-    "MainSentence": "Working from home isn’t for me.",
-    "ModelExamples": [
-      {
-        "ko": "저는 재택근무 체질이 아니에요. 늘 딴짓하게 되거든요.",
-        "en": "Working from home isn’t for me.  I always get distracted."
-      }
-    ],
-    "SmallTalk": [
-       {
-        "ko": "질문...",
-        "en": "Answer..."
-      }
-    ]
-  },
-  ...
-]
-```
+### `index.php`
+
+메인 진입점 파일입니다.
+
+- **기능**:
+  - `data.json` 파일 로드 및 파싱 검증
+  - JSON 데이터를 파싱하여 HTML 구조로 변환 (서버 사이드 렌더링 일부 포함 - Select 옵션 등)
+  - `quizData` 변수를 통해 프론트엔드로 데이터 주입
+- **주요 변수**:
+  - `$filename`: 데이터 파일 경로 (`data.json`)
+  - `$data`: 날짜별 퀴즈 카드 데이터가 담긴 연관 배열
 
 ## 프론트엔드 (JavaScript)
 
-`script.js`에 위치합니다.
-대화형 퀴즈 로직을 처리합니다.
+### `script.js`
 
-### `QuizApp`
+사용자 인터페이스 상호작용 및 퀴즈 로직을 담당합니다.
 
-UI와 로직을 조율하는 메인 애플리케이션 클래스입니다.
+#### `class FontSizeManager`
 
-#### 속성 (Properties)
+질문과 정답 텍스트의 글자 크기를 관리합니다.
 
-- `data`: PHP에서 전달된 파싱된 퀴즈 데이터입니다.
-- `currentDayData`: 현재 선택된 Day의 질문 배열입니다.
-- `currentIndex`: 현재 표시되고 있는 질문의 인덱스입니다.
+- **메서드**:
+  - `changeSize(delta)`: 주어진 `delta`만큼 글자 크기를 변경합니다. (최소 1.0rem ~ 최대 4.0rem)
+  - `update()`: 변경된 크기를 DOM에 적용하고 `localStorage`에 저장합니다.
 
-#### 주요 메서드 (Key Methods)
+#### `class DarkModeManager`
 
-- **`loadDay(day, startAtEnd = false)`**: 지정된 Day의 질문을 로드합니다. `startAtEnd`는 첫 번째 질문부터 시작할지 마지막 질문부터 시작할지를 결정합니다 (뒤로 가기 네비게이션에 유용).
-- **`sortOptions()`**: Day 옵션 정렬을 처리합니다. 다음을 지원합니다:
-  - **Reverse (거꾸로)**: Day 순서를 반대로 뒤집습니다.
-  - **Random (무작위)**: Fisher-Yates 알고리즘을 사용하여 Day 순서를 무작위로 섞습니다.
-- **`handleNext()` / `handlePrev()`**: 질문 간의 이동을 처리합니다. 경계에 도달하면 자동으로 다음/이전 Day로 전환합니다.
+다크 모드/라이트 모드 전환을 관리합니다.
 
-### `FontSizeManager`
+- **기능**:
+  - `localStorage`에 사용자 설정을 저장하여 재방문 시 기본값으로 사용
+  - `body` 태그에 `.dark-mode` 클래스 토글
 
-질문 및 정답 텍스트의 글자 크기 설정을 관리합니다.
+#### `class QuizApp`
 
-#### 기능 (Features)
+퀴즈 애플리케이션의 핵심 로직입니다.
 
-- **영구 저장 (Persistence)**: 사용자의 글자 크기 설정을 `localStorage`에 저장합니다.
-- **범위 (Range)**: 글자 크기를 `1.0rem`에서 `4.0rem` 사이로 제한합니다.
+- **생성자**: `new QuizApp(data)`
+- **주요 메서드**:
+  - `loadDay(day)`: 선택된 날짜의 데이터를 로드하고 첫 번째 카드를 표시합니다.
+  - `updateCard()`: 현재 질문과 정답을 화면에 렌더링합니다.
+  - `handlePrev() / handleNext()`: 이전/다음 질문으로 이동합니다. 날짜 경계를 넘어가면 자동으로 날짜를 변경합니다.
+  - `shuffleArray(array)`: Fisher-Yates 알고리즘을 사용하여 배열을 무작위로 섞습니다.
 
-### `DarkModeManager`
+## 유틸리티 (Node.js)
 
-다크 모드 테마를 관리합니다.
+### `scraper.js`
 
-#### 기능 (Features)
+Notion 페이지에서 데이터를 스크래핑하여 `data.json`을 생성하는 스크립트입니다.
 
-- **전환 (Toggling)**: 라이트 모드와 다크 모드 간을 전환합니다.
-- **영구 저장 (Persistence)**: 사용자의 설정을 `localStorage`의 `useDarkMode` 키에 저장합니다.
-- **UI 업데이트 (UI Update)**: `<body>` 요소에 `.dark-mode` 클래스를 토글하고 버튼 아이콘(🌙 / ☀️)을 업데이트합니다.
+- **사용법**: `node scraper.js`
+- **주요 함수**:
+  - `scrapeNotion()`: Puppeteer를 사용하여 Notion 페이지에 접속, 데이터 로드 및 텍스트 추출
+  - `parseNotionText(text)`: 추출된 원본 텍스트를 파싱하여 구조화된 JSON 데이터로 변환
+    - 한글/영어 라인을 감지하여 자동 매핑
+    - Day 별 `ModelExamples` 및 `SmallTalk` 섹션 분류

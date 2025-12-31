@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.questionEl = questionEl;
             this.answerEl = answerEl;
             this.qSize = parseFloat(localStorage.getItem('questionFontSize')) || 2.0;
-            this.aSize = parseFloat(localStorage.getItem('answerFontSize')) || 3.0;
+            this.aSize = parseFloat(localStorage.getItem('answerFontSize')) || 2.0;
             this.init();
         }
 
@@ -38,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        /**
+         * 변경된 글자 크기를 DOM 요소에 적용하고 localStorage에 저장합니다.
+         */
         update() {
             this.questionEl.style.fontSize = `${this.qSize}rem`;
             this.answerEl.style.fontSize = `${this.aSize}rem`;
@@ -57,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
             this.init();
         }
 
+        /**
+         * 초기화 메서드입니다. 저장된 설정이 있으면 적용하고 이벤트를 바인딩합니다.
+         */
         init() {
             // 초기 상태 적용
             if (this.isDarkMode) {
@@ -196,6 +202,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        /**
+         * 특정 Day의 데이터를 로드하고 화면을 갱신합니다.
+         * 
+         * @param {string} day - 선택된 Day 식별자
+         * @param {boolean} [startAtEnd=false] - true일 경우 마지막 문제부터 시작 (이전 Day에서 넘어올 때 사용)
+         */
         loadDay(day, startAtEnd = false) {
             this.currentDayData = this.data[day] || [];
             this.currentIndex = startAtEnd && this.currentDayData.length > 0 ? this.currentDayData.length - 1 : 0;
@@ -241,6 +253,10 @@ document.addEventListener('DOMContentLoaded', () => {
             this.nextBtn.disabled = isLastQuestion && isLastDay;
         }
 
+        /**
+         * '이전' 버튼 클릭 시 처리를 담당합니다.
+         * 현재 Day의 첫 문제라면 이전 Day로 이동합니다.
+         */
         handlePrev() {
             if (this.currentIndex > 0) {
                 // 현재 Day의 이전 질문으로 이동
@@ -253,6 +269,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        /**
+         * '다음' 버튼 클릭 시 처리를 담당합니다.
+         * 현재 Day의 마지막 문제라면 다음 Day로 이동합니다.
+         */
         handleNext() {
             if (this.currentIndex < this.currentDayData.length - 1) {
                 // 현재 Day의 다음 질문으로 이동
