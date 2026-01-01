@@ -14,33 +14,32 @@
 
 ### 요구 사항
 
-- PHP 7.4 이상
-- Node.js (스크래퍼 실행 시 필요)
+- PHP 7.4 이상 (cURL 확장 모듈 필요)
+- Notion API 키 및 페이지 ID
 
 ### 실행
 
 1. 저장소를 클론합니다.
-2. 웹 서버(Apache, Nginx 등) 또는 PHP 내장 서버를 사용하여 실행합니다.
+2. 프로젝트 루트에 `.env` 파일을 생성하고 다음 정보를 입력합니다:
+   ```
+   NOTION_KEY=your_integration_secret
+   NOTION_PAGE_ID=your_page_id
+   ```
+3. 웹 서버(Apache, Nginx 등) 또는 PHP 내장 서버를 사용하여 실행합니다.
    ```bash
    php -S localhost:8000
    ```
-3. 브라우저에서 `http://localhost:8000`으로 접속합니다.
+4. 브라우저에서 `http://localhost:8000`으로 접속합니다.
 
-### 데이터 업데이트 (선택 사항)
+### 데이터 업데이트
 
-Notion 페이지의 데이터를 최신으로 업데이트하려면 스크래퍼를 실행하세요.
-
-```bash
-npm install
-node scraper.js
-```
+웹 페이지 우측 상단의 **새로고침(🔄) 아이콘**을 클릭하면 Notion에서 최신 데이터를 가져와 `data.json`을 업데이트합니다.
 
 ## 프로젝트 구조
 
-- `index.php`: 메인 웹 페이지 및 로직
-- `script.js`: 프론트엔드 인터랙션 로직
+- `index.php`: 메인 웹 페이지, 파싱 로직, Notion 연동 및 프론트엔드 로직
+- `NotionImporter.php`: Notion API 통신 및 데이터 처리 클래스
 - `style.css`: 스타일시트
-- `scraper.js`: Notion 데이터 스크래핑 도구
 - `data.json`: 스크래핑된 학습 데이터
 - `API.md`: 코드 및 API 상세 문서
 
