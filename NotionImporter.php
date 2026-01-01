@@ -37,10 +37,13 @@ class NotionImporter
         // 2. 텍스트 파싱
         $structuredData = $this->parseNotionText($rawText);
 
-        // 3. 파일 저장
-        file_put_contents(__DIR__ . '/data.json', json_encode($structuredData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        // 3. 파일 저장 (데이터가 있을 때만 저장하여 오동작 방지)
+        if (!empty($structuredData)) {
+            file_put_contents(__DIR__ . '/data.json', json_encode($structuredData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            return count($structuredData);
+        }
 
-        return count($structuredData);
+        return 0;
     }
 
     /**
@@ -121,7 +124,6 @@ class NotionImporter
         curl_close($ch);
 
         if ($httpCode !== 200) {
-
             return null;
         }
 
@@ -145,42 +147,6 @@ class NotionImporter
         $currentSection = null; // 'ModelExamples' or 'SmallTalk'
         $sectionBuffer = [];
 
-        // 내부 함수: 버퍼 처리
-        $flushSectionBuffer = function () use (&$currentDay, &$currentSection, &$sectionBuffer) {
-            if (!$currentDay || !$currentSection || empty($sectionBuffer))
-                return;
-
-            $koLines = [];
-            $enLines = [];
-
-            foreach ($sectionBuffer as $line) {
-                // 성능 최적화: $matches 배열 생성 없이 반환값(매칭 수)만 사용
-                $hangulCount = preg_match_all('/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/u', $line);
-                $englishCount = preg_match_all('/[a-zA-Z]/', $line);
-
-                if ($hangulCount === 0) {
-                    $enLines[] = $line;
-                } else {
-                    // 한글이 있지만 영어가 압도적으로 많으면 영어로 간주
-                    if ($englishCount > $hangulCount * 2) {
-                        $enLines[] = $line;
-                    } else {
-                        $koLines[] = $line;
-                    }
-                }
-            }
-
-            $count = min(count($koLines), count($enLines));
-            for ($i = 0; $i < $count; $i++) {
-                $currentDay[$currentSection][] = [
-                    'ko' => $koLines[$i],
-                    'en' => $enLines[$i]
-                ];
-            }
-
-            $sectionBuffer = [];
-        };
-
         foreach ($lines as $rawLine) {
             $line = trim($rawLine);
             // 빈 줄 건너뛰기
@@ -190,7 +156,7 @@ class NotionImporter
 
             // Day 헤더 감지 "Day 001" 등
             if (preg_match('/^Day\s*(\d+)/i', $line, $matches)) {
-                $flushSectionBuffer();
+                $this->processSectionBuffer($currentDay, $currentSection, $sectionBuffer);
                 if ($currentDay) {
                     $days[] = $currentDay;
                 }
@@ -220,13 +186,13 @@ class NotionImporter
             $lowerLine = strtolower(str_replace(' ', '', $line));
 
             if (strpos($lowerLine, '[modelexamples]') !== false) {
-                $flushSectionBuffer();
+                $this->processSectionBuffer($currentDay, $currentSection, $sectionBuffer);
                 $currentSection = 'ModelExamples';
                 continue;
             }
 
             if (strpos($lowerLine, '[smalltalk]') !== false) {
-                $flushSectionBuffer();
+                $this->processSectionBuffer($currentDay, $currentSection, $sectionBuffer);
                 $currentSection = 'SmallTalk';
                 continue;
             }
@@ -237,26 +203,67 @@ class NotionImporter
             $sectionBuffer[] = $line;
         }
 
-        $flushSectionBuffer();
+        $this->processSectionBuffer($currentDay, $currentSection, $sectionBuffer);
         if ($currentDay) {
             $days[] = $currentDay;
         }
 
-        // 중복 제거 및 정렬
-        $uniqueDays = [];
-        $seenDays = [];
+        // 중복 제거 (O(N) 해시맵 사용)
+        $uniqueDaysMap = [];
 
         foreach ($days as $day) {
-            if (!in_array($day['Day'], $seenDays)) {
-                $uniqueDays[] = $day;
-                $seenDays[] = $day['Day'];
+            if (!isset($uniqueDaysMap[$day['Day']])) {
+                $uniqueDaysMap[$day['Day']] = $day;
             }
         }
+
+        $uniqueDays = array_values($uniqueDaysMap);
 
         usort($uniqueDays, function ($a, $b) {
             return strcmp($a['Day'], $b['Day']);
         });
 
         return $uniqueDays;
+    }
+
+    /**
+     * 섹션 버퍼를 처리하여 구조화된 데이터에 추가합니다.
+     *
+     * @param array|null &$currentDay 현재 처리 중인 Day 데이터 배열 참조
+     * @param string|null $currentSection 현재 섹션 이름 ('ModelExamples' or 'SmallTalk')
+     * @param array &$sectionBuffer 현재 섹션의 텍스트 줄 버퍼 참조 (처리 후 비워짐)
+     */
+    private function processSectionBuffer(&$currentDay, $currentSection, &$sectionBuffer)
+    {
+        if (!$currentDay || !$currentSection || empty($sectionBuffer))
+            return;
+
+        $koLines = [];
+        $enLines = [];
+
+        foreach ($sectionBuffer as $line) {
+            $hangulCount = preg_match_all('/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/u', $line);
+            $englishCount = preg_match_all('/[a-zA-Z]/', $line);
+
+            if ($hangulCount === 0) {
+                $enLines[] = $line;
+            } else {
+                if ($englishCount > $hangulCount * 2) {
+                    $enLines[] = $line;
+                } else {
+                    $koLines[] = $line;
+                }
+            }
+        }
+
+        $count = min(count($koLines), count($enLines));
+        for ($i = 0; $i < $count; $i++) {
+            $currentDay[$currentSection][] = [
+                'ko' => $koLines[$i],
+                'en' => $enLines[$i]
+            ];
+        }
+
+        $sectionBuffer = [];
     }
 }

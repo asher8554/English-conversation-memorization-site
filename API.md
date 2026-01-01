@@ -25,17 +25,23 @@ Notion API를 통해 데이터를 가져오고 파싱하여 `data.json` 파일�
   - cURL을 사용하여 Notion API 요청을 수행합니다.
 - **`private parseNotionText(string $text): array`**
   - 원시 텍스트 데이터를 분석하여 Day, MainSentence, ModelExamples, SmallTalk 구조로 변환합니다.
+- **`private processSectionBuffer(array &$currentDay, string $currentSection, array &$sectionBuffer): void`**
+  - 추출된 텍스트 버퍼를 분석하여 한글/영어 문장으로 분리하고 현재 Day 데이터에 추가합니다.
+
+### `Utils.php`
+
+환경 설정 로딩 및 프론트엔드 데이터 변환을 담당하는 유틸리티 클래스입니다.
+
+#### `class Utils`
+
+- **`static loadEnv(string $path): array`**
+  - `.env` 파일을 파싱하여 PHP 환경 변수 배열로 반환합니다.
+- **`static processQuizData(array $jsonData): array`**
+  - 원시 JSON 데이터를 프론트엔드에서 사용할 형식으로 변환합니다.
 
 ### `index.php`
 
-웹 애플리케이션의 진입점이며, 환경 설정 로딩 및 초기 데이터 처리를 담당합니다.
-
-#### 함수
-
-- **`loadEnv(string $path): array`**
-  - `.env` 파일을 파싱하여 PHP 환경 변수 배열로 반환합니다.
-- **`processQuizData(array $jsonData): array`**
-  - 원시 JSON 데이터를 프론트엔드에서 사용할 형식으로 변환합니다.
+웹 애플리케이션의 진입점입니다. `Utils` 클래스를 사용하여 환경 설정을 로드하고 `NotionImporter`를 호출하여 데이터를 처리한 후, HTML/JS를 렌더링합니다.
 
 ---
 

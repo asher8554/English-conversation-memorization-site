@@ -184,7 +184,7 @@ select:focus {
 
 .btn-secondary {
   background: #f3f4f6;
-  color: #1f2937; /* Consistent dark text for secondary buttons even in dark mode for contrast */
+  color: #1f2937; /* 다크 모드에서도 대비를 위해 보조 버튼에 일관된 어두운 텍스트 색상 사용 */
   flex: 1;
 }
 .dark-mode .btn-secondary {
@@ -204,7 +204,7 @@ select:focus {
   cursor: not-allowed;
 }
 
-/* Animations */
+/* 애니메이션 */
 @keyframes fadeIn {
   from {
     opacity: 0;
