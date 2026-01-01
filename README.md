@@ -37,7 +37,8 @@
 
 ## 프로젝트 구조
 
-- `index.php`: 메인 웹 페이지, 파싱 로직, Notion 연동 및 프론트엔드 로직
+- `index.php`: 메인 웹 페이지, Notion 연동 및 프론트엔드 로직 포함
+- `Utils.php`: 환경 변수 로드 및 데이터 처리 유틸리티
 - `NotionImporter.php`: Notion API 통신 및 데이터 처리 클래스
 - `style.css`: 스타일시트
 - `data.json`: 스크래핑된 학습 데이터
