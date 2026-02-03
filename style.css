@@ -62,21 +62,18 @@ body {
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-header {
-  margin-bottom: 2rem;
-}
-
-h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  background: linear-gradient(
-    to right,
-    var(--primary-color),
-    var(--primary-hover)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.container {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .day-selector {
