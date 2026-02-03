@@ -1,55 +1,45 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English Conversation Memorization</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
-
 <body>
-    <div class="font-controls">
-        <!-- Notion Import 버튼은 정적 사이트에서 작동하지 않으므로 제거함 -->
-        <button id="darkModeToggle" class="btn-circle" title="Toggle Dark Mode">🌙</button>
-        <button id="decreaseFont" class="btn-circle" title="Decrease Font Size">-</button>
-        <button id="increaseFont" class="btn-circle" title="Increase Font Size">+</button>
-    </div>
-
     <div class="container">
         <header>
-            <div class="day-selector">
-                <select id="daySelect">
-                    <!-- JavaScript로 동적 생성됨 -->
-                </select>
-                <div class="checkbox-wrapper">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="reverseOrder"> Reverse
-                    </label>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="randomOrder"> Random
-                    </label>
-                </div>
-            </div>
+            <h1>English Conversation Memorization</h1>
+            <button id="darkModeToggle" class="toggle-btn" aria-label="Toggle Dark Mode">🌙</button>
         </header>
 
-        <main class="card-area">
-            <div class="controls">
-                <button class="btn btn-secondary" id="prevBtn">Previous</button>
-                <button class="btn btn-secondary" id="nextBtn">Next</button>
+        <div class="controls">
+            <select id="daySelect" aria-label="Select Day"></select>
+            <div class="font-controls">
+                <button id="decreaseFont" aria-label="Decrease Font Size">A-</button>
+                <button id="increaseFont" aria-label="Increase Font Size">A+</button>
             </div>
-            <div id="cardContent" class="fade-in">
-                <div class="question" id="questionText"></div>
-                <button class="btn btn-primary" id="showAnswerBtn">Show Answer</button>
-                <div class="answer-container">
-                    <div class="answer" id="answerText"></div>
-                </div>
+            <div class="sort-controls">
+                <label><input type="checkbox" id="reverseOrder"> 역순</label>
+                <label><input type="checkbox" id="randomOrder"> 무작위</label>
             </div>
-        </main>
+        </div>
+
+        <div class="card">
+            <div id="cardContent" class="card-content fade-in">
+                <div id="questionText" class="question"></div>
+                <!-- 정답은 버튼을 누르면 표시 -->
+                <button id="showAnswerBtn" class="show-answer-btn">Show Answer</button>
+                <div id="answerText" class="answer"></div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button id="prevBtn" disabled>&laquo; Prev</button>
+            <button id="nextBtn" disabled>Next &raquo;</button>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
 </body>
-
 </html>
