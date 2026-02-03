@@ -185,6 +185,7 @@ class TTSManager {
 
     /**
      * 사용 가능한 음성 목록을 가져와 드롭다운을 채웁니다.
+     * 자연스러운 목소리(Google, Microsoft 등)를 우선순위로 정렬합니다.
      */
     populateVoiceList() {
         this.voices = this.synth.getVoices();
@@ -194,19 +195,56 @@ class TTSManager {
         this.koVoiceSelect.innerHTML = '';
         this.enVoiceSelect.innerHTML = '';
 
-        this.voices.forEach((voice) => {
-            const option = document.createElement('option');
-            option.textContent = `${voice.name} (${voice.lang})`;
-            option.value = voice.name;
-            option.setAttribute('data-lang', voice.lang);
-            option.setAttribute('data-name', voice.name);
+        // 우선순위 키워드 (자연스러운 목소리 순서)
+        const premiumKeywords = ['Google', 'Microsoft', 'Apple', 'Natural', 'Premium'];
 
-            if (voice.lang.includes('ko')) {
-                this.koVoiceSelect.appendChild(option.cloneNode(true));
-            } else if (voice.lang.includes('en')) {
-                this.enVoiceSelect.appendChild(option.cloneNode(true));
+        const sortVoices = (a, b) => {
+            const getScore = (voice) => {
+                let score = 0;
+                premiumKeywords.forEach((keyword, index) => {
+                    if (voice.name.includes(keyword)) score += (10 - index);
+                });
+                return score;
+            };
+            return getScore(b) - getScore(a); // 점수 높은 순 내림차순
+        };
+
+        // 한국어 필터링 및 정렬
+        const koVoices = this.voices
+            .filter(v => v.lang.includes('ko') || v.lang === 'ko_KR')
+            .sort(sortVoices);
+
+        // 영어 필터링 및 정렬
+        const enVoices = this.voices
+            .filter(v => v.lang.startsWith('en-') || v.lang === 'en_US' || v.lang === 'en_GB')
+            .sort(sortVoices);
+
+        // 정렬된 리스트 추가
+        const addOptions = (voiceList, selectElement) => {
+            voiceList.forEach(voice => {
+                const option = document.createElement('option');
+                // 이름 좀 더 깔끔하게 표시
+                let displayName = voice.name;
+                
+                // 불필요한 시스템 텍스트 제거 (예: Japanese -> 일본어 등의 표시는 유지하되 너무 길면 자르기)
+                if (displayName.includes('Google')) displayName = displayName.replace('Google', 'Google (Natural)');
+                if (displayName.includes('Microsoft')) displayName = displayName.replace('Microsoft', 'MS');
+
+                option.textContent = `${displayName}`;
+                option.value = voice.name;
+                selectElement.appendChild(option);
+            });
+            
+            // 만약 목소리가 아예 없으면 기본 안내 추가
+            if (voiceList.length === 0) {
+                const option = document.createElement('option');
+                option.textContent = "사용 가능한 목소리가 없습니다";
+                selectElement.appendChild(option);
             }
-        });
+        };
+
+        addOptions(koVoices, this.koVoiceSelect);
+        addOptions(enVoices, this.enVoiceSelect);
     }
 
     /**
