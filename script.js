@@ -207,10 +207,6 @@ class QuizApp {
         this.cardContent = document.getElementById('cardContent');
         this.reverseOrderCheckbox = document.getElementById('reverseOrder');
         this.randomOrderCheckbox = document.getElementById('randomOrder');
-        
-        // TTS 버튼
-        this.speakQuestionBtn = document.getElementById('speakQuestionBtn');
-        this.speakAnswerBtn = document.getElementById('speakAnswerBtn');
     }
 
     /**
@@ -257,10 +253,6 @@ class QuizApp {
         this.showAnswerBtn.addEventListener('click', () => {
             this.answerText.classList.add('visible');
             this.showAnswerBtn.style.display = 'none';
-            this.speakAnswerBtn.style.display = 'inline-block'; // 정답이 보이면 버튼 표시
-            
-            // 정답 자동 읽기 (선택 사항: 원하면 주석 해제)
-            // this.ttsManager.speak(this.answerText.textContent, 'en-US');
         });
 
         this.prevBtn.addEventListener('click', () => this.handlePrev());
@@ -268,15 +260,6 @@ class QuizApp {
 
         this.reverseOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.randomOrderCheckbox));
         this.randomOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.reverseOrderCheckbox));
-
-        // TTS 이벤트
-        this.speakQuestionBtn.addEventListener('click', () => {
-            this.ttsManager.speak(this.questionText.textContent, 'ko-KR');
-        });
-
-        this.speakAnswerBtn.addEventListener('click', () => {
-            this.ttsManager.speak(this.answerText.textContent, 'en-US');
-        });
     }
 
     /**
@@ -368,9 +351,11 @@ class QuizApp {
         
         this.showAnswerBtn.style.display = 'block';
         this.showAnswerBtn.textContent = 'Show Answer';
-        this.speakAnswerBtn.style.display = 'none'; // 정답 버튼은 처음에 숨김
 
         this.updateNavButtons();
+        
+        // 질문 자동 읽기 (TTS)
+        this.ttsManager.speak(currentItem.q, 'ko-KR');
     }
 
     /**
