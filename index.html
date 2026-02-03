@@ -7,21 +7,20 @@
     <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
+    <div class="font-controls">
+        <button id="refreshBtn" class="btn-circle" title="Refresh Page">🔄</button>
+        <button id="darkModeToggle" class="btn-circle" title="Toggle Dark Mode">🌙</button>
+        <button id="decreaseFont" class="btn-circle" title="Decrease Font Size">-</button>
+        <button id="increaseFont" class="btn-circle" title="Increase Font Size">+</button>
+    </div>
+
     <div class="container">
         <header>
             <h1>English Conversation Memorization</h1>
-            <div>
-                <button id="refreshBtn" class="toggle-btn" aria-label="Refresh Page" style="margin-right: 0.5rem;">🔄</button>
-                <button id="darkModeToggle" class="toggle-btn" aria-label="Toggle Dark Mode">🌙</button>
-            </div>
         </header>
 
         <div class="controls">
             <select id="daySelect" aria-label="Select Day"></select>
-            <div class="font-controls">
-                <button id="decreaseFont" aria-label="Decrease Font Size">A-</button>
-                <button id="increaseFont" aria-label="Increase Font Size">A+</button>
-            </div>
             <div class="sort-controls">
                 <label><input type="checkbox" id="reverseOrder"> 역순</label>
                 <label><input type="checkbox" id="randomOrder"> 무작위</label>
