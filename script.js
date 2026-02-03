@@ -118,6 +118,57 @@ class DarkModeManager {
 }
 
 /**
+ * 텍스트 음성 변환(TTS) 기능을 관리합니다.
+ * 
+ * @class TTSManager
+ */
+class TTSManager {
+    constructor() {
+        this.synth = window.speechSynthesis;
+        this.voices = [];
+        this.init();
+    }
+
+    init() {
+        // 음성 목록 로드 (비동기 처리)
+        if (this.synth.onvoiceschanged !== undefined) {
+            this.synth.onvoiceschanged = () => {
+                this.voices = this.synth.getVoices();
+            };
+        }
+        // 초기 로드 시도
+        this.voices = this.synth.getVoices();
+    }
+
+    /**
+     * 텍스트를 음성으로 읽습니다.
+     * @param {string} text - 읽을 텍스트
+     * @param {string} lang - 언어 코드 ('ko-KR' or 'en-US')
+     */
+    speak(text, lang = 'en-US') {
+        if (!text) return;
+        
+        // 말하기 중단 (이전 발화 취소)
+        this.synth.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        utterance.rate = 1.0; // 속도
+        utterance.pitch = 1.0; // 높낮이
+
+        // 최적의 목소리 선택
+        const voice = this.voices.find(v => v.lang === lang || v.lang.startsWith(lang.split('-')[0])) 
+                   || this.voices[0];
+        
+        if (voice) {
+            utterance.voice = voice;
+        }
+
+        this.synth.speak(utterance);
+    }
+}
+
+/**
  * 퀴즈 애플리케이션의 핵심 로직을 담당합니다.
  * 데이터 로딩, UI 렌더링, 네비게이션, 정렬 기능을 관리합니다.
  *
@@ -156,6 +207,10 @@ class QuizApp {
         this.cardContent = document.getElementById('cardContent');
         this.reverseOrderCheckbox = document.getElementById('reverseOrder');
         this.randomOrderCheckbox = document.getElementById('randomOrder');
+        
+        // TTS 버튼
+        this.speakQuestionBtn = document.getElementById('speakQuestionBtn');
+        this.speakAnswerBtn = document.getElementById('speakAnswerBtn');
     }
 
     /**
@@ -180,6 +235,7 @@ class QuizApp {
      * 이벤트 리스너를 등록하고 첫 번째 데이터를 로드합니다.
      */
     init() {
+        this.ttsManager = new TTSManager();
         this.initEventListeners();
 
         new DarkModeManager();
@@ -201,6 +257,10 @@ class QuizApp {
         this.showAnswerBtn.addEventListener('click', () => {
             this.answerText.classList.add('visible');
             this.showAnswerBtn.style.display = 'none';
+            this.speakAnswerBtn.style.display = 'inline-block'; // 정답이 보이면 버튼 표시
+            
+            // 정답 자동 읽기 (선택 사항: 원하면 주석 해제)
+            // this.ttsManager.speak(this.answerText.textContent, 'en-US');
         });
 
         this.prevBtn.addEventListener('click', () => this.handlePrev());
@@ -208,6 +268,15 @@ class QuizApp {
 
         this.reverseOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.randomOrderCheckbox));
         this.randomOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.reverseOrderCheckbox));
+
+        // TTS 이벤트
+        this.speakQuestionBtn.addEventListener('click', () => {
+            this.ttsManager.speak(this.questionText.textContent, 'ko-KR');
+        });
+
+        this.speakAnswerBtn.addEventListener('click', () => {
+            this.ttsManager.speak(this.answerText.textContent, 'en-US');
+        });
     }
 
     /**
@@ -299,6 +368,7 @@ class QuizApp {
         
         this.showAnswerBtn.style.display = 'block';
         this.showAnswerBtn.textContent = 'Show Answer';
+        this.speakAnswerBtn.style.display = 'none'; // 정답 버튼은 처음에 숨김
 
         this.updateNavButtons();
     }

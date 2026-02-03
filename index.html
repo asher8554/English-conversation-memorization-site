@@ -15,8 +15,6 @@
     </div>
 
     <div class="container">
-    <div class="container">
-
         <div class="controls">
             <select id="daySelect" aria-label="Select Day"></select>
             <div class="sort-controls">
@@ -27,10 +25,16 @@
 
         <div class="card">
             <div id="cardContent" class="card-content fade-in">
-                <div id="questionText" class="question"></div>
+                <div class="text-with-audio">
+                    <div id="questionText" class="question"></div>
+                    <button id="speakQuestionBtn" class="btn-speak" title="질문 읽기">🔊</button>
+                </div>
                 <!-- 정답은 버튼을 누르면 표시 -->
                 <button id="showAnswerBtn" class="btn btn-primary">Show Answer</button>
-                <div id="answerText" class="answer"></div>
+                <div class="text-with-audio">
+                    <div id="answerText" class="answer"></div>
+                    <button id="speakAnswerBtn" class="btn-speak" title="정답 읽기" style="display: none;">🔊</button>
+                </div>
             </div>
         </div>
 
