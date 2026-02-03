@@ -39,11 +39,64 @@ class NotionImporter
 
         // 3. 파일 저장 (데이터가 있을 때만 저장하여 오동작 방지)
         if (!empty($structuredData)) {
-            file_put_contents(__DIR__ . '/data.json', json_encode($structuredData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            // 프론트엔드 최적화: 데이터 구조 변환 및 압축 (Minify)
+            $optimizedData = $this->transformForFrontend($structuredData);
+            file_put_contents(__DIR__ . '/data.json', json_encode($optimizedData, JSON_UNESCAPED_UNICODE));
             return count($structuredData);
         }
 
         return 0;
+    }
+
+    /**
+     * 프론트엔드 최적화를 위해 데이터를 미리 변환합니다.
+     * 클라이언트(JS)에서 수행하던 O(N) 데이터 가공 작업을 빌드 시점에 수행하여
+     * 브라우저 초기화 성능을 개선하고 스크립트 복잡도를 낮춥니다.
+     *
+     * @param array $rawData Notion에서 파싱된 원본 데이터
+     * @return array ['data' => ..., 'dayMainSentences' => ...] 구조의 최적화된 데이터
+     */
+    private function transformForFrontend($rawData)
+    {
+        $cardsByDay = [];
+        $sentencesByDay = [];
+
+        foreach ($rawData as $dayItem) {
+            $dayKey = $dayItem['Day'];
+            $sentencesByDay[$dayKey] = isset($dayItem['MainSentence']) ? $dayItem['MainSentence'] : '';
+            $cards = [];
+
+            // 모델 예시 (Model Examples) 처리
+            if (isset($dayItem['ModelExamples']) && is_array($dayItem['ModelExamples'])) {
+                foreach ($dayItem['ModelExamples'] as $ex) {
+                    if (isset($ex['ko']) && isset($ex['en'])) {
+                        $cards[] = [
+                            'q' => $ex['ko'],
+                            'a' => $ex['en']
+                        ];
+                    }
+                }
+            }
+
+            // 스몰 토크 (Small Talk) 처리
+            if (isset($dayItem['SmallTalk']) && is_array($dayItem['SmallTalk'])) {
+                foreach ($dayItem['SmallTalk'] as $st) {
+                    if (isset($st['ko']) && isset($st['en'])) {
+                        $cards[] = [
+                            'q' => $st['ko'],
+                            'a' => $st['en']
+                        ];
+                    }
+                }
+            }
+
+            $cardsByDay[$dayKey] = $cards;
+        }
+
+        return [
+            'data' => $cardsByDay,
+            'dayMainSentences' => $sentencesByDay
+        ];
     }
 
     /**

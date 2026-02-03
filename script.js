@@ -5,8 +5,10 @@
  */
 class FontSizeManager {
     /**
-     * @param {HTMLElement} questionEl - 질문을 표시할 요소
-     * @param {HTMLElement} answerEl - 정답을 표시할 요소
+     * FontSizeManager 인스턴스를 생성합니다.
+     * 
+     * @param {HTMLElement} questionEl - 질문 텍스트를 표시할 DOM 요소
+     * @param {HTMLElement} answerEl - 정답 텍스트를 표시할 DOM 요소
      */
     constructor(questionEl, answerEl) {
         this.questionEl = questionEl;
@@ -16,6 +18,10 @@ class FontSizeManager {
         this.init();
     }
 
+    /**
+     * 초기화 로직을 수행합니다.
+     * 저장된 설정을 적용하고 글자 크기 조절 버튼에 이벤트 리스너를 등록합니다.
+     */
     init() {
         this.update();
         const increaseBtn = document.getElementById('increaseFont');
@@ -25,13 +31,14 @@ class FontSizeManager {
     }
 
     /**
-     * 델타 값만큼 글자 크기를 변경합니다.
-     * @param {number} delta - 변경할 크기 (예: 0.2)
+     * 글자 크기를 변경합니다.
+     * 
+     * @param {number} delta - 변경할 크기 (양수: 확대, 음수: 축소)
      */
     changeSize(delta) {
         const newQSize = this.qSize + delta;
 
-        // 1.0에서 4.0 사이로 제한
+        // 1.0rem ~ 4.0rem 사이로 크기 제한
         if (newQSize >= 1.0 && newQSize <= 4.0) {
             this.qSize += delta;
             this.aSize += delta;
@@ -40,7 +47,7 @@ class FontSizeManager {
     }
 
     /**
-     * 변경된 글자 크기를 DOM 요소에 적용하고 localStorage에 저장합니다.
+     * 변경된 글자 크기를 DOM에 적용하고 localStorage에 저장합니다.
      */
     update() {
         this.questionEl.style.fontSize = `${this.qSize}rem`;
@@ -51,11 +58,15 @@ class FontSizeManager {
 }
 
 /**
- * 다크 모드를 전환하고 설정을 localStorage에 저장합니다.
+ * 다크 모드/라이트 모드 전환을 관리합니다.
  *
  * @class DarkModeManager
  */
 class DarkModeManager {
+    /**
+     * DarkModeManager 인스턴스를 생성합니다.
+     * 초기 로드 시 저장된 설정에 따라 테마를 적용합니다.
+     */
     constructor() {
         this.toggleBtn = document.getElementById('darkModeToggle');
         this.body = document.body;
@@ -64,10 +75,9 @@ class DarkModeManager {
     }
 
     /**
-     * 초기화 메서드입니다. 저장된 설정이 있으면 적용하고 이벤트를 바인딩합니다.
+     * 초기화 로직을 수행합니다.
      */
     init() {
-        // 초기 상태 적용
         if (this.isDarkMode) {
             this.enableDarkMode();
         }
@@ -77,6 +87,9 @@ class DarkModeManager {
         }
     }
 
+    /**
+     * 다크 모드 상태를 토글합니다.
+     */
     toggle() {
         this.isDarkMode = !this.isDarkMode;
         if (this.isDarkMode) {
@@ -87,27 +100,35 @@ class DarkModeManager {
         localStorage.setItem('useDarkMode', this.isDarkMode);
     }
 
+    /**
+     * 다크 모드를 활성화합니다.
+     */
     enableDarkMode() {
         this.body.classList.add('dark-mode');
-        if (this.toggleBtn) this.toggleBtn.textContent = '☀️'; // 라이트 모드로 전환하는 해 아이콘
+        if (this.toggleBtn) this.toggleBtn.textContent = '☀️';
     }
 
+    /**
+     * 다크 모드를 비활성화(라이트 모드)합니다.
+     */
     disableDarkMode() {
         this.body.classList.remove('dark-mode');
-        if (this.toggleBtn) this.toggleBtn.textContent = '🌙'; // 다크 모드로 전환하는 달 아이콘
+        if (this.toggleBtn) this.toggleBtn.textContent = '🌙';
     }
 }
 
 /**
- * 퀴즈 앱의 메인 로직입니다.
- * 네비게이션, Day 로딩, 옵션 정렬 등을 처리합니다.
+ * 퀴즈 애플리케이션의 핵심 로직을 담당합니다.
+ * 데이터 로딩, UI 렌더링, 네비게이션, 정렬 기능을 관리합니다.
  *
  * @class QuizApp
  */
 class QuizApp {
     /**
-     * @param {Object} data - 퀴즈 데이터 구조
-     * @param {Object} dayMainSentences - Day별 메인 문장 데이터
+     * QuizApp 인스턴스를 생성합니다.
+     * 
+     * @param {Object} data - 날짜별 퀴즈 카드 데이터 (Question/Answer 쌍)
+     * @param {Object} dayMainSentences - 날짜별 메인 문장 데이터
      */
     constructor(data, dayMainSentences) {
         this.data = data;
@@ -116,12 +137,15 @@ class QuizApp {
         this.currentIndex = 0;
 
         this.cacheDOM();
-        this.populateDaySelect(); // Select 옵션 생성
+        this.populateDaySelect();
         this.originalOptions = Array.from(this.daySelect.options);
 
         this.init();
     }
 
+    /**
+     * 자주 사용되는 DOM 요소들을 캐싱합니다.
+     */
     cacheDOM() {
         this.daySelect = document.getElementById('daySelect');
         this.questionText = document.getElementById('questionText');
@@ -134,6 +158,9 @@ class QuizApp {
         this.randomOrderCheckbox = document.getElementById('randomOrder');
     }
 
+    /**
+     * 데이터에 기반하여 Day 선택 드롭다운 메뉴를 생성합니다.
+     */
     populateDaySelect() {
         this.daySelect.innerHTML = '';
         Object.keys(this.data).forEach(day => {
@@ -148,10 +175,13 @@ class QuizApp {
         });
     }
 
+    /**
+     * 앱을 초기화합니다.
+     * 이벤트 리스너를 등록하고 첫 번째 데이터를 로드합니다.
+     */
     init() {
         this.initEventListeners();
 
-        // 매니저 초기화
         new DarkModeManager();
         new FontSizeManager(this.questionText, this.answerText);
 
@@ -163,8 +193,7 @@ class QuizApp {
     }
 
     /**
-     * 이벤트 리스너를 초기화하고 바인딩합니다.
-     * Day 선택, 정답 보기, 네비게이션, 정렬 옵션 등에 대한 이벤트를 처리합니다.
+     * 각종 사용자 인터랙션에 대한 이벤트 리스너를 등록합니다.
      */
     initEventListeners() {
         this.daySelect.addEventListener('change', (e) => this.loadDay(e.target.value));
@@ -182,11 +211,11 @@ class QuizApp {
     }
 
     /**
-     * 정렬 체크박스 변경 이벤트를 처리합니다.
-     * 역순과 무작위 정렬은 동시에 선택될 수 없으므로 상호 배타적으로 동작합니다.
-     *
-     * @param {Event} event - 발생한 이벤트 객체
-     * @param {HTMLInputElement} otherCheckbox - 해제해야 할 다른 체크박스 요소
+     * 정렬 옵션 변경 시 호출됩니다.
+     * 역순 정렬과 랜덤 정렬은 상호 배타적으로 동작합니다.
+     * 
+     * @param {Event} event - 체크박스 변경 이벤트
+     * @param {HTMLElement} otherCheckbox - 해제할 다른 정렬 옵션 체크박스
      */
     handleSortChange(event, otherCheckbox) {
         if (event.target.checked) {
@@ -197,8 +226,7 @@ class QuizApp {
     }
 
     /**
-     * 현재 선택된 정렬 옵션(역순, 무작위)에 따라 Day 목록을 정렬합니다.
-     * 정렬 후 현재 선택된 값을 유지하거나, 선택 값이 사라진 경우 첫 번째 항목을 선택합니다.
+     * 선택된 정렬 방식(역순/랜덤)에 따라 Day 목록을 재정렬합니다.
      */
     sortOptions() {
         const isReverse = this.reverseOrderCheckbox.checked;
@@ -218,7 +246,6 @@ class QuizApp {
 
         this.daySelect.value = currentVal;
 
-        // 선택이 사라지는 엣지 케이스 처리
         if (this.daySelect.selectedIndex === -1 && this.daySelect.options.length > 0) {
             this.daySelect.selectedIndex = 0;
             this.loadDay(this.daySelect.value);
@@ -228,26 +255,22 @@ class QuizApp {
     }
 
     /**
-     * Fisher-Yates 알고리즘을 사용하여 배열을 무작위로 섞습니다.
-     * 모든 가능한 순열이 동일한 확률로 나타나도록 보장합니다.
-     *
-     * @param {Array} array - 제자리에서 섞을 배열
+     * 배열의 요소를 무작위로 섞습니다 (Fisher-Yates 알고리즘).
+     * 
+     * @param {Array} array - 섞을 배열
      */
     shuffleArray(array) {
-        // 마지막 요소부터 역순으로 반복
         for (let i = array.length - 1; i > 0; i--) {
-            // 0부터 i 사이의 무작위 인덱스 선택
             const j = Math.floor(Math.random() * (i + 1));
-            // i와 j 위치의 요소 교환
             [array[i], array[j]] = [array[j], array[i]];
         }
     }
 
     /**
-     * 특정 Day의 데이터를 로드하고 화면을 갱신합니다.
-     *
-     * @param {string} day - 선택된 Day 식별자
-     * @param {boolean} [startAtEnd=false] - true일 경우 마지막 문제부터 시작 (이전 Day에서 넘어올 때 사용)
+     * 특정 Day의 데이터를 로드하여 현재 퀴즈 세트를 설정합니다.
+     * 
+     * @param {string} day - 선택된 Day 키 (예: "Day 001")
+     * @param {boolean} startAtEnd - true일 경우 마지막 카드부터 보여줍니다 (이전 Day에서 이동 시)
      */
     loadDay(day, startAtEnd = false) {
         this.currentDayData = this.data[day] || [];
@@ -255,11 +278,13 @@ class QuizApp {
         this.updateCard();
     }
 
+    /**
+     * 현재 선택된 카드의 내용(질문, 정답)으로 화면을 갱신합니다.
+     */
     updateCard() {
-        // 상태 초기화
         this.answerText.classList.remove('visible');
         this.cardContent.classList.remove('fade-in');
-        void this.cardContent.offsetWidth; // 리플로우 트리거
+        void this.cardContent.offsetWidth; // 리플로우 강제하여 애니메이션 재시작
         this.cardContent.classList.add('fade-in');
 
         if (this.currentDayData.length === 0) {
@@ -269,8 +294,6 @@ class QuizApp {
 
         const currentItem = this.currentDayData[this.currentIndex];
         
-        // PHP version used innerHTML, but textContent is safer if no HTML expected.
-        // If ModelExamples contain HTML entities (handled by PHP htmlspecialchars), using textContent will show logic properly.
         this.questionText.textContent = currentItem.q;
         this.answerText.textContent = currentItem.a;
         
@@ -280,6 +303,9 @@ class QuizApp {
         this.updateNavButtons();
     }
 
+    /**
+     * 데이터가 없을 때의 빈 상태를 렌더링합니다.
+     */
     renderEmptyState() {
         this.questionText.textContent = "이 날짜에 해당하는 질문이 없습니다.";
         this.answerText.textContent = "";
@@ -288,6 +314,9 @@ class QuizApp {
         this.nextBtn.disabled = true;
     }
 
+    /**
+     * 이전/다음 버튼의 활성화 상태를 업데이트합니다.
+     */
     updateNavButtons() {
         const isFirstQuestion = this.currentIndex === 0;
         const isFirstDay = this.daySelect.selectedIndex === 0;
@@ -299,82 +328,33 @@ class QuizApp {
     }
 
     /**
-     * '이전' 버튼 클릭 시 처리를 담당합니다.
-     * 현재 Day의 첫 문제라면 이전 Day로 이동합니다.
+     * '이전' 버튼 클릭 핸들러입니다.
      */
     handlePrev() {
         if (this.currentIndex > 0) {
-            // 현재 Day의 이전 질문으로 이동
             this.currentIndex--;
             this.updateCard();
         } else if (this.daySelect.selectedIndex > 0) {
-            // Day의 시작이면, 이전 Day의 마지막 질문으로 이동
             this.daySelect.selectedIndex--;
-            this.loadDay(this.daySelect.value, true); // true = startAtEnd
+            this.loadDay(this.daySelect.value, true);
         }
     }
 
     /**
-     * '다음' 버튼 클릭 시 처리를 담당합니다.
-     * 현재 Day의 마지막 문제라면 다음 Day로 이동합니다.
+     * '다음' 버튼 클릭 핸들러입니다.
      */
     handleNext() {
         if (this.currentIndex < this.currentDayData.length - 1) {
-            // 현재 Day의 다음 질문으로 이동
             this.currentIndex++;
             this.updateCard();
         } else if (this.daySelect.selectedIndex < this.daySelect.options.length - 1) {
-            // Day의 끝이면, 다음 Day의 첫 번째 질문으로 이동
             this.daySelect.selectedIndex++;
             this.loadDay(this.daySelect.value);
         }
     }
 }
 
-/**
- * Utils.php의 processQuizData 로직을 JavaScript로 포팅
- * 원시 Notion JSON 데이터를 앱에서 사용할 수 있는 형식으로 변환합니다.
- */
-function processQuizData(jsonData) {
-    const data = {};
-    const dayMainSentences = {};
-
-    jsonData.forEach(dayItem => {
-        const dayKey = dayItem['Day'];
-        dayMainSentences[dayKey] = dayItem['MainSentence'] || '';
-        const cards = [];
-
-        // Model Examples
-        if (dayItem['ModelExamples'] && Array.isArray(dayItem['ModelExamples'])) {
-            dayItem['ModelExamples'].forEach(ex => {
-                if (ex['ko'] && ex['en']) {
-                    cards.push({
-                        q: ex['ko'],
-                        a: ex['en']
-                    });
-                }
-            });
-        }
-
-        // Small Talk
-        if (dayItem['SmallTalk'] && Array.isArray(dayItem['SmallTalk'])) {
-            dayItem['SmallTalk'].forEach(st => {
-                if (st['ko'] && st['en']) {
-                    cards.push({
-                        q: st['ko'],
-                        a: st['en']
-                    });
-                }
-            });
-        }
-
-        data[dayKey] = cards;
-    });
-
-    return { data, dayMainSentences };
-}
-
-// Data Fetching and Initialization
+// 애플리케이션 초기화
 document.addEventListener('DOMContentLoaded', () => {
     fetch('data.json')
         .then(response => {
@@ -384,8 +364,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(jsonData => {
-            const { data, dayMainSentences } = processQuizData(jsonData);
-            // 앱 초기화
+            // 최적화: 백엔드에서 이미 처리된 데이터를 바로 사용합니다.
+            // 별도의 processQuizData 함수가 필요 없습니다.
+            const { data, dayMainSentences } = jsonData;
             new QuizApp(data, dayMainSentences);
         })
         .catch(error => {
@@ -393,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const container = document.querySelector('.container');
             if (container) {
                 container.innerHTML = `<div style="text-align:center; padding: 2rem;">
-                    <h3>데이터를 불러오는데 실패했습니다.</h3>
+                    <h3>데이터 로딩 실패</h3>
                     <p style="color: red; font-weight: bold;">${error.message}</p>
                     <p>페이지를 새로고침 해보세요.</p>
                 </div>`;
