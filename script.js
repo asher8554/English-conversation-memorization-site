@@ -376,20 +376,6 @@ function processQuizData(jsonData) {
 
 // Data Fetching and Initialization
 document.addEventListener('DOMContentLoaded', () => {
-    // Debug indicator
-    const debugContainer = document.createElement('div');
-    debugContainer.style.position = 'fixed';
-    debugContainer.style.bottom = '10px';
-    debugContainer.style.left = '10px';
-    debugContainer.style.background = 'rgba(0,0,0,0.7)';
-    debugContainer.style.color = 'white';
-    debugContainer.style.padding = '5px 10px';
-    debugContainer.style.fontSize = '12px';
-    debugContainer.style.borderRadius = '4px';
-    debugContainer.style.zIndex = '9999';
-    debugContainer.textContent = 'Loading data...';
-    document.body.appendChild(debugContainer);
-
     fetch('data.json')
         .then(response => {
             if (!response.ok) {
@@ -398,33 +384,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(jsonData => {
-            if (!Array.isArray(jsonData)) {
-                throw new Error('Data format error: Root is not an array');
-            }
-            
-            if (jsonData.length === 0) {
-               debugContainer.textContent = 'Data loaded but empty array.';
-               debugContainer.style.background = 'rgba(255, 100, 100, 0.8)';
-            } else {
-               debugContainer.textContent = `Loaded ${jsonData.length} items.`;
-               setTimeout(() => debugContainer.remove(), 3000);
-            }
-
             const { data, dayMainSentences } = processQuizData(jsonData);
             // 앱 초기화
             new QuizApp(data, dayMainSentences);
         })
         .catch(error => {
             console.error('Failed to load data:', error);
-            debugContainer.textContent = `Error: ${error.message}`;
-            debugContainer.style.background = 'red';
-            
             const container = document.querySelector('.container');
             if (container) {
                 container.innerHTML = `<div style="text-align:center; padding: 2rem;">
                     <h3>데이터를 불러오는데 실패했습니다.</h3>
                     <p style="color: red; font-weight: bold;">${error.message}</p>
-                    <p>브라우저 콘솔(F12)을 확인해주세요.</p>
+                    <p>페이지를 새로고침 해보세요.</p>
                 </div>`;
             }
         });
