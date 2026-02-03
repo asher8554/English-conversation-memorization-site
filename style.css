@@ -274,3 +274,11 @@ select:focus {
   gap: 1rem;
   width: 100%;
 }
+
+.sort-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  white-space: nowrap;
+}
