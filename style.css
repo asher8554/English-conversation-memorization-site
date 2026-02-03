@@ -268,3 +268,9 @@ select:focus {
   background: var(--primary-color);
   color: white;
 }
+
+.navigation {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
