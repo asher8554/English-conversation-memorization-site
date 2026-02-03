@@ -253,6 +253,9 @@ class QuizApp {
         this.showAnswerBtn.addEventListener('click', () => {
             this.answerText.classList.add('visible');
             this.showAnswerBtn.style.display = 'none';
+            
+            // 정답 자동 읽기 (영어)
+            this.ttsManager.speak(this.answerText.textContent, 'en-US');
         });
 
         this.prevBtn.addEventListener('click', () => this.handlePrev());
