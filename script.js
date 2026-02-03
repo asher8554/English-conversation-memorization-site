@@ -185,7 +185,11 @@ class TTSManager {
 
     /**
      * 사용 가능한 음성 목록을 가져와 드롭다운을 채웁니다.
-     * 자연스러운 목소리(Google, Microsoft 등)를 우선순위로 정렬합니다.
+     * Google, Microsoft, Apple 등 자연스러운 프리미엄 목소리를 우선순위로 정렬합니다.
+     * 
+     * 우선순위:
+     * 1. 키워드 매칭 (Google, Microsoft, Apple, Natural, Premium)
+     * 2. 언어 매칭 (한국어, 영어)
      */
     populateVoiceList() {
         this.voices = this.synth.getVoices();
