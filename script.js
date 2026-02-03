@@ -126,6 +126,18 @@ class TTSManager {
     constructor() {
         this.synth = window.speechSynthesis;
         this.voices = [];
+        this.koVoice = null;
+        this.enVoice = null;
+        
+        // UI 요소
+        this.settingsModal = document.getElementById('settingsModal');
+        this.settingsBtn = document.getElementById('settingsBtn');
+        this.closeModalBtn = document.querySelector('.close-modal');
+        this.saveSettingsBtn = document.getElementById('saveSettingsBtn');
+        this.testVoiceBtn = document.getElementById('testVoiceBtn');
+        this.koVoiceSelect = document.getElementById('koVoiceSelect');
+        this.enVoiceSelect = document.getElementById('enVoiceSelect');
+
         this.init();
     }
 
@@ -133,11 +145,137 @@ class TTSManager {
         // 음성 목록 로드 (비동기 처리)
         if (this.synth.onvoiceschanged !== undefined) {
             this.synth.onvoiceschanged = () => {
-                this.voices = this.synth.getVoices();
+                this.populateVoiceList();
+                this.loadSettings();
             };
         }
+        
         // 초기 로드 시도
+        this.populateVoiceList();
+        this.loadSettings();
+
+        this.initEventListeners();
+    }
+
+    initEventListeners() {
+        // 모달 열기/닫기
+        if (this.settingsBtn) {
+            this.settingsBtn.addEventListener('click', () => this.openSettings());
+        }
+        if (this.closeModalBtn) {
+            this.closeModalBtn.addEventListener('click', () => this.closeSettings());
+        }
+        if (this.saveSettingsBtn) {
+            this.saveSettingsBtn.addEventListener('click', () => {
+                this.saveSettings();
+                this.closeSettings();
+            });
+        }
+        if (this.testVoiceBtn) {
+            this.testVoiceBtn.addEventListener('click', () => this.testVoices());
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.addEventListener('click', (e) => {
+            if (e.target === this.settingsModal) {
+                this.closeSettings();
+            }
+        });
+    }
+
+    /**
+     * 사용 가능한 음성 목록을 가져와 드롭다운을 채웁니다.
+     */
+    populateVoiceList() {
         this.voices = this.synth.getVoices();
+        
+        if (this.voices.length === 0) return;
+
+        this.koVoiceSelect.innerHTML = '';
+        this.enVoiceSelect.innerHTML = '';
+
+        this.voices.forEach((voice) => {
+            const option = document.createElement('option');
+            option.textContent = `${voice.name} (${voice.lang})`;
+            option.value = voice.name;
+            option.setAttribute('data-lang', voice.lang);
+            option.setAttribute('data-name', voice.name);
+
+            if (voice.lang.includes('ko')) {
+                this.koVoiceSelect.appendChild(option.cloneNode(true));
+            } else if (voice.lang.includes('en')) {
+                this.enVoiceSelect.appendChild(option.cloneNode(true));
+            }
+        });
+    }
+
+    /**
+     * 저장된 목소리 설정을 불러옵니다.
+     */
+    loadSettings() {
+        const savedKoVoice = localStorage.getItem('koVoiceName');
+        const savedEnVoice = localStorage.getItem('enVoiceName');
+
+        if (savedKoVoice && this.koVoiceSelect.querySelector(`option[value="${savedKoVoice}"]`)) {
+            this.koVoiceSelect.value = savedKoVoice;
+        }
+        
+        if (savedEnVoice && this.enVoiceSelect.querySelector(`option[value="${savedEnVoice}"]`)) {
+            this.enVoiceSelect.value = savedEnVoice;
+        }
+
+        this.updateCurrentVoices();
+    }
+
+    /**
+     * 현재 선택된 목소리를 저장하고 적용합니다.
+     */
+    saveSettings() {
+        const selectedKo = this.koVoiceSelect.value;
+        const selectedEn = this.enVoiceSelect.value;
+
+        localStorage.setItem('koVoiceName', selectedKo);
+        localStorage.setItem('enVoiceName', selectedEn);
+
+        this.updateCurrentVoices();
+        alert('설정이 저장되었습니다.');
+    }
+
+    /**
+     * 현재 선택된 음성 객체를 업데이트합니다.
+     */
+    updateCurrentVoices() {
+        this.koVoice = this.voices.find(v => v.name === this.koVoiceSelect.value);
+        this.enVoice = this.voices.find(v => v.name === this.enVoiceSelect.value);
+    }
+
+    /**
+     * 설정 화면 열기
+     */
+    openSettings() {
+        this.settingsModal.style.display = 'flex';
+        // 애니메이션을 위해 잠시 대기
+        setTimeout(() => this.settingsModal.classList.add('show'), 10);
+    }
+
+    /**
+     * 설정 화면 닫기
+     */
+    closeSettings() {
+        this.settingsModal.classList.remove('show');
+        setTimeout(() => {
+            this.settingsModal.style.display = 'none';
+        }, 300);
+    }
+
+    /**
+     * 목소리 테스트
+     */
+    testVoices() {
+        this.speak('안녕하세요, 한국어 목소리 테스트입니다.', 'ko-KR');
+        setTimeout(() => {
+            this.speak('Hello, this is an English voice test.', 'en-US');
+        }, 2500);
     }
 
     /**
@@ -148,20 +286,28 @@ class TTSManager {
     speak(text, lang = 'en-US') {
         if (!text) return;
         
-        // 말하기 중단 (이전 발화 취소)
         this.synth.cancel();
 
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = lang;
-        utterance.rate = 1.0; // 속도
-        utterance.pitch = 1.0; // 높낮이
+        utterance.rate = 1.0; 
 
-        // 최적의 목소리 선택
-        const voice = this.voices.find(v => v.lang === lang || v.lang.startsWith(lang.split('-')[0])) 
-                   || this.voices[0];
+        // 사용자가 설정한 목소리 우선 적용
+        let targetVoice = null;
+        if (lang === 'ko-KR' && this.koVoice) {
+            targetVoice = this.koVoice;
+        } else if (lang === 'en-US' && this.enVoice) {
+            targetVoice = this.enVoice;
+        }
+
+        // 설정된 목소리가 없으면 기본 로직
+        if (!targetVoice) {
+             targetVoice = this.voices.find(v => v.lang === lang || v.lang.startsWith(lang.split('-')[0])) 
+                        || this.voices[0];
+        }
         
-        if (voice) {
-            utterance.voice = voice;
+        if (targetVoice) {
+            utterance.voice = targetVoice;
         }
 
         this.synth.speak(utterance);

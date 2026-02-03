@@ -9,9 +9,33 @@
 <body>
     <div class="font-controls">
         <button id="refreshBtn" class="btn-circle" title="Refresh Page">🔄</button>
+        <button id="settingsBtn" class="btn-circle" title="Voice Settings">⚙️</button>
         <button id="darkModeToggle" class="btn-circle" title="Toggle Dark Mode">🌙</button>
         <button id="decreaseFont" class="btn-circle" title="Decrease Font Size">-</button>
         <button id="increaseFont" class="btn-circle" title="Increase Font Size">+</button>
+    </div>
+
+    <!-- 설정 모달 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Voice Settings</h2>
+            
+            <div class="setting-item">
+                <label for="koVoiceSelect">🇰🇷 Korean Voice</label>
+                <select id="koVoiceSelect" class="voice-select"></select>
+            </div>
+
+            <div class="setting-item">
+                <label for="enVoiceSelect">🇺🇸 English Voice</label>
+                <select id="enVoiceSelect" class="voice-select"></select>
+            </div>
+
+            <div class="setting-actions">
+                <button id="testVoiceBtn" class="btn btn-secondary">Test Voices 🔊</button>
+                <button id="saveSettingsBtn" class="btn btn-primary">Save & Close</button>
+            </div>
+        </div>
     </div>
 
     <div class="container">
