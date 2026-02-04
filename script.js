@@ -356,13 +356,42 @@ class TTSManager {
 }
 
 /**
+ * Firebase 초기화 (사용자 설정 필요)
+ * https://console.firebase.google.com/ 에서 프로젝트 생성 후 설정을 입력하세요.
+ */
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// Firebase 초기화 시도 (설정이 올바를 때만)
+let db = null;
+try {
+    if (firebaseConfig.projectId !== "YOUR_PROJECT_ID") {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        console.log("Firebase initialized successfully");
+    } else {
+        console.warn("Firebase configuration is missing. Data will only be saved locally.");
+    }
+} catch (e) {
+    console.error("Error initializing Firebase:", e);
+}
+
+/**
  * 복습 관리자
- * 복습 기록을 관리하고 localStorage에 통계를 저장합니다.
+ * 복습 기록을 관리하고 localStorage 및 Firebase에 통계를 저장합니다.
  */
 class ReviewManager {
     constructor() {
         this.storageKey = 'reviewStats';
         this.reviews = this.loadReviews();
+        this.syncWithFirebase(); // 시작 시 동기화 시도
     }
 
     /**
@@ -371,6 +400,33 @@ class ReviewManager {
     loadReviews() {
         const stored = localStorage.getItem(this.storageKey);
         return stored ? JSON.parse(stored) : {};
+    }
+
+    /**
+     * Firebase와 데이터 동기화 (최신 데이터 병합)
+     */
+    syncWithFirebase() {
+        if (!db) return;
+
+        const reviewsRef = db.ref('reviews');
+        reviewsRef.once('value').then((snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // 로컬 데이터와 클라우드 데이터 병합 (더 높은 숫자로 보수적 병합)
+                let updated = false;
+                Object.keys(data).forEach(day => {
+                    if (!this.reviews[day] || data[day].count > this.reviews[day].count) {
+                        this.reviews[day] = data[day];
+                        updated = true;
+                    }
+                });
+
+                if (updated) {
+                    this.saveReviews(false); // 로컬에만 저장 (무한 루프 방지)
+                    console.log("Data synced from Firebase");
+                }
+            }
+        }).catch((e) => console.error("Sync failed:", e));
     }
 
     /**
@@ -383,14 +439,23 @@ class ReviewManager {
         }
         this.reviews[day].count++;
         this.reviews[day].lastReviewed = new Date().toISOString();
-        this.saveReviews();
+        this.saveReviews(true);
     }
 
     /**
      * 리뷰 데이터를 저장합니다.
+     * @param {boolean} syncToCloud 클라우드 업로드 여부
      */
-    saveReviews() {
+    saveReviews(syncToCloud = true) {
+        // LocalStorage 저장
         localStorage.setItem(this.storageKey, JSON.stringify(this.reviews));
+
+        // Firebase 저장
+        if (syncToCloud && db) {
+            db.ref('reviews').set(this.reviews)
+                .then(() => console.log("Progress saved to Firebase"))
+                .catch((e) => console.error("Firebase save failed:", e));
+        }
     }
 
     /**
