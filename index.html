@@ -9,6 +9,7 @@
 <body>
     <div class="font-controls">
         <button id="refreshBtn" class="btn-circle" title="Refresh Page">🔄</button>
+        <button id="statsBtn" class="btn-circle" title="View Statistics">📊</button>
         <button id="settingsBtn" class="btn-circle" title="Voice Settings">⚙️</button>
         <button id="darkModeToggle" class="btn-circle" title="Toggle Dark Mode">🌙</button>
         <button id="decreaseFont" class="btn-circle" title="Decrease Font Size">-</button>
@@ -34,6 +35,34 @@
             <div class="setting-actions">
                 <button id="testVoiceBtn" class="btn btn-secondary">Test Voices 🔊</button>
                 <button id="saveSettingsBtn" class="btn btn-primary">Save & Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 통계 모달 -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content stats-content">
+            <span class="close-stats-modal close-modal">&times;</span>
+            <h2>📊 Review Progress</h2>
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <h3>Total Reviews</h3>
+                    <p id="totalReviews">0</p>
+                </div>
+            </div>
+            <div class="stats-list-container">
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Reviews</th>
+                            <th>Last Reviewed</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsTableBody">
+                        <!-- JS로 채워짐 -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

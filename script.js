@@ -373,6 +373,69 @@ class TTSManager {
 }
 
 /**
+ * 리뷰 진행 상황을 관리하고 통계를 localStorage에 저장합니다.
+ * 
+ * @class ReviewManager
+ */
+class ReviewManager {
+    constructor() {
+        this.storageKey = 'reviewStats';
+        this.reviews = this.loadReviews();
+    }
+
+    /**
+     * 저장된 리뷰 데이터를 불러옵니다.
+     */
+    loadReviews() {
+        const stored = localStorage.getItem(this.storageKey);
+        return stored ? JSON.parse(stored) : {};
+    }
+
+    /**
+     * 특정 Day의 리뷰 횟수를 증가시킵니다.
+     * @param {string} day 
+     */
+    incrementReview(day) {
+        if (!this.reviews[day]) {
+            this.reviews[day] = { count: 0, lastReviewed: null };
+        }
+        this.reviews[day].count++;
+        this.reviews[day].lastReviewed = new Date().toISOString();
+        this.saveReviews();
+    }
+
+    /**
+     * 리뷰 데이터를 저장합니다.
+     */
+    saveReviews() {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.reviews));
+    }
+
+    /**
+     * 특정 Day의 리뷰 횟수를 반환합니다.
+     * @param {string} day 
+     */
+    getReviewCount(day) {
+        return this.reviews[day] ? this.reviews[day].count : 0;
+    }
+
+    /**
+     * 모든 리뷰 데이터를 반환합니다.
+     */
+    getAllReviews() {
+        return this.reviews;
+    }
+
+    /**
+     * 총 리뷰 횟수를 계산합니다.
+     */
+    getTotalReviews() {
+        return Object.values(this.reviews).reduce((sum, item) => sum + item.count, 0);
+    }
+}
+
+
+/**
  * 퀴즈 애플리케이션의 핵심 로직을 담당합니다.
  * 데이터 로딩, UI 렌더링, 네비게이션, 정렬 기능을 관리합니다.
  *
@@ -411,6 +474,13 @@ class QuizApp {
         this.cardContent = document.getElementById('cardContent');
         this.reverseOrderCheckbox = document.getElementById('reverseOrder');
         this.randomOrderCheckbox = document.getElementById('randomOrder');
+        
+        // 통계 관련 DOM
+        this.statsBtn = document.getElementById('statsBtn');
+        this.statsModal = document.getElementById('statsModal');
+        this.closeStatsModalBtn = document.querySelector('.close-stats-modal');
+        this.totalReviewsEl = document.getElementById('totalReviews');
+        this.statsTableBody = document.getElementById('statsTableBody');
     }
 
     /**
@@ -418,6 +488,7 @@ class QuizApp {
      */
     populateDaySelect() {
         this.daySelect.innerHTML = '';
+        const fragment = document.createDocumentFragment();
         Object.keys(this.data).forEach(day => {
             const option = document.createElement('option');
             option.value = day;
@@ -426,8 +497,9 @@ class QuizApp {
                 label += " - " + this.dayMainSentences[day];
             }
             option.textContent = label;
-            this.daySelect.appendChild(option);
+            fragment.appendChild(option);
         });
+        this.daySelect.appendChild(fragment);
     }
 
     /**
@@ -436,16 +508,46 @@ class QuizApp {
      */
     init() {
         this.ttsManager = new TTSManager();
+        this.reviewManager = new ReviewManager();
         this.initEventListeners();
 
         new DarkModeManager();
         new FontSizeManager(this.questionText, this.answerText);
+
+        // 리뷰 완료 버튼 동적 생성
+        this.createReviewCompleteBtn();
 
         if (this.daySelect.options.length > 0) {
             this.loadDay(this.daySelect.value);
         } else {
             this.renderEmptyState();
         }
+    }
+
+    createReviewCompleteBtn() {
+        this.reviewCompleteBtn = document.createElement('button');
+        this.reviewCompleteBtn.id = 'reviewCompleteBtn';
+        this.reviewCompleteBtn.className = 'btn btn-complete';
+        this.reviewCompleteBtn.textContent = '✅ Review Complete';
+        this.reviewCompleteBtn.style.display = 'none'; // 초기엔 숨김
+        
+        // 카드 콘텐츠 내부에 추가 (정답 텍스트 아래)
+        this.cardContent.appendChild(this.reviewCompleteBtn);
+
+        this.reviewCompleteBtn.addEventListener('click', () => {
+             this.handleReviewComplete();
+        });
+    }
+
+    handleReviewComplete() {
+        const currentDay = this.daySelect.value;
+        this.reviewManager.incrementReview(currentDay);
+        
+        alert(`Good job! "${currentDay}" review recorded.`);
+        
+        // UI 업데이트 없이 그냥 카운트만 올림. 필요하면 버튼 비활성화 등을 할 수 있음.
+        this.reviewCompleteBtn.disabled = true;
+        this.reviewCompleteBtn.textContent = 'Review Recorded';
     }
 
     /**
@@ -467,6 +569,64 @@ class QuizApp {
 
         this.reverseOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.randomOrderCheckbox));
         this.randomOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.reverseOrderCheckbox));
+
+        // 통계 모달 이벤트
+        if (this.statsBtn) {
+            this.statsBtn.addEventListener('click', () => this.openStats());
+        }
+        if (this.closeStatsModalBtn) {
+            this.closeStatsModalBtn.addEventListener('click', () => this.closeStats());
+        }
+        // 모달 외부 클릭 시 닫기
+        window.addEventListener('click', (e) => {
+            if (e.target === this.statsModal) {
+                this.closeStats();
+            }
+        });
+    }
+
+    openStats() {
+        this.renderStats();
+        this.statsModal.style.display = 'flex';
+        setTimeout(() => this.statsModal.classList.add('show'), 10);
+    }
+
+    closeStats() {
+        this.statsModal.classList.remove('show');
+        setTimeout(() => {
+            this.statsModal.style.display = 'none';
+        }, 300);
+    }
+
+    renderStats() {
+        const reviews = this.reviewManager.getAllReviews();
+        this.totalReviewsEl.textContent = this.reviewManager.getTotalReviews();
+        this.statsTableBody.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+
+        // 모든 날짜(Day)를 순회하며 통계 표시
+        // 데이터에 있는 Day 목록을 기준으로 표시 (리뷰 기록이 없어도 0으로 표시하기 위함)
+        Object.keys(this.data).forEach(day => {
+            const tr = document.createElement('tr');
+            
+            const reviewData = reviews[day] || { count: 0, lastReviewed: '-' };
+            let lastReviewedText = '-';
+            if (reviewData.lastReviewed && reviewData.lastReviewed !== '-') {
+                 const date = new Date(reviewData.lastReviewed);
+                 lastReviewedText = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            }
+
+            // Day 이름에 메인 문장도 작게 표시할 수 있지만, 칸이 좁으니 Day만 표시하거나 툴팁으로 처리
+            // 여기서는 Day 이름만 깔끔하게 표시
+            
+            tr.innerHTML = `
+                <td>${day}</td>
+                <td style="font-weight: bold; color: var(--primary-color);">${reviewData.count}</td>
+                <td>${lastReviewedText}</td>
+            `;
+            fragment.appendChild(tr);
+        });
+        this.statsTableBody.appendChild(fragment);
     }
 
     /**
@@ -559,6 +719,18 @@ class QuizApp {
         this.showAnswerBtn.style.display = 'block';
         this.showAnswerBtn.textContent = 'Show Answer';
 
+        // 마지막 카드인지 확인
+        const isLastCard = this.currentIndex === this.currentDayData.length - 1;
+        
+        // 리뷰 완료 버튼 초기화 및 표시 여부 결정
+        if (isLastCard) {
+            this.reviewCompleteBtn.style.display = 'block';
+            this.reviewCompleteBtn.disabled = false;
+            this.reviewCompleteBtn.textContent = '✅ Review Complete';
+        } else {
+            this.reviewCompleteBtn.style.display = 'none';
+        }
+
         this.updateNavButtons();
         
         // 질문 자동 읽기 (TTS)
@@ -626,8 +798,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(jsonData => {
-            // 최적화: 백엔드에서 이미 처리된 데이터를 바로 사용합니다.
-            // 별도의 processQuizData 함수가 필요 없습니다.
             const { data, dayMainSentences } = jsonData;
             new QuizApp(data, dayMainSentences);
         })
