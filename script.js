@@ -1,14 +1,11 @@
 /**
- * 질문과 정답 텍스트의 글자 크기를 관리하며, 설정을 localStorage에 저장합니다.
- *
- * @class FontSizeManager
+ * 폰트 크기 관리자
+ * 질문과 정답 텍스트의 글자 크기를 조절하고 설정을 localStorage에 저장합니다.
  */
 class FontSizeManager {
     /**
-     * FontSizeManager 인스턴스를 생성합니다.
-     * 
-     * @param {HTMLElement} questionEl - 질문 텍스트를 표시할 DOM 요소
-     * @param {HTMLElement} answerEl - 정답 텍스트를 표시할 DOM 요소
+     * @param {HTMLElement} questionEl - 질문 요소
+     * @param {HTMLElement} answerEl - 정답 요소
      */
     constructor(questionEl, answerEl) {
         this.questionEl = questionEl;
@@ -19,8 +16,7 @@ class FontSizeManager {
     }
 
     /**
-     * 초기화 로직을 수행합니다.
-     * 저장된 설정을 적용하고 글자 크기 조절 버튼에 이벤트 리스너를 등록합니다.
+     * 초기 설정 적용 및 이벤트 리스너 등록
      */
     init() {
         this.update();
@@ -31,9 +27,8 @@ class FontSizeManager {
     }
 
     /**
-     * 글자 크기를 변경합니다.
-     * 
-     * @param {number} delta - 변경할 크기 (양수: 확대, 음수: 축소)
+     * 폰트 크기 변경
+     * @param {number} delta - 변경할 크기 (양수/음수)
      */
     changeSize(delta) {
         const newQSize = this.qSize + delta;
@@ -47,7 +42,7 @@ class FontSizeManager {
     }
 
     /**
-     * 변경된 글자 크기를 DOM에 적용하고 localStorage에 저장합니다.
+     * 스타일 업데이트 및 저장
      */
     update() {
         this.questionEl.style.fontSize = `${this.qSize}rem`;
@@ -58,15 +53,10 @@ class FontSizeManager {
 }
 
 /**
- * 다크 모드/라이트 모드 전환을 관리합니다.
- *
- * @class DarkModeManager
+ * 다크 모드 관리자
+ * 테마 전환 및 설정을 처리합니다.
  */
 class DarkModeManager {
-    /**
-     * DarkModeManager 인스턴스를 생성합니다.
-     * 초기 로드 시 저장된 설정에 따라 테마를 적용합니다.
-     */
     constructor() {
         this.toggleBtn = document.getElementById('darkModeToggle');
         this.body = document.body;
@@ -75,7 +65,7 @@ class DarkModeManager {
     }
 
     /**
-     * 초기화 로직을 수행합니다.
+     * 초기 설정 적용
      */
     init() {
         if (this.isDarkMode) {
@@ -88,7 +78,7 @@ class DarkModeManager {
     }
 
     /**
-     * 다크 모드 상태를 토글합니다.
+     * 다크 모드 토글
      */
     toggle() {
         this.isDarkMode = !this.isDarkMode;
@@ -101,7 +91,7 @@ class DarkModeManager {
     }
 
     /**
-     * 다크 모드를 활성화합니다.
+     * 다크 모드 활성화
      */
     enableDarkMode() {
         this.body.classList.add('dark-mode');
@@ -109,7 +99,7 @@ class DarkModeManager {
     }
 
     /**
-     * 다크 모드를 비활성화(라이트 모드)합니다.
+     * 다크 모드 비활성화
      */
     disableDarkMode() {
         this.body.classList.remove('dark-mode');
@@ -118,9 +108,8 @@ class DarkModeManager {
 }
 
 /**
- * 텍스트 음성 변환(TTS) 기능을 관리합니다.
- * 
- * @class TTSManager
+ * TTS (Text-to-Speech) 관리자
+ * 음성 합성 기능을 제어하고 사용자 설정을 관리합니다.
  */
 class TTSManager {
     constructor() {
@@ -128,7 +117,7 @@ class TTSManager {
         this.voices = [];
         this.koVoice = null;
         this.enVoice = null;
-        
+
         // UI 요소
         this.settingsModal = document.getElementById('settingsModal');
         this.settingsBtn = document.getElementById('settingsBtn');
@@ -149,7 +138,7 @@ class TTSManager {
                 this.loadSettings();
             };
         }
-        
+
         // 초기 로드 시도
         this.populateVoiceList();
         this.loadSettings();
@@ -184,29 +173,25 @@ class TTSManager {
     }
 
     /**
-     * 사용 가능한 음성 목록을 가져와 드롭다운을 채웁니다.
-     * Google, Microsoft, Apple 등 자연스러운 프리미엄 목소리를 우선순위로 정렬합니다.
-     * 
-     * 우선순위:
-     * 1. 키워드 매칭 (Google, Microsoft, Apple, Natural, Premium)
-     * 2. 언어 매칭 (한국어, 영어)
+     * 사용 가능한 음성 목록을 로드하고 필터링하여 드롭다운에 추가합니다.
+     * Google, Microsoft, Apple 등 자연스러운 프리미엄 음성을 우선 정렬합니다.
      */
     populateVoiceList() {
         this.voices = this.synth.getVoices();
-        
+
         if (this.voices.length === 0) return;
 
         this.koVoiceSelect.innerHTML = '';
         this.enVoiceSelect.innerHTML = '';
 
-        // 제거할 효과음/특수 목소리 키워드
+        // 제외할 키워드 (효과음 등)
         const excludedKeywords = [
-            'Bells', 'Organ', 'Cello', 'Zarvox', 'Trinoids', 
-            'Deranged', 'Hysterical', 'Boing', 'Bubbles', 
+            'Bells', 'Organ', 'Cello', 'Zarvox', 'Trinoids',
+            'Deranged', 'Hysterical', 'Boing', 'Bubbles',
             'Bad News', 'Good News', 'Pipe Organ', 'Whisper'
         ];
 
-        // 우선순위 키워드 (자연스러운 목소리 순서)
+        // 우선순위 키워드
         const premiumKeywords = ['Google', 'Microsoft', 'Apple', 'Natural', 'Premium'];
 
         const sortVoices = (a, b) => {
@@ -218,11 +203,11 @@ class TTSManager {
                 });
                 // 미국식 영어(en-US) 우선순위 추가
                 if (voice.lang === 'en-US' || voice.lang.includes('US')) {
-                    score += 20; // 가장 높은 우선순위 부여
+                    score += 20;
                 }
                 return score;
             };
-            return getScore(b) - getScore(a); // 점수 높은 순 내림차순
+            return getScore(b) - getScore(a);
         };
 
         const isExcluded = (voice) => {
@@ -239,14 +224,13 @@ class TTSManager {
             .filter(v => (v.lang.startsWith('en-') || v.lang === 'en_US' || v.lang === 'en_GB') && !isExcluded(v))
             .sort(sortVoices);
 
-        // 정렬된 리스트 추가
+        // 드롭다운 옵션 추가
         const addOptions = (voiceList, selectElement) => {
             voiceList.forEach(voice => {
                 const option = document.createElement('option');
-                // 이름 좀 더 깔끔하게 표시
                 let displayName = voice.name;
-                
-                // 불필요한 시스템 텍스트 제거 (예: Japanese -> 일본어 등의 표시는 유지하되 너무 길면 자르기)
+
+                // 표시 이름 정리
                 if (displayName.includes('Google')) displayName = displayName.replace('Google', 'Google (Natural)');
                 if (displayName.includes('Microsoft')) displayName = displayName.replace('Microsoft', 'MS');
 
@@ -254,8 +238,7 @@ class TTSManager {
                 option.value = voice.name;
                 selectElement.appendChild(option);
             });
-            
-            // 만약 목소리가 아예 없으면 기본 안내 추가
+
             if (voiceList.length === 0) {
                 const option = document.createElement('option');
                 option.textContent = "사용 가능한 목소리가 없습니다";
@@ -277,7 +260,7 @@ class TTSManager {
         if (savedKoVoice && this.koVoiceSelect.querySelector(`option[value="${savedKoVoice}"]`)) {
             this.koVoiceSelect.value = savedKoVoice;
         }
-        
+
         if (savedEnVoice && this.enVoiceSelect.querySelector(`option[value="${savedEnVoice}"]`)) {
             this.enVoiceSelect.value = savedEnVoice;
         }
@@ -343,12 +326,12 @@ class TTSManager {
      */
     speak(text, lang = 'en-US') {
         if (!text) return;
-        
+
         this.synth.cancel();
 
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = lang;
-        utterance.rate = 1.0; 
+        utterance.rate = 1.0;
 
         // 사용자가 설정한 목소리 우선 적용
         let targetVoice = null;
@@ -360,10 +343,10 @@ class TTSManager {
 
         // 설정된 목소리가 없으면 기본 로직
         if (!targetVoice) {
-             targetVoice = this.voices.find(v => v.lang === lang || v.lang.startsWith(lang.split('-')[0])) 
-                        || this.voices[0];
+            targetVoice = this.voices.find(v => v.lang === lang || v.lang.startsWith(lang.split('-')[0]))
+                || this.voices[0];
         }
-        
+
         if (targetVoice) {
             utterance.voice = targetVoice;
         }
@@ -373,9 +356,8 @@ class TTSManager {
 }
 
 /**
- * 리뷰 진행 상황을 관리하고 통계를 localStorage에 저장합니다.
- * 
- * @class ReviewManager
+ * 복습 관리자
+ * 복습 기록을 관리하고 localStorage에 통계를 저장합니다.
  */
 class ReviewManager {
     constructor() {
@@ -432,21 +414,25 @@ class ReviewManager {
     getTotalReviews() {
         return Object.values(this.reviews).reduce((sum, item) => sum + item.count, 0);
     }
+
+    /**
+     * 모든 리뷰 데이터를 초기화합니다.
+     */
+    resetReviews() {
+        this.reviews = {};
+        this.saveReviews();
+    }
 }
 
 
 /**
- * 퀴즈 애플리케이션의 핵심 로직을 담당합니다.
- * 데이터 로딩, UI 렌더링, 네비게이션, 정렬 기능을 관리합니다.
- *
- * @class QuizApp
+ * 퀴즈 애플리케이션 메인 클래스
+ * 데이터 로드, UI 제어, 퀴즈 진행 로직을 담당합니다.
  */
 class QuizApp {
     /**
-     * QuizApp 인스턴스를 생성합니다.
-     * 
-     * @param {Object} data - 날짜별 퀴즈 카드 데이터 (Question/Answer 쌍)
-     * @param {Object} dayMainSentences - 날짜별 메인 문장 데이터
+     * @param {Object} data - 날짜별 퀴즈 데이터
+     * @param {Object} dayMainSentences - 날짜별 주요 문장
      */
     constructor(data, dayMainSentences) {
         this.data = data;
@@ -462,7 +448,7 @@ class QuizApp {
     }
 
     /**
-     * 자주 사용되는 DOM 요소들을 캐싱합니다.
+     * DOM 요소 캐싱
      */
     cacheDOM() {
         this.daySelect = document.getElementById('daySelect');
@@ -474,17 +460,18 @@ class QuizApp {
         this.cardContent = document.getElementById('cardContent');
         this.reverseOrderCheckbox = document.getElementById('reverseOrder');
         this.randomOrderCheckbox = document.getElementById('randomOrder');
-        
+
         // 통계 관련 DOM
         this.statsBtn = document.getElementById('statsBtn');
         this.statsModal = document.getElementById('statsModal');
         this.closeStatsModalBtn = document.querySelector('.close-stats-modal');
         this.totalReviewsEl = document.getElementById('totalReviews');
         this.statsTableBody = document.getElementById('statsTableBody');
+        this.resetStatsBtn = document.getElementById('resetStatsBtn');
     }
 
     /**
-     * 데이터에 기반하여 Day 선택 드롭다운 메뉴를 생성합니다.
+     * Day 선택 드롭다운 생성
      */
     populateDaySelect() {
         this.daySelect.innerHTML = '';
@@ -503,8 +490,7 @@ class QuizApp {
     }
 
     /**
-     * 앱을 초기화합니다.
-     * 이벤트 리스너를 등록하고 첫 번째 데이터를 로드합니다.
+     * 애플리케이션 초기화
      */
     init() {
         this.ttsManager = new TTSManager();
@@ -530,28 +516,28 @@ class QuizApp {
         this.reviewCompleteBtn.className = 'btn btn-complete';
         this.reviewCompleteBtn.textContent = '✅ Review Complete';
         this.reviewCompleteBtn.style.display = 'none'; // 초기엔 숨김
-        
+
         // 카드 콘텐츠 내부에 추가 (정답 텍스트 아래)
         this.cardContent.appendChild(this.reviewCompleteBtn);
 
         this.reviewCompleteBtn.addEventListener('click', () => {
-             this.handleReviewComplete();
+            this.handleReviewComplete();
         });
     }
 
     handleReviewComplete() {
         const currentDay = this.daySelect.value;
         this.reviewManager.incrementReview(currentDay);
-        
+
         alert(`Good job! "${currentDay}" review recorded.`);
-        
+
         // UI 업데이트 없이 그냥 카운트만 올림. 필요하면 버튼 비활성화 등을 할 수 있음.
         this.reviewCompleteBtn.disabled = true;
         this.reviewCompleteBtn.textContent = 'Review Recorded';
     }
 
     /**
-     * 각종 사용자 인터랙션에 대한 이벤트 리스너를 등록합니다.
+     * 이벤트 리스너 등록
      */
     initEventListeners() {
         this.daySelect.addEventListener('change', (e) => this.loadDay(e.target.value));
@@ -559,7 +545,7 @@ class QuizApp {
         this.showAnswerBtn.addEventListener('click', () => {
             this.answerText.classList.add('visible');
             this.showAnswerBtn.style.display = 'none';
-            
+
             // 정답 자동 읽기 (영어)
             this.ttsManager.speak(this.answerText.textContent, 'en-US');
         });
@@ -583,6 +569,19 @@ class QuizApp {
                 this.closeStats();
             }
         });
+
+        // 통계 초기화 버튼
+        if (this.resetStatsBtn) {
+            this.resetStatsBtn.addEventListener('click', () => this.handleResetStats());
+        }
+    }
+
+    handleResetStats() {
+        if (confirm('Are you sure you want to reset all review statistics? This action cannot be undone.')) {
+            this.reviewManager.resetReviews();
+            this.renderStats();
+            alert('Statistics have been reset.');
+        }
     }
 
     openStats() {
@@ -608,17 +607,17 @@ class QuizApp {
         // 데이터에 있는 Day 목록을 기준으로 표시 (리뷰 기록이 없어도 0으로 표시하기 위함)
         Object.keys(this.data).forEach(day => {
             const tr = document.createElement('tr');
-            
+
             const reviewData = reviews[day] || { count: 0, lastReviewed: '-' };
             let lastReviewedText = '-';
             if (reviewData.lastReviewed && reviewData.lastReviewed !== '-') {
-                 const date = new Date(reviewData.lastReviewed);
-                 lastReviewedText = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const date = new Date(reviewData.lastReviewed);
+                lastReviewedText = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
 
             // Day 이름에 메인 문장도 작게 표시할 수 있지만, 칸이 좁으니 Day만 표시하거나 툴팁으로 처리
             // 여기서는 Day 이름만 깔끔하게 표시
-            
+
             tr.innerHTML = `
                 <td>${day}</td>
                 <td style="font-weight: bold; color: var(--primary-color);">${reviewData.count}</td>
@@ -630,11 +629,9 @@ class QuizApp {
     }
 
     /**
-     * 정렬 옵션 변경 시 호출됩니다.
-     * 역순 정렬과 랜덤 정렬은 상호 배타적으로 동작합니다.
-     * 
-     * @param {Event} event - 체크박스 변경 이벤트
-     * @param {HTMLElement} otherCheckbox - 해제할 다른 정렬 옵션 체크박스
+     * 정렬 옵션 변경 처리
+     * @param {Event} event - 이벤트 객체
+     * @param {HTMLElement} otherCheckbox - 상호 배제될 체크박스
      */
     handleSortChange(event, otherCheckbox) {
         if (event.target.checked) {
@@ -674,8 +671,7 @@ class QuizApp {
     }
 
     /**
-     * 배열의 요소를 무작위로 섞습니다 (Fisher-Yates 알고리즘).
-     * 
+     * 배열 섞기 (Fisher-Yates 알고리즘)
      * @param {Array} array - 섞을 배열
      */
     shuffleArray(array) {
@@ -686,10 +682,9 @@ class QuizApp {
     }
 
     /**
-     * 특정 Day의 데이터를 로드하여 현재 퀴즈 세트를 설정합니다.
-     * 
-     * @param {string} day - 선택된 Day 키 (예: "Day 001")
-     * @param {boolean} startAtEnd - true일 경우 마지막 카드부터 보여줍니다 (이전 Day에서 이동 시)
+     * 특정 날짜(Day) 데이터 로드
+     * @param {string} day - 선택된 Day
+     * @param {boolean} startAtEnd - 마지막 카드부터 시작 여부
      */
     loadDay(day, startAtEnd = false) {
         this.currentDayData = this.data[day] || [];
@@ -698,7 +693,7 @@ class QuizApp {
     }
 
     /**
-     * 현재 선택된 카드의 내용(질문, 정답)으로 화면을 갱신합니다.
+     * 카드 화면 갱신
      */
     updateCard() {
         this.answerText.classList.remove('visible');
@@ -712,16 +707,16 @@ class QuizApp {
         }
 
         const currentItem = this.currentDayData[this.currentIndex];
-        
+
         this.questionText.textContent = currentItem.q;
         this.answerText.textContent = currentItem.a;
-        
+
         this.showAnswerBtn.style.display = 'block';
         this.showAnswerBtn.textContent = 'Show Answer';
 
         // 마지막 카드인지 확인
         const isLastCard = this.currentIndex === this.currentDayData.length - 1;
-        
+
         // 리뷰 완료 버튼 초기화 및 표시 여부 결정
         if (isLastCard) {
             this.reviewCompleteBtn.style.display = 'block';
@@ -732,7 +727,7 @@ class QuizApp {
         }
 
         this.updateNavButtons();
-        
+
         // 질문 자동 읽기 (TTS)
         this.ttsManager.speak(currentItem.q, 'ko-KR');
     }

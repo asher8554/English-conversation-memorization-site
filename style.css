@@ -1,3 +1,4 @@
+/* CSS Variables */
 :root {
   /* 라이트 모드 변수 */
   --primary-color: #6366f1;
@@ -111,8 +112,7 @@ select:focus {
   font-size: 2.2rem;
   color: var(--primary-color);
   font-weight: 600;
-  font-weight: 600;
-  display: none; /* 초기에는 숨겨서 간격을 없앰 */
+  display: none; /* 초기 상태: 숨김 */
   margin-top: 1rem;
 }
 
@@ -179,6 +179,16 @@ select:focus {
 .btn-secondary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.4);
 }
 
 /* 애니메이션 */
@@ -344,7 +354,7 @@ select:focus {
 }
 
 
-/* Stats Modal Styles */
+/* 통계 모달 스타일 */
 .stats-content {
   max-width: 500px;
 }
@@ -419,7 +429,7 @@ select:focus {
   color: white;
   width: 100%;
   margin-top: 1rem;
-  display: none; /* Initially hidden */
+  display: none; /* 초기 상태: 숨김 */
   box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
 }
 
@@ -428,7 +438,7 @@ select:focus {
   box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.4);
 }
 
-/* Scrollbar styling for stats list */
+/* 통계 목록 스크롤바 스타일 */
 .stats-list-container::-webkit-scrollbar {
   width: 6px;
 }

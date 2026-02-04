@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English Conversation Memorization</title>
     <link rel="stylesheet" href="style.css?v=2">
 </head>
+
 <body>
     <div class="font-controls">
         <button id="refreshBtn" class="btn-circle" title="Refresh Page">🔄</button>
@@ -21,7 +23,7 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h2>Voice Settings</h2>
-            
+
             <div class="setting-item">
                 <label for="koVoiceSelect">🇰🇷 Korean Voice</label>
                 <select id="koVoiceSelect" class="voice-select"></select>
@@ -64,6 +66,8 @@
                     </tbody>
                 </table>
             </div>
+            <button id="resetStatsBtn" class="btn btn-danger" style="margin-top: 1rem; width: 100%;">🚫 Reset All
+                Stats</button>
         </div>
     </div>
 
@@ -93,4 +97,5 @@
 
     <script src="script.js?v=2"></script>
 </body>
+
 </html>
