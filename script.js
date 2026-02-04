@@ -199,28 +199,44 @@ class TTSManager {
         this.koVoiceSelect.innerHTML = '';
         this.enVoiceSelect.innerHTML = '';
 
+        // 제거할 효과음/특수 목소리 키워드
+        const excludedKeywords = [
+            'Bells', 'Organ', 'Cello', 'Zarvox', 'Trinoids', 
+            'Deranged', 'Hysterical', 'Boing', 'Bubbles', 
+            'Bad News', 'Good News', 'Pipe Organ', 'Whisper'
+        ];
+
         // 우선순위 키워드 (자연스러운 목소리 순서)
         const premiumKeywords = ['Google', 'Microsoft', 'Apple', 'Natural', 'Premium'];
 
         const sortVoices = (a, b) => {
             const getScore = (voice) => {
                 let score = 0;
+                // 프리미엄/자연스러운 목소리 가산점
                 premiumKeywords.forEach((keyword, index) => {
                     if (voice.name.includes(keyword)) score += (10 - index);
                 });
+                // 미국식 영어(en-US) 우선순위 추가
+                if (voice.lang === 'en-US' || voice.lang.includes('US')) {
+                    score += 20; // 가장 높은 우선순위 부여
+                }
                 return score;
             };
             return getScore(b) - getScore(a); // 점수 높은 순 내림차순
         };
 
+        const isExcluded = (voice) => {
+            return excludedKeywords.some(keyword => voice.name.includes(keyword));
+        };
+
         // 한국어 필터링 및 정렬
         const koVoices = this.voices
-            .filter(v => v.lang.includes('ko') || v.lang === 'ko_KR')
+            .filter(v => (v.lang.includes('ko') || v.lang === 'ko_KR') && !isExcluded(v))
             .sort(sortVoices);
 
-        // 영어 필터링 및 정렬
+        // 영어 필터링 및 정렬 (미국식 우선)
         const enVoices = this.voices
-            .filter(v => v.lang.startsWith('en-') || v.lang === 'en_US' || v.lang === 'en_GB')
+            .filter(v => (v.lang.startsWith('en-') || v.lang === 'en_US' || v.lang === 'en_GB') && !isExcluded(v))
             .sort(sortVoices);
 
         // 정렬된 리스트 추가
