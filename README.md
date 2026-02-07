@@ -1,51 +1,47 @@
-# 영어 회화 암기 사이트 (English Conversation Memorization Site)
+# English Conversation Memorization Helper
 
-자신만의 영어 회화 문장을 암기할 수 있도록 도와주는 웹 사이트입니다. Notion에서 정리한 문장들을 스크래핑하여 퀴즈 형태로 학습할 수 있습니다.
+영어 회화 문장 암기를 돕기 위한 심플한 웹 애플리케이션입니다.
+매일 반복적인 복습을 통해 문장을 장기 기억에 저장하도록 설계되었습니다.
 
-## 주요 기능
+## 🚀 주요 기능
 
-- **일자별 학습**: Day 별로 정리된 문장 학습
-- **퀴즈 모드**: 한국어 문장을 보고 영어 문장을 맞추는 방식
-- **랜덤/역순 정렬**: 학습 효과를 높이기 위한 순서 섞기 기능
-- **다크 모드**: 눈의 피로를 줄여주는 다크 모드 지원
-- **글자 크기 조절**: 가독성을 위한 폰트 사이즈 조절 기능
-- **TTS 음성 지원**: 질문(한국어)과 정답(영어) 자동 읽기 기능
-- **목소리 설정**: 원하는 목소리 선택 및 설정 저장 기능
+- **일일 퀴즈**: 날짜별(Day) 영어 회화 문장 퀴즈 제공
+- **자동 발음 듣기 (TTS)**: 원어민 발음(미국식)으로 문장 읽어주기 기능
+- **다크 모드**: 야간 학습을 위한 눈이 편안한 테마 제공
+- **폰트 크기 조절**: 가독성을 위한 글자 크기 사용자 정의
+- **복습 통계**: 날짜별 복습 횟수 및 최근 학습 시간 추적
+- **자동 이메일 리포트**: 매일 아침 학습 진행 상황을 이메일로 자동 발송 (GitHub Actions + Firebase)
 
-## 설치 및 실행 방법
+## 🛠 기술 스택
 
-### 요구 사항
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Backend/DB**: Firebase Realtime Database (학습 기록 동기화)
+- **Automation**: Python, GitHub Actions (이메일 발송)
 
-- PHP 7.4 이상 (cURL 확장 모듈 필요)
-- Notion API 키 및 페이지 ID
+## 📦 설치 및 실행 방법
 
-### 실행
+### 1. 로컬 환경 실행
 
-1. 저장소를 클론합니다.
-2. 프로젝트 루트에 `.env` 파일을 생성하고 다음 정보를 입력합니다:
-   ```
-   NOTION_KEY=your_integration_secret
-   NOTION_PAGE_ID=your_page_id
-   ```
-3. 웹 서버(Apache, Nginx 등) 또는 PHP 내장 서버를 사용하여 실행합니다.
-   ```bash
-   php -S localhost:8000
-   ```
-4. 브라우저에서 `http://localhost:8000`으로 접속합니다.
+별도의 서버 설치 없이 브라우저에서 `index.html` 파일을 열면 기본적인 퀴즈 기능을 사용할 수 있습니다.
+단, 이메일 리포트 기능을 사용하려면 Firebase 및 GitHub 설정이 필요합니다.
 
-### 데이터 업데이트
+### 2. 이메일 리포트 설정 (선택 사항)
 
-웹 페이지 우측 상단의 **새로고침(🔄) 아이콘**을 클릭하면 Notion에서 최신 데이터를 가져와 `data.json`을 업데이트합니다.
+컴퓨터를 켜두지 않아도 **GitHub Actions**가 매일 아침 8시(한국 시간)에 학습 리포트를 이메일로 보내줍니다.
 
-## 프로젝트 구조
+1. **Firebase 프로젝트 생성**:
+   - [Firebase Console](https://console.firebase.google.com/)에서 프로젝트 생성
+   - Realtime Database 생성 및 규칙 설정 (`read: true, write: true`)
+   - `script.js` 파일 내 `firebaseConfig` 객체 업데이트
 
-- `index.php`: 메인 웹 페이지, Notion 연동 및 프론트엔드 로직 포함
-- `Utils.php`: 환경 변수 로드 및 데이터 처리 유틸리티
-- `NotionImporter.php`: Notion API 통신 및 데이터 처리 클래스
-- `style.css`: 스타일시트
-- `data.json`: 스크래핑된 학습 데이터
-- `API.md`: 코드 및 API 상세 문서
+2. **GitHub 저장소 설정**:
+   - 이 코드를 자신의 GitHub 저장소에 Push
+   - Settings > Secrets and variables > Actions에 다음 Secret 추가:
+     - `EMAIL_USER`: 보내는 사람 이메일 (Gmail 권장)
+     - `EMAIL_PASSWORD`: 이메일 앱 비밀번호
+     - `EMAIL_TO`: 받는 사람 이메일
+     - `FIREBASE_URL`: Firebase Realtime Database URL
 
-## 기여하기
+## 📝 라이선스
 
-이 프로젝트는 개인 학습용 프로젝트로, 외부 기여를 받지 않습니다. 자세한 내용은 `CONTRIBUTING.md`를 참고해주세요.
+MIT License

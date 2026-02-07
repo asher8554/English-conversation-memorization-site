@@ -1,3 +1,4 @@
+/* CSS Variables */
 :root {
   /* 라이트 모드 변수 */
   --primary-color: #6366f1;
@@ -44,7 +45,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   color: var(--text-color);
-  padding: 20px 10px; /* Reduced from 50px 20px */
+  padding: 20px 10px;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -56,7 +57,7 @@ body {
   box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 500px;
-  padding: 1.5rem 1.5rem 1rem 1.5rem; /* Reduced padding */
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: background 0.3s ease, border-color 0.3s ease;
@@ -111,7 +112,7 @@ select:focus {
   font-size: 2.2rem;
   color: var(--primary-color);
   font-weight: 600;
-  display: none; /* Hide initially to remove gap */
+  display: none; /* 초기 상태: 숨김 */
   margin-top: 1rem;
 }
 
@@ -178,6 +179,16 @@ select:focus {
 .btn-secondary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.4);
 }
 
 /* 애니메이션 */
@@ -343,3 +354,102 @@ select:focus {
 }
 
 
+/* 통계 모달 스타일 */
+.stats-content {
+  max-width: 500px;
+}
+
+.stats-summary {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--input-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--input-border);
+  min-width: 150px;
+}
+
+.stat-card h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.stats-list-container {
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--input-border);
+  color: var(--text-color);
+}
+
+.stats-table th {
+  background: var(--input-bg);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.stats-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.stats-table tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.btn-complete {
+  background: #10b981;
+  color: white;
+  width: 100%;
+  margin-top: 1rem;
+  display: none; /* 초기 상태: 숨김 */
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+}
+
+.btn-complete:hover {
+  background: #059669;
+  box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.4);
+}
+
+/* 통계 목록 스크롤바 스타일 */
+.stats-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.stats-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.stats-list-container::-webkit-scrollbar-thumb {
+  background-color: var(--text-secondary);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
