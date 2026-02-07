@@ -191,6 +191,17 @@ class TTSManager {
      * 1. 키워드 매칭 (Google, Microsoft, Apple, Natural, Premium)
      * 2. 언어 매칭 (한국어, 영어)
      */
+    /**
+     * 사용 가능한 음성 목록을 가져와 드롭다운을 채웁니다.
+     * Google, Microsoft, Apple 등 자연스러운 프리미엄 목소리를 우선순위로 정렬합니다.
+     * 
+     * 최적화:
+     * - 비교 함수 내에서 매번 점수를 계산하지 않고, 미리 점수를 계산하여 정렬 성능을 개선합니다.
+     * 
+     * 우선순위:
+     * 1. 키워드 매칭 (Google, Microsoft, Apple, Natural, Premium)
+     * 2. 언어 매칭 (한국어, 영어)
+     */
     populateVoiceList() {
         this.voices = this.synth.getVoices();
         
@@ -202,26 +213,32 @@ class TTSManager {
         // 우선순위 키워드 (자연스러운 목소리 순서)
         const premiumKeywords = ['Google', 'Microsoft', 'Apple', 'Natural', 'Premium'];
 
-        const sortVoices = (a, b) => {
-            const getScore = (voice) => {
-                let score = 0;
-                premiumKeywords.forEach((keyword, index) => {
-                    if (voice.name.includes(keyword)) score += (10 - index);
-                });
-                return score;
-            };
-            return getScore(b) - getScore(a); // 점수 높은 순 내림차순
+        // 점수 계산 헬퍼 함수
+        const getScore = (voice) => {
+            let score = 0;
+            premiumKeywords.forEach((keyword, index) => {
+                if (voice.name.includes(keyword)) score += (10 - index);
+            });
+            return score;
         };
 
-        // 한국어 필터링 및 정렬
-        const koVoices = this.voices
+        // 한국어 음성 필터링 및 점수 계산
+        const koVoicesWithScore = this.voices
             .filter(v => v.lang.includes('ko') || v.lang === 'ko_KR')
-            .sort(sortVoices);
+            .map(voice => ({ voice, score: getScore(voice) }));
 
-        // 영어 필터링 및 정렬
-        const enVoices = this.voices
+        // 영어 음성 필터링 및 점수 계산
+        const enVoicesWithScore = this.voices
             .filter(v => v.lang.startsWith('en-') || v.lang === 'en_US' || v.lang === 'en_GB')
-            .sort(sortVoices);
+            .map(voice => ({ voice, score: getScore(voice) }));
+
+        // 정렬 수행 (점수 내림차순)
+        koVoicesWithScore.sort((a, b) => b.score - a.score);
+        enVoicesWithScore.sort((a, b) => b.score - a.score);
+
+        // 원본 음성 객체 추출
+        const koVoices = koVoicesWithScore.map(item => item.voice);
+        const enVoices = enVoicesWithScore.map(item => item.voice);
 
         // 정렬된 리스트 추가
         const addOptions = (voiceList, selectElement) => {
@@ -233,6 +250,11 @@ class TTSManager {
                 // 불필요한 시스템 텍스트 제거 (예: Japanese -> 일본어 등의 표시는 유지하되 너무 길면 자르기)
                 if (displayName.includes('Google')) displayName = displayName.replace('Google', 'Google (Natural)');
                 if (displayName.includes('Microsoft')) displayName = displayName.replace('Microsoft', 'MS');
+                
+                // 모바일 환경 등에서 너무 긴 이름 축소
+                if (displayName.length > 40) {
+                     displayName = displayName.substring(0, 37) + '...';
+                }
 
                 option.textContent = `${displayName}`;
                 option.value = voice.name;
@@ -487,13 +509,18 @@ class QuizApp {
         this.daySelect.innerHTML = '';
         optionsToSort.forEach(opt => this.daySelect.add(opt));
 
-        this.daySelect.value = currentVal;
-
-        if (this.daySelect.selectedIndex === -1 && this.daySelect.options.length > 0) {
+        if (isRandom && this.daySelect.options.length > 0) {
             this.daySelect.selectedIndex = 0;
             this.loadDay(this.daySelect.value);
         } else {
-            this.updateNavButtons();
+            this.daySelect.value = currentVal;
+
+            if (this.daySelect.selectedIndex === -1 && this.daySelect.options.length > 0) {
+                this.daySelect.selectedIndex = 0;
+                this.loadDay(this.daySelect.value);
+            } else {
+                this.updateNavButtons();
+            }
         }
     }
 
