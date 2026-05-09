@@ -118,7 +118,6 @@ class TTSManager {
         this.koVoice = null;
         this.enVoice = null;
 
-        // UI 요소
         this.settingsModal = document.getElementById('settingsModal');
         this.settingsBtn = document.getElementById('settingsBtn');
         this.closeModalBtn = document.querySelector('.close-modal');
@@ -131,7 +130,6 @@ class TTSManager {
     }
 
     init() {
-        // 음성 목록 로드 (비동기 처리)
         if (this.synth.onvoiceschanged !== undefined) {
             this.synth.onvoiceschanged = () => {
                 this.populateVoiceList();
@@ -139,7 +137,6 @@ class TTSManager {
             };
         }
 
-        // 초기 로드 시도
         this.populateVoiceList();
         this.loadSettings();
 
@@ -147,7 +144,6 @@ class TTSManager {
     }
 
     initEventListeners() {
-        // 모달 열기/닫기
         if (this.settingsBtn) {
             this.settingsBtn.addEventListener('click', () => this.openSettings());
         }
@@ -173,19 +169,8 @@ class TTSManager {
     }
 
     /**
-     * 사용 가능한 음성 목록을 로드하고 필터링하여 드롭다운에 추가합니다.
-     * Google, Microsoft, Apple 등 자연스러운 프리미엄 음성을 우선 정렬합니다.
-     */
-    /**
      * 사용 가능한 음성 목록을 가져와 드롭다운을 채웁니다.
      * Google, Microsoft, Apple 등 자연스러운 프리미엄 목소리를 우선순위로 정렬합니다.
-     * 
-     * 최적화:
-     * - 비교 함수 내에서 매번 점수를 계산하지 않고, 미리 점수를 계산하여 정렬 성능을 개선합니다.
-     * 
-     * 우선순위:
-     * 1. 키워드 매칭 (Google, Microsoft, Apple, Natural, Premium)
-     * 2. 언어 매칭 (한국어, 영어)
      */
     populateVoiceList() {
         this.voices = this.synth.getVoices();
@@ -195,14 +180,12 @@ class TTSManager {
         this.koVoiceSelect.innerHTML = '';
         this.enVoiceSelect.innerHTML = '';
 
-        // 제외할 키워드 (효과음 등)
         const excludedKeywords = [
             'Bells', 'Organ', 'Cello', 'Zarvox', 'Trinoids',
             'Deranged', 'Hysterical', 'Boing', 'Bubbles',
             'Bad News', 'Good News', 'Pipe Organ', 'Whisper'
         ];
 
-        // 우선순위 키워드
         const premiumKeywords = ['Google', 'Microsoft', 'Apple', 'Natural', 'Premium'];
 
         const sortVoices = (a, b) => {
@@ -213,30 +196,25 @@ class TTSManager {
                 });
                 return score;
             };
-            return getScore(b) - getScore(a); // 점수 높은 순 내림차순
+            return getScore(b) - getScore(a);
         };
 
-        // 한국어 필터링 및 정렬
         const koVoices = this.voices
             .filter(v => v.lang.includes('ko') || v.lang === 'ko_KR')
             .sort(sortVoices);
 
-        // 영어 필터링 및 정렬
         const enVoices = this.voices
             .filter(v => v.lang.startsWith('en-') || v.lang === 'en_US' || v.lang === 'en_GB')
             .sort(sortVoices);
 
-        // 드롭다운 옵션 추가
         const addOptions = (voiceList, selectElement) => {
             voiceList.forEach(voice => {
                 const option = document.createElement('option');
                 let displayName = voice.name;
 
-                // 표시 이름 정리
                 if (displayName.includes('Google')) displayName = displayName.replace('Google', 'Google (Natural)');
                 if (displayName.includes('Microsoft')) displayName = displayName.replace('Microsoft', 'MS');
                 
-                // 모바일 환경 등에서 너무 긴 이름 축소
                 if (displayName.length > 40) {
                      displayName = displayName.substring(0, 37) + '...';
                 }
@@ -558,9 +536,8 @@ class QuizApp {
         this.reviewCompleteBtn.id = 'reviewCompleteBtn';
         this.reviewCompleteBtn.className = 'btn btn-complete';
         this.reviewCompleteBtn.textContent = '✅ Review Complete';
-        this.reviewCompleteBtn.style.display = 'none'; // 초기엔 숨김
+        this.reviewCompleteBtn.style.display = 'none';
 
-        // 카드 콘텐츠 내부에 추가 (정답 텍스트 아래)
         this.cardContent.appendChild(this.reviewCompleteBtn);
 
         this.reviewCompleteBtn.addEventListener('click', () => {
@@ -574,7 +551,6 @@ class QuizApp {
 
         alert(`Good job! "${currentDay}" review recorded.`);
 
-        // UI 업데이트 없이 그냥 카운트만 올림. 필요하면 버튼 비활성화 등을 할 수 있음.
         this.reviewCompleteBtn.disabled = true;
         this.reviewCompleteBtn.textContent = 'Review Recorded';
     }
@@ -603,21 +579,18 @@ class QuizApp {
             button.addEventListener('click', () => this.switchCourse(button.dataset.courseId));
         });
 
-        // 통계 모달 이벤트
         if (this.statsBtn) {
             this.statsBtn.addEventListener('click', () => this.openStats());
         }
         if (this.closeStatsModalBtn) {
             this.closeStatsModalBtn.addEventListener('click', () => this.closeStats());
         }
-        // 모달 외부 클릭 시 닫기
         window.addEventListener('click', (e) => {
             if (e.target === this.statsModal) {
                 this.closeStats();
             }
         });
 
-        // 통계 초기화 버튼
         if (this.resetStatsBtn) {
             this.resetStatsBtn.addEventListener('click', () => this.handleResetStats());
         }
@@ -650,8 +623,6 @@ class QuizApp {
         this.statsTableBody.innerHTML = '';
         const fragment = document.createDocumentFragment();
 
-        // 모든 날짜(Day)를 순회하며 통계 표시
-        // 데이터에 있는 Day 목록을 기준으로 표시 (리뷰 기록이 없어도 0으로 표시하기 위함)
         Object.keys(this.data).forEach(day => {
             const tr = document.createElement('tr');
 
@@ -661,9 +632,6 @@ class QuizApp {
                 const date = new Date(reviewData.lastReviewed);
                 lastReviewedText = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
-
-            // Day 이름에 메인 문장도 작게 표시할 수 있지만, 칸이 좁으니 Day만 표시하거나 툴팁으로 처리
-            // 여기서는 Day 이름만 깔끔하게 표시
 
             tr.innerHTML = `
                 <td>${day}</td>
