@@ -53,3 +53,10 @@
 - [x] 비선택 상태를 공통 어두운 회색 버튼으로 변경.
 - [x] 로컬 화면과 정적 검증 확인.
 - [x] 커밋과 GitHub Pages 배포.
+
+## 기본동사 Day 013~015 추가 체크리스트
+
+- [x] Notion 브라우저 화면에서 Day 013~015 토글 본문 확인.
+- [x] Day 013~015 Model Examples와 Small talk를 기본동사 데이터에 추가.
+- [x] Day 순서와 카드 진행 검증.
+- [x] 커밋과 GitHub Pages 배포.
