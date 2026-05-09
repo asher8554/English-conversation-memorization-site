@@ -450,7 +450,7 @@ class QuizApp {
      * @param {Object} quizData - 코스별 퀴즈 데이터
      */
     constructor(quizData) {
-        this.courses = this.normalizeCourses(quizData);
+        this.courses = quizData.courses || {};
         this.currentCourseId = this.getInitialCourseId(quizData.defaultCourse);
         this.data = {};
         this.dayMainSentences = {};
@@ -462,31 +462,10 @@ class QuizApp {
         this.init();
     }
 
-    normalizeCourses(quizData) {
-        if (quizData.courses) {
-            return quizData.courses;
-        }
-
-        return {
-            conversation: {
-                title: '영어회화',
-                data: quizData.data || {},
-                dayMainSentences: quizData.dayMainSentences || {}
-            }
-        };
-    }
-
     getInitialCourseId(defaultCourse) {
-        const savedCourseId = localStorage.getItem('selectedCourseId');
-        if (savedCourseId && this.courses[savedCourseId]) {
-            return savedCourseId;
-        }
-
-        if (defaultCourse && this.courses[defaultCourse]) {
-            return defaultCourse;
-        }
-
-        return Object.keys(this.courses)[0];
+        const courseIds = Object.keys(this.courses);
+        return [localStorage.getItem('selectedCourseId'), defaultCourse, courseIds[0]]
+            .find(courseId => this.courses[courseId]);
     }
 
     /**
@@ -521,14 +500,8 @@ class QuizApp {
         this.daySelect.innerHTML = '';
         const fragment = document.createDocumentFragment();
         Object.keys(this.data).forEach(day => {
-            const option = document.createElement('option');
-            option.value = day;
-            let label = day;
-            if (this.dayMainSentences[day]) {
-                label += " - " + this.dayMainSentences[day];
-            }
-            option.textContent = label;
-            fragment.appendChild(option);
+            const label = this.dayMainSentences[day] ? `${day} - ${this.dayMainSentences[day]}` : day;
+            fragment.appendChild(new Option(label, day));
         });
         this.daySelect.appendChild(fragment);
     }
@@ -577,11 +550,7 @@ class QuizApp {
         this.randomOrderCheckbox.checked = false;
         this.populateDaySelect();
         this.originalOptions = Array.from(this.daySelect.options);
-        if (this.daySelect.options.length > 0) {
-            this.loadDay(this.daySelect.value);
-        } else {
-            this.renderEmptyState();
-        }
+        this.loadDay(this.daySelect.value);
     }
 
     createReviewCompleteBtn() {

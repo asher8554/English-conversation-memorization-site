@@ -60,3 +60,10 @@
 - [x] Day 013~015 Model Examples와 Small talk를 기본동사 데이터에 추가.
 - [x] Day 순서와 카드 진행 검증.
 - [x] 커밋과 GitHub Pages 배포.
+
+## 코스 선택 리팩토링 체크리스트
+
+- [x] 현재 코스 선택 JS/CSS/data 구조 점검.
+- [x] 불필요하거나 장황한 코드 후보 선별.
+- [x] 동작 유지 범위에서 간결하게 리팩토링.
+- [x] 검증 후 커밋과 GitHub Pages 배포.
