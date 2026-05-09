@@ -81,10 +81,28 @@ body {
   transition: all 0.2s ease;
 }
 
-.course-btn:hover,
-.course-btn.active {
+.course-btn[data-course-id="conversation"] {
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.course-btn[data-course-id="conversation"]:hover,
+.course-btn[data-course-id="conversation"].active {
   border-color: var(--primary-color);
-  background: var(--primary-color);
+  background: #ffffff;
+  color: var(--primary-color);
+}
+
+.course-btn[data-course-id="basic-verbs"] {
+  border-color: #fdba74;
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.course-btn[data-course-id="basic-verbs"]:hover,
+.course-btn[data-course-id="basic-verbs"].active {
+  border-color: #ea580c;
+  background: #f97316;
   color: white;
 }
 

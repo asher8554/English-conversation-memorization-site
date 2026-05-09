@@ -39,3 +39,10 @@
 - [x] Notion 본문 기준 Small talk 문장 추가.
 - [x] 기본동사에서 Model Examples 다음 Small talk까지 순차 진행 확인.
 - [x] 검증 후 커밋과 GitHub Pages 배포.
+
+## 코스 버튼 색상 구분 체크리스트
+
+- [x] 현재 코스 버튼 공통 active 스타일 확인.
+- [x] 영어회화 선택 버튼은 흰 배경, 기본동사 선택 버튼은 주황색 배경으로 분리.
+- [x] 로컬 화면과 정적 검증 확인.
+- [x] 커밋과 GitHub Pages 배포.
