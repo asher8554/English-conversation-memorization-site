@@ -363,49 +363,17 @@ class TTSManager {
 }
 
 /**
- * Firebase 설정 객체
- * https://console.firebase.google.com/ 에서 프로젝트 생성 후 발급받은 키를 입력해야 합니다.
- * @type {Object}
- */
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-
-// Firebase 초기화 로직
-let db = null;
-try {
-    // 사용자가 설정을 업데이트했는지 확인
-    if (firebaseConfig.projectId !== "YOUR_PROJECT_ID") {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.database();
-        // 초기화 성공 시 로그 출력 (디버깅용, 배포 시 제거 권장)
-        // console.log("Firebase initialized successfully");
-    } else {
-        console.warn("Firebase 설정이 올바르지 않습니다. 데이터가 로컬에만 저장됩니다.");
-    }
-} catch (e) {
-    console.error("Firebase 초기화 중 오류 발생:", e);
-}
-
-/**
  * 복습 관리자 클래스
  * 
- * 일일 복습 기록을 로컬 스토리지와 Firebase(클라우드)에 동기화하여 관리합니다.
+ * 일일 복습 기록을 로컬 스토리지에 저장하여 관리합니다.
  */
 class ReviewManager {
     /**
-     * 초기화 및 데이터 로드, 클라우드 동기화 수행
+     * 초기화 및 데이터 로드 수행
      */
     constructor() {
         this.storageKey = 'reviewStats';
         this.reviews = this.loadReviews();
-        this.syncWithFirebase(); // 앱 시작 시 클라우드 데이터와 동기화
     }
 
     /**
@@ -418,35 +386,6 @@ class ReviewManager {
     }
 
     /**
-     * Firebase와 데이터 동기화 (클라우드 데이터 병합)
-     * 
-     * 클라우드의 리뷰 횟수가 로컬보다 많을 경우 로컬 데이터를 업데이트합니다.
-     */
-    syncWithFirebase() {
-        if (!db) return;
-
-        const reviewsRef = db.ref('reviews');
-        reviewsRef.once('value').then((snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                let updated = false;
-                // 클라우드 데이터와 로컬 데이터 비교 및 병합
-                Object.keys(data).forEach(day => {
-                    // 로컬에 해당 기록이 없거나, 클라우드 카운트가 더 클 경우 업데이트
-                    if (!this.reviews[day] || data[day].count > this.reviews[day].count) {
-                        this.reviews[day] = data[day];
-                        updated = true;
-                    }
-                });
-
-                if (updated) {
-                    this.saveReviews(false); // 로컬 스토리지에만 저장 (무한 루프 방지)
-                }
-            }
-        }).catch((e) => console.error("Firebase 동기화 실패:", e));
-    }
-
-    /**
      * 특정 Day의 리뷰를 완료 처리하고 카운트를 증가시킵니다.
      * @param {string} day - 완료한 Day (예: "Day 001")
      */
@@ -456,30 +395,14 @@ class ReviewManager {
         }
         this.reviews[day].count++;
         this.reviews[day].lastReviewed = new Date().toISOString();
-        this.saveReviews(true); // 클라우드에도 저장
+        this.saveReviews();
     }
 
     /**
-     * 리뷰 데이터를 로컬 및 클라우드(옵션)에 저장합니다.
-     * @param {boolean} syncToCloud - 클라우드 동기화 여부 (기본값: true)
+     * 리뷰 데이터를 로컬 스토리지에 저장합니다.
      */
-    saveReviews(syncToCloud = true) {
-        // 1. 로컬 스토리지 저장
+    saveReviews() {
         localStorage.setItem(this.storageKey, JSON.stringify(this.reviews));
-
-        // 2. Firebase 저장 (설정된 경우)
-        if (syncToCloud && db) {
-            db.ref('reviews').set(this.reviews)
-                .catch((e) => console.error("Firebase 저장 실패:", e));
-        }
-    }
-
-    /**
-     * 특정 Day의 리뷰 횟수를 반환합니다.
-     * @param {string} day 
-     */
-    getReviewCount(day) {
-        return this.reviews[day] ? this.reviews[day].count : 0;
     }
 
     /**
