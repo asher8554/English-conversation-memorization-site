@@ -371,8 +371,13 @@ class ReviewManager {
     /**
      * 초기화 및 데이터 로드 수행
      */
-    constructor() {
-        this.storageKey = 'reviewStats';
+    constructor(courseId) {
+        this.setCourse(courseId);
+    }
+
+    setCourse(courseId) {
+        this.courseId = courseId;
+        this.storageKey = `reviewStats:${courseId}`;
         this.reviews = this.loadReviews();
     }
 
@@ -382,7 +387,14 @@ class ReviewManager {
      */
     loadReviews() {
         const stored = localStorage.getItem(this.storageKey);
-        return stored ? JSON.parse(stored) : {};
+        if (stored) return JSON.parse(stored);
+
+        const legacyStats = localStorage.getItem('reviewStats');
+        if (this.courseId === 'conversation' && legacyStats) {
+            return JSON.parse(legacyStats);
+        }
+
+        return {};
     }
 
     /**
@@ -435,20 +447,46 @@ class ReviewManager {
  */
 class QuizApp {
     /**
-     * @param {Object} data - 날짜별 퀴즈 데이터
-     * @param {Object} dayMainSentences - 날짜별 주요 문장
+     * @param {Object} quizData - 코스별 퀴즈 데이터
      */
-    constructor(data, dayMainSentences) {
-        this.data = data;
-        this.dayMainSentences = dayMainSentences;
+    constructor(quizData) {
+        this.courses = this.normalizeCourses(quizData);
+        this.currentCourseId = this.getInitialCourseId(quizData.defaultCourse);
+        this.data = {};
+        this.dayMainSentences = {};
         this.currentDayData = [];
         this.currentIndex = 0;
 
         this.cacheDOM();
-        this.populateDaySelect();
-        this.originalOptions = Array.from(this.daySelect.options);
 
         this.init();
+    }
+
+    normalizeCourses(quizData) {
+        if (quizData.courses) {
+            return quizData.courses;
+        }
+
+        return {
+            conversation: {
+                title: '영어회화',
+                data: quizData.data || {},
+                dayMainSentences: quizData.dayMainSentences || {}
+            }
+        };
+    }
+
+    getInitialCourseId(defaultCourse) {
+        const savedCourseId = localStorage.getItem('selectedCourseId');
+        if (savedCourseId && this.courses[savedCourseId]) {
+            return savedCourseId;
+        }
+
+        if (defaultCourse && this.courses[defaultCourse]) {
+            return defaultCourse;
+        }
+
+        return Object.keys(this.courses)[0];
     }
 
     /**
@@ -464,6 +502,8 @@ class QuizApp {
         this.cardContent = document.getElementById('cardContent');
         this.reverseOrderCheckbox = document.getElementById('reverseOrder');
         this.randomOrderCheckbox = document.getElementById('randomOrder');
+        this.courseButtons = document.querySelectorAll('.course-btn');
+        this.courseMeta = document.getElementById('courseMeta');
 
         // 통계 관련 DOM
         this.statsBtn = document.getElementById('statsBtn');
@@ -498,7 +538,7 @@ class QuizApp {
      */
     init() {
         this.ttsManager = new TTSManager();
-        this.reviewManager = new ReviewManager();
+        this.reviewManager = new ReviewManager(this.currentCourseId);
         this.initEventListeners();
 
         new DarkModeManager();
@@ -506,7 +546,37 @@ class QuizApp {
 
         // 리뷰 완료 버튼 동적 생성
         this.createReviewCompleteBtn();
+        this.switchCourse(this.currentCourseId, false);
+    }
 
+    switchCourse(courseId, shouldPersist = true) {
+        const course = this.courses[courseId];
+        if (!course) return;
+
+        this.currentCourseId = courseId;
+        this.data = course.data || {};
+        this.dayMainSentences = course.dayMainSentences || {};
+        this.reviewManager.setCourse(courseId);
+
+        if (shouldPersist) {
+            localStorage.setItem('selectedCourseId', courseId);
+        }
+
+        this.courseButtons.forEach(button => {
+            const isActive = button.dataset.courseId === courseId;
+            button.classList.toggle('active', isActive);
+            button.setAttribute('aria-pressed', String(isActive));
+        });
+
+        if (this.courseMeta) {
+            const dayCount = Object.keys(this.data).length;
+            this.courseMeta.textContent = `${course.title} · ${dayCount} Days`;
+        }
+
+        this.reverseOrderCheckbox.checked = false;
+        this.randomOrderCheckbox.checked = false;
+        this.populateDaySelect();
+        this.originalOptions = Array.from(this.daySelect.options);
         if (this.daySelect.options.length > 0) {
             this.loadDay(this.daySelect.value);
         } else {
@@ -559,6 +629,10 @@ class QuizApp {
 
         this.reverseOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.randomOrderCheckbox));
         this.randomOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.reverseOrderCheckbox));
+
+        this.courseButtons.forEach(button => {
+            button.addEventListener('click', () => this.switchCourse(button.dataset.courseId));
+        });
 
         // 통계 모달 이벤트
         if (this.statsBtn) {
@@ -802,8 +876,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(jsonData => {
-            const { data, dayMainSentences } = jsonData;
-            new QuizApp(data, dayMainSentences);
+            new QuizApp(jsonData);
         })
         .catch(error => {
             console.error('Failed to load data:', error);

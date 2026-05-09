@@ -12,3 +12,9 @@
 - 2026-05-09: 삭제 대상 파일은 `API.md`, `CONTRIBUTING.md.bak`, `Utils.php`, `run_import.php`, `NotionImporter.php`, `send_daily_report.py`, `requirements.txt`, `.github/workflows/daily-report.yml`, `.vscode/settings.json`, 로컬 `.env`다.
 - 2026-05-09: 런타임은 `localStorage` 기반 복습 기록만 유지하도록 정리했다. `data.json`에서는 빈 `Day 034` 항목을 제거해 33일, 총 346개 카드가 남았다.
 - 2026-05-09: 검증으로 `node --check script.js`, `data.json` 파싱/빈 Day 확인, 제거 대상 키워드 검색, `git diff --check`를 실행했다. `git diff --check`는 줄바꿈 변환 경고만 출력했고 공백 오류는 없었다.
+- 2026-05-09: 사용자가 Notion 링크 `https://www.notion.so/100-32f3d76f88748069b726d6b6d47f5afd?source=copy_link`의 기본동사 학습 내용을 사이트에서 선택 실행할 수 있게 요청했다.
+- 2026-05-09: 일반 웹 접근은 `publicAccessRole: none`으로 막혀 있었지만 Notion 커넥터로 `김재우 기본동사 100` 페이지를 읽었다.
+- 2026-05-09: 커넥터 출력은 긴 본문 중간 일부가 잘려 전체 예문을 확정적으로 자동 변환하기 어렵다. 이번 구현은 Notion에서 확인된 Day별 핵심 문장을 기본동사 코스의 시작 데이터로 넣고, UI와 데이터 구조는 이후 예문 보강이 쉽도록 코스 단위로 확장한다.
+- 2026-05-09: `data.json`은 `courses.conversation`과 `courses.basic-verbs`를 갖는 구조로 확장했다. 영어회화 코스는 기존 33일 346카드를 유지하고, 기본동사 코스는 Notion에서 확인한 Day 001~026 핵심 문장 26카드로 시작한다.
+- 2026-05-09: 복습 통계 저장 키는 `reviewStats:<courseId>` 형식으로 분리했다. 기존 영어회화 사용자 통계는 `reviewStats` 레거시 키에서 한 번 이어받을 수 있게 유지했다.
+- 2026-05-09: 한글 데이터가 깨지지 않도록 `data.json`을 UTF-8 기준으로 재생성했고, 기본동사 코스명과 첫 문장 표시를 확인했다.
