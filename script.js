@@ -868,7 +868,7 @@ class QuizApp {
 
 // 애플리케이션 초기화
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('data.json?v=4')
+    fetch('data.json?v=5')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

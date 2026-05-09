@@ -31,3 +31,11 @@
 - [x] 기본동사 데이터를 Day별 여러 카드로 보강.
 - [x] 기본동사에서 마지막 카드에서만 Review Complete가 나오는지 확인.
 - [x] 검증 후 커밋과 GitHub Pages 배포.
+
+## 기본동사 Small talk 추가 체크리스트
+
+- [x] 영어회화 코스의 Day 배열 진행 방식 확인.
+- [x] 기본동사에서 Small talk가 빠진 원인 확인.
+- [x] Notion 본문 기준 Small talk 문장 추가.
+- [x] 기본동사에서 Model Examples 다음 Small talk까지 순차 진행 확인.
+- [x] 검증 후 커밋과 GitHub Pages 배포.
