@@ -18,3 +18,4 @@
 - 2026-05-09: `data.json`은 `courses.conversation`과 `courses.basic-verbs`를 갖는 구조로 확장했다. 영어회화 코스는 기존 33일 346카드를 유지하고, 기본동사 코스는 Notion에서 확인한 Day 001~026 핵심 문장 26카드로 시작한다.
 - 2026-05-09: 복습 통계 저장 키는 `reviewStats:<courseId>` 형식으로 분리했다. 기존 영어회화 사용자 통계는 `reviewStats` 레거시 키에서 한 번 이어받을 수 있게 유지했다.
 - 2026-05-09: 한글 데이터가 깨지지 않도록 `data.json`을 UTF-8 기준으로 재생성했고, 기본동사 코스명과 첫 문장 표시를 확인했다.
+- 2026-05-09: GitHub Pages에서 이전 배포본과 브라우저 캐시가 남을 수 있어 `style.css`, `script.js`, `data.json` 요청 버전을 `v=3`으로 올렸다.
