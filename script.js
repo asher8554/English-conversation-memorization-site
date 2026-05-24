@@ -128,6 +128,9 @@ class TTSManager {
         this.needsSpeechWarmup = true;
         this.speechWarmupInProgress = false;
         this.speechAfterWarmup = null;
+        this.initialAutomaticSpeech = null;
+        this.initialAutomaticSpeechTimer = null;
+        this.initialAutomaticDelayMs = 6000;
         this.settings = this.getDefaultPlaybackSettings();
 
         this.settingsModal = document.getElementById('settingsModal');
@@ -484,6 +487,11 @@ class TTSManager {
             return null;
         }
 
+        if (options.automatic && !options.skipInitialDelay && this.needsSpeechWarmup) {
+            this.queueInitialAutomaticSpeech(text, lang, options);
+            return null;
+        }
+
         if (options.automatic && !options.skipWarmup && this.needsSpeechWarmup) {
             return this.warmUpBeforeSpeech(text, lang, options);
         }
@@ -496,6 +504,30 @@ class TTSManager {
 
         this.synth.speak(utterance);
         return utterance;
+    }
+
+    queueInitialAutomaticSpeech(text, lang, options) {
+        this.initialAutomaticSpeech = { text, lang, options };
+        if (this.initialAutomaticSpeechTimer) {
+            clearTimeout(this.initialAutomaticSpeechTimer);
+        }
+        this.initialAutomaticSpeechTimer = setTimeout(() => this.playInitialAutomaticSpeech(), this.initialAutomaticDelayMs);
+    }
+
+    playInitialAutomaticSpeech() {
+        const nextSpeech = this.initialAutomaticSpeech;
+        this.initialAutomaticSpeech = null;
+        this.initialAutomaticSpeechTimer = null;
+
+        if (!nextSpeech) return;
+
+        this.populateVoiceList();
+        this.loadSettings();
+        this.markVoicesReady();
+        this.speak(nextSpeech.text, nextSpeech.lang, {
+            ...nextSpeech.options,
+            skipInitialDelay: true
+        });
     }
 
     warmUpBeforeSpeech(text, lang, options) {

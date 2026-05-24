@@ -307,8 +307,18 @@ test('TTS waits for voiceschanged before the first automatic speech uses a settl
     ]);
     context.triggerVoicesChanged();
 
+    assert.equal(context.spoken.length, 0);
+
+    context.runTimers();
+
     assert.equal(context.spoken.length, 1);
+    assert.equal(context.spoken[0].volume, 0);
     assert.equal(context.spoken[0].voice.voiceURI, 'google-ko');
+
+    context.finishLastUtterance();
+
+    assert.equal(context.spoken.length, 2);
+    assert.equal(context.spoken[1].voice.voiceURI, 'google-ko');
 });
 
 test('TTS waits for a saved voice that appears after an early voiceschanged event', () => {
