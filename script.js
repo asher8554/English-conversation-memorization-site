@@ -122,6 +122,9 @@ class TTSManager {
         this.pendingSpeechTimer = null;
         this.voicesReady = false;
         this.voiceReadinessTimer = null;
+        this.voiceWaitExpired = false;
+        this.preferredKoVoiceKey = '';
+        this.preferredEnVoiceKey = '';
         this.settings = this.getDefaultPlaybackSettings();
 
         this.settingsModal = document.getElementById('settingsModal');
@@ -170,16 +173,30 @@ class TTSManager {
     }
 
     scheduleVoiceReadinessFallback() {
-        this.voiceReadinessTimer = setTimeout(() => this.markVoicesReady(), 700);
+        this.voiceReadinessTimer = setTimeout(() => this.expireVoiceWait(), 2500);
     }
 
     markVoicesReady() {
         this.voicesReady = true;
-        if (this.voiceReadinessTimer) {
-            clearTimeout(this.voiceReadinessTimer);
-            this.voiceReadinessTimer = null;
+        this.flushPendingSpeech(false);
+
+        if (!this.pendingSpeech) {
+            this.clearVoiceReadinessTimer();
         }
+    }
+
+    expireVoiceWait() {
+        this.voicesReady = true;
+        this.voiceWaitExpired = true;
+        this.clearVoiceReadinessTimer();
         this.flushPendingSpeech(true);
+    }
+
+    clearVoiceReadinessTimer() {
+        if (!this.voiceReadinessTimer) return;
+
+        clearTimeout(this.voiceReadinessTimer);
+        this.voiceReadinessTimer = null;
     }
 
     initEventListeners() {
@@ -374,6 +391,8 @@ class TTSManager {
         const savedEnVoice = localStorage.getItem('enVoiceURI')
             || this.findVoiceKeyByLegacyName(localStorage.getItem('enVoiceName'), 'en-US');
 
+        this.preferredKoVoiceKey = savedKoVoice || '';
+        this.preferredEnVoiceKey = savedEnVoice || '';
         this.selectVoice(this.koVoiceSelect, savedKoVoice);
         this.selectVoice(this.enVoiceSelect, savedEnVoice);
 
@@ -388,8 +407,14 @@ class TTSManager {
         const selectedKo = this.koVoiceSelect.value;
         const selectedEn = this.enVoiceSelect.value;
 
-        if (selectedKo) localStorage.setItem('koVoiceURI', selectedKo);
-        if (selectedEn) localStorage.setItem('enVoiceURI', selectedEn);
+        if (selectedKo) {
+            this.preferredKoVoiceKey = selectedKo;
+            localStorage.setItem('koVoiceURI', selectedKo);
+        }
+        if (selectedEn) {
+            this.preferredEnVoiceKey = selectedEn;
+            localStorage.setItem('enVoiceURI', selectedEn);
+        }
 
         this.settings = this.readPlaybackSettingsFromControls();
         this.savePlaybackSettings();
@@ -447,7 +472,11 @@ class TTSManager {
             this.populateVoiceList();
         }
 
-        if ((!this.voicesReady || this.voices.length === 0) && !options.allowFallback) {
+        const shouldWaitForVoice = !this.voicesReady
+            || this.voices.length === 0
+            || (!this.voiceWaitExpired && !this.canUsePreferredVoice(lang));
+
+        if (shouldWaitForVoice && !options.allowFallback) {
             this.queueSpeech(text, lang, options);
             return null;
         }
@@ -483,20 +512,26 @@ class TTSManager {
 
     queueSpeech(text, lang, options) {
         this.pendingSpeech = { text, lang, options };
-        if (this.pendingSpeechTimer) {
-            clearTimeout(this.pendingSpeechTimer);
-        }
-        this.pendingSpeechTimer = setTimeout(() => this.flushPendingSpeech(true), 700);
     }
 
     flushPendingSpeech(allowFallback = false) {
         if (!this.pendingSpeech) return;
         if (this.voices.length === 0 && !allowFallback) return;
+        if (!allowFallback && !this.canUsePreferredVoice(this.pendingSpeech.lang)) return;
 
         const { text, lang, options } = this.pendingSpeech;
         this.pendingSpeech = null;
         this.pendingSpeechTimer = null;
         this.speak(text, lang, { ...options, allowFallback: true });
+    }
+
+    canUsePreferredVoice(lang) {
+        const preferredKey = this.getPreferredVoiceKey(lang);
+        return !preferredKey || Boolean(this.findVoiceByKey(preferredKey));
+    }
+
+    getPreferredVoiceKey(lang) {
+        return this.matchesLanguage({ lang }, 'ko-KR') ? this.preferredKoVoiceKey : this.preferredEnVoiceKey;
     }
 
     getDefaultPlaybackSettings() {

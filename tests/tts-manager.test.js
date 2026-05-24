@@ -304,6 +304,33 @@ test('TTS waits for voiceschanged before the first automatic speech uses a settl
     assert.equal(context.spoken[0].voice.voiceURI, 'google-ko');
 });
 
+test('TTS waits for a saved voice that appears after an early voiceschanged event', () => {
+    const context = createClassContext({
+        runTimersImmediately: false,
+        stored: {
+            koVoiceURI: 'google-ko'
+        },
+        voices: [
+            { name: 'Temporary Korean', lang: 'ko-KR', voiceURI: 'ko-temporary' }
+        ]
+    });
+    const manager = new context.TTSManager();
+
+    manager.speak('안녕하세요.', 'ko-KR');
+    context.triggerVoicesChanged();
+
+    assert.equal(context.spoken.length, 0);
+
+    context.setVoices([
+        { name: 'Temporary Korean', lang: 'ko-KR', voiceURI: 'ko-temporary' },
+        { name: 'Google 한국어', lang: 'ko-KR', voiceURI: 'google-ko' }
+    ]);
+    context.triggerVoicesChanged();
+
+    assert.equal(context.spoken.length, 1);
+    assert.equal(context.spoken[0].voice.voiceURI, 'google-ko');
+});
+
 test('ReviewManager ignores corrupted localStorage stats instead of crashing', () => {
     const { ReviewManager } = createClassContext({
         stored: {
