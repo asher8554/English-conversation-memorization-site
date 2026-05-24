@@ -8,23 +8,27 @@ const vm = require('node:vm');
 const rootDir = path.resolve(__dirname, '..');
 const scriptPath = path.join(rootDir, 'script.js');
 
-function createClassContext({ voices = [], stored = {}, runTimersImmediately = true } = {}) {
+function createClassContext({ voices = [], stored = {}, runTimersImmediately = true, storageUnavailable = false } = {}) {
     let currentVoices = voices;
     const elements = {};
     const storage = new Map(Object.entries(stored));
     const timers = [];
+    let timerId = 0;
     const voiceChangeHandlers = [];
     const spoken = [];
     let cancelCount = 0;
 
     const localStorage = {
         getItem(key) {
+            if (storageUnavailable) throw new Error('storage unavailable');
             return storage.has(key) ? storage.get(key) : null;
         },
         setItem(key, value) {
+            if (storageUnavailable) throw new Error('storage unavailable');
             storage.set(key, String(value));
         },
         removeItem(key) {
+            if (storageUnavailable) throw new Error('storage unavailable');
             storage.delete(key);
         }
     };
@@ -129,22 +133,33 @@ function createClassContext({ voices = [], stored = {}, runTimersImmediately = t
             throw new Error('fetch should not run in class tests');
         },
         setTimeout(callback, delay) {
-            timers.push({ callback, delay });
+            const id = ++timerId;
+            timers.push({ id, callback, delay });
             if (runTimersImmediately) callback();
-            return timers.length;
+            return id;
         },
-        clearTimeout() { },
+        clearTimeout(id) {
+            const index = timers.findIndex(timer => timer.id === id);
+            if (index !== -1) timers.splice(index, 1);
+        },
         window: {
             speechSynthesis,
             addEventListener() { },
             setTimeout(callback, delay) {
-                timers.push({ callback, delay });
+                const id = ++timerId;
+                timers.push({ id, callback, delay });
                 if (runTimersImmediately) callback();
-                return timers.length;
+                return id;
             },
-            clearTimeout() { }
+            clearTimeout(id) {
+                const index = timers.findIndex(timer => timer.id === id);
+                if (index !== -1) timers.splice(index, 1);
+            }
         },
         document: {
+            body: {
+                classList: createClassList()
+            },
             getElementById(id) {
                 return elements[id] || null;
             },
@@ -176,9 +191,11 @@ function createClassContext({ voices = [], stored = {}, runTimersImmediately = t
     context.globalThis = context;
 
     const script = fs.readFileSync(scriptPath, 'utf8');
-    vm.runInNewContext(`${script}\nglobalThis.__classes = { TTSManager, ReviewManager };`, context);
+    vm.runInNewContext(`${script}\nglobalThis.__classes = { FontSizeManager, DarkModeManager, TTSManager, ReviewManager };`, context);
 
     return {
+        FontSizeManager: context.__classes.FontSizeManager,
+        DarkModeManager: context.__classes.DarkModeManager,
         TTSManager: context.__classes.TTSManager,
         ReviewManager: context.__classes.ReviewManager,
         elements,
@@ -201,6 +218,10 @@ function createClassContext({ voices = [], stored = {}, runTimersImmediately = t
             while (timers.length) {
                 timers.shift().callback();
             }
+        },
+        runNextTimer() {
+            const timer = timers.shift();
+            if (timer) timer.callback();
         },
         finishLastUtterance() {
             const utterance = spoken[spoken.length - 1];
@@ -327,7 +348,7 @@ test('TTS waits for voiceschanged before the first automatic speech uses a settl
 
     assert.equal(context.spoken.length, 0);
 
-    context.runTimers();
+    context.runNextTimer();
 
     assert.equal(context.spoken.length, 1);
     assert.equal(context.spoken[0].volume, 0);
@@ -368,13 +389,17 @@ test('TTS waits for a saved voice that appears after an early voiceschanged even
 
 test('TTS warms up silently before the first audible automatic speech', () => {
     const context = createClassContext({
+        runTimersImmediately: false,
         voices: [
             { name: 'Google 한국어', lang: 'ko-KR', voiceURI: 'google-ko' }
         ]
     });
     const manager = new context.TTSManager();
+    context.triggerVoicesChanged();
 
     manager.speak('안녕하세요.', 'ko-KR', { automatic: true });
+
+    context.runNextTimer();
 
     assert.equal(context.spoken.length, 1);
     assert.equal(context.spoken[0].volume, 0);
@@ -386,6 +411,47 @@ test('TTS warms up silently before the first audible automatic speech', () => {
     assert.equal(context.spoken[1].text, '안녕하세요.');
     assert.equal(context.spoken[1].volume, 1);
     assert.equal(context.spoken[1].voice.voiceURI, 'google-ko');
+});
+
+test('TTS starts the first automatic speech when the silent warmup never ends', () => {
+    const context = createClassContext({
+        runTimersImmediately: false,
+        voices: [
+            { name: 'Google 한국어', lang: 'ko-KR', voiceURI: 'google-ko' }
+        ]
+    });
+    const manager = new context.TTSManager();
+    context.triggerVoicesChanged();
+
+    manager.speak('안녕하세요.', 'ko-KR', { automatic: true });
+
+    context.runNextTimer();
+
+    assert.equal(context.spoken.length, 1);
+    assert.equal(context.spoken[0].volume, 0);
+
+    context.runNextTimer();
+
+    assert.equal(context.spoken.length, 2);
+    assert.equal(context.spoken[1].text, '안녕하세요.');
+});
+
+test('storage-backed managers tolerate unavailable localStorage', () => {
+    const context = createClassContext({
+        storageUnavailable: true,
+        voices: [
+            { name: 'Google 한국어', lang: 'ko-KR', voiceURI: 'google-ko' }
+        ]
+    });
+
+    assert.doesNotThrow(() => new context.TTSManager());
+    assert.doesNotThrow(() => new context.DarkModeManager());
+    assert.doesNotThrow(() => new context.FontSizeManager({ style: {} }, { style: {} }));
+
+    const reviewManager = new context.ReviewManager('conversation');
+
+    assert.doesNotThrow(() => reviewManager.incrementReview('Day 001'));
+    assert.equal(reviewManager.getAllReviews()['Day 001'].count, 1);
 });
 
 test('ReviewManager ignores corrupted localStorage stats instead of crashing', () => {

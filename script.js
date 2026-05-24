@@ -1,3 +1,20 @@
+function getStorageItem(key) {
+    try {
+        return localStorage.getItem(key);
+    } catch (error) {
+        return null;
+    }
+}
+
+function setStorageItem(key, value) {
+    try {
+        localStorage.setItem(key, value);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 /**
  * 폰트 크기 관리자
  * 질문과 정답 텍스트의 글자 크기를 조절하고 설정을 localStorage에 저장합니다.
@@ -10,8 +27,8 @@ class FontSizeManager {
     constructor(questionEl, answerEl) {
         this.questionEl = questionEl;
         this.answerEl = answerEl;
-        this.qSize = parseFloat(localStorage.getItem('questionFontSize')) || 2.0;
-        this.aSize = parseFloat(localStorage.getItem('answerFontSize')) || 1.6;
+        this.qSize = parseFloat(getStorageItem('questionFontSize')) || 2.0;
+        this.aSize = parseFloat(getStorageItem('answerFontSize')) || 1.6;
         this.init();
     }
 
@@ -47,8 +64,8 @@ class FontSizeManager {
     update() {
         this.questionEl.style.fontSize = `${this.qSize}rem`;
         this.answerEl.style.fontSize = `${this.aSize}rem`;
-        localStorage.setItem('questionFontSize', this.qSize);
-        localStorage.setItem('answerFontSize', this.aSize);
+        setStorageItem('questionFontSize', this.qSize);
+        setStorageItem('answerFontSize', this.aSize);
     }
 }
 
@@ -60,7 +77,7 @@ class DarkModeManager {
     constructor() {
         this.toggleBtn = document.getElementById('darkModeToggle');
         this.body = document.body;
-        this.isDarkMode = localStorage.getItem('useDarkMode') === 'true';
+        this.isDarkMode = getStorageItem('useDarkMode') === 'true';
         this.init();
     }
 
@@ -87,7 +104,7 @@ class DarkModeManager {
         } else {
             this.disableDarkMode();
         }
-        localStorage.setItem('useDarkMode', this.isDarkMode);
+        setStorageItem('useDarkMode', this.isDarkMode);
     }
 
     /**
@@ -128,6 +145,8 @@ class TTSManager {
         this.needsSpeechWarmup = true;
         this.speechWarmupInProgress = false;
         this.speechAfterWarmup = null;
+        this.speechWarmupFallbackTimer = null;
+        this.speechWarmupFallbackMs = 1200;
         this.initialAutomaticSpeech = null;
         this.initialAutomaticSpeechTimer = null;
         this.initialAutomaticDelayMs = 0;
@@ -392,10 +411,10 @@ class TTSManager {
     loadSettings() {
         this.settings = this.loadPlaybackSettings();
 
-        const savedKoVoice = localStorage.getItem('koVoiceURI')
-            || this.findVoiceKeyByLegacyName(localStorage.getItem('koVoiceName'), 'ko-KR');
-        const savedEnVoice = localStorage.getItem('enVoiceURI')
-            || this.findVoiceKeyByLegacyName(localStorage.getItem('enVoiceName'), 'en-US');
+        const savedKoVoice = getStorageItem('koVoiceURI')
+            || this.findVoiceKeyByLegacyName(getStorageItem('koVoiceName'), 'ko-KR');
+        const savedEnVoice = getStorageItem('enVoiceURI')
+            || this.findVoiceKeyByLegacyName(getStorageItem('enVoiceName'), 'en-US');
 
         this.preferredKoVoiceKey = savedKoVoice || '';
         this.preferredEnVoiceKey = savedEnVoice || '';
@@ -415,11 +434,11 @@ class TTSManager {
 
         if (selectedKo) {
             this.preferredKoVoiceKey = selectedKo;
-            localStorage.setItem('koVoiceURI', selectedKo);
+            setStorageItem('koVoiceURI', selectedKo);
         }
         if (selectedEn) {
             this.preferredEnVoiceKey = selectedEn;
-            localStorage.setItem('enVoiceURI', selectedEn);
+            setStorageItem('enVoiceURI', selectedEn);
         }
 
         this.settings = this.readPlaybackSettingsFromControls();
@@ -544,12 +563,14 @@ class TTSManager {
         warmup.onend = () => this.finishSpeechWarmup();
         warmup.onerror = () => this.finishSpeechWarmup();
         this.synth.speak(warmup);
+        this.speechWarmupFallbackTimer = setTimeout(() => this.finishSpeechWarmup(), this.speechWarmupFallbackMs);
         return warmup;
     }
 
     finishSpeechWarmup() {
         if (!this.speechWarmupInProgress) return;
 
+        this.clearSpeechWarmupFallbackTimer();
         this.speechWarmupInProgress = false;
         this.needsSpeechWarmup = false;
         const nextSpeech = this.speechAfterWarmup;
@@ -562,6 +583,13 @@ class TTSManager {
                 skipWarmup: true
             });
         }
+    }
+
+    clearSpeechWarmupFallbackTimer() {
+        if (!this.speechWarmupFallbackTimer) return;
+
+        clearTimeout(this.speechWarmupFallbackTimer);
+        this.speechWarmupFallbackTimer = null;
     }
 
     createUtterance(text, lang) {
@@ -631,12 +659,12 @@ class TTSManager {
     }
 
     getStoredBoolean(key, fallback) {
-        const value = localStorage.getItem(key);
+        const value = getStorageItem(key);
         return value === null ? fallback : value === 'true';
     }
 
     getStoredRate(key, fallback) {
-        const value = parseFloat(localStorage.getItem(key));
+        const value = parseFloat(getStorageItem(key));
         if (!Number.isFinite(value)) return fallback;
         return Math.min(1.3, Math.max(0.6, value));
     }
@@ -651,10 +679,10 @@ class TTSManager {
     }
 
     savePlaybackSettings() {
-        localStorage.setItem('ttsAutoQuestion', this.settings.autoQuestion);
-        localStorage.setItem('ttsAutoAnswer', this.settings.autoAnswer);
-        localStorage.setItem('ttsKoRate', this.settings.koRate);
-        localStorage.setItem('ttsEnRate', this.settings.enRate);
+        setStorageItem('ttsAutoQuestion', this.settings.autoQuestion);
+        setStorageItem('ttsAutoAnswer', this.settings.autoAnswer);
+        setStorageItem('ttsKoRate', this.settings.koRate);
+        setStorageItem('ttsEnRate', this.settings.enRate);
     }
 
     syncPlaybackControls() {
@@ -707,10 +735,10 @@ class ReviewManager {
      * @returns {Object} 리뷰 데이터 객체
      */
     loadReviews() {
-        const stored = localStorage.getItem(this.storageKey);
+        const stored = getStorageItem(this.storageKey);
         if (stored) return this.parseReviews(stored);
 
-        const legacyStats = localStorage.getItem('reviewStats');
+        const legacyStats = getStorageItem('reviewStats');
         if (this.courseId === 'conversation' && legacyStats) {
             return this.parseReviews(legacyStats);
         }
@@ -744,7 +772,7 @@ class ReviewManager {
      * 리뷰 데이터를 로컬 스토리지에 저장합니다.
      */
     saveReviews() {
-        localStorage.setItem(this.storageKey, JSON.stringify(this.reviews));
+        setStorageItem(this.storageKey, JSON.stringify(this.reviews));
     }
 
     /**
@@ -794,7 +822,7 @@ class QuizApp {
 
     getInitialCourseId(defaultCourse) {
         const courseIds = Object.keys(this.courses);
-        return [localStorage.getItem('selectedCourseId'), defaultCourse, courseIds[0]]
+        return [getStorageItem('selectedCourseId'), defaultCourse, courseIds[0]]
             .find(courseId => this.courses[courseId]);
     }
 
@@ -862,7 +890,7 @@ class QuizApp {
         this.reviewManager.setCourse(courseId);
 
         if (shouldPersist) {
-            localStorage.setItem('selectedCourseId', courseId);
+            setStorageItem('selectedCourseId', courseId);
         }
 
         this.courseButtons.forEach(button => {
