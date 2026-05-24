@@ -125,6 +125,9 @@ class TTSManager {
         this.voiceWaitExpired = false;
         this.preferredKoVoiceKey = '';
         this.preferredEnVoiceKey = '';
+        this.needsSpeechWarmup = true;
+        this.speechWarmupInProgress = false;
+        this.speechAfterWarmup = null;
         this.settings = this.getDefaultPlaybackSettings();
 
         this.settingsModal = document.getElementById('settingsModal');
@@ -481,33 +484,76 @@ class TTSManager {
             return null;
         }
 
+        if (options.automatic && !options.skipWarmup && this.needsSpeechWarmup) {
+            return this.warmUpBeforeSpeech(text, lang, options);
+        }
+
         if (options.interrupt !== false) {
             this.synth.cancel();
         }
 
+        const utterance = this.createUtterance(text, lang);
+
+        this.synth.speak(utterance);
+        return utterance;
+    }
+
+    warmUpBeforeSpeech(text, lang, options) {
+        this.speechAfterWarmup = { text, lang, options };
+        if (this.speechWarmupInProgress) return null;
+
+        this.speechWarmupInProgress = true;
+        if (options.interrupt !== false) {
+            this.synth.cancel();
+        }
+
+        const warmup = this.createUtterance('.', lang);
+        warmup.volume = 0;
+        warmup.onend = () => this.finishSpeechWarmup();
+        warmup.onerror = () => this.finishSpeechWarmup();
+        this.synth.speak(warmup);
+        return warmup;
+    }
+
+    finishSpeechWarmup() {
+        if (!this.speechWarmupInProgress) return;
+
+        this.speechWarmupInProgress = false;
+        this.needsSpeechWarmup = false;
+        const nextSpeech = this.speechAfterWarmup;
+        this.speechAfterWarmup = null;
+
+        if (nextSpeech) {
+            this.speak(nextSpeech.text, nextSpeech.lang, {
+                ...nextSpeech.options,
+                interrupt: false,
+                skipWarmup: true
+            });
+        }
+    }
+
+    createUtterance(text, lang) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = lang;
         utterance.rate = this.getRateForLang(lang);
 
-        // 사용자가 설정한 목소리 우선 적용
-        let targetVoice = null;
-        if (lang === 'ko-KR' && this.koVoice) {
-            targetVoice = this.koVoice;
-        } else if (lang === 'en-US' && this.enVoice) {
-            targetVoice = this.enVoice;
-        }
-
-        // 설정된 목소리가 없으면 기본 로직
-        if (!targetVoice) {
-            targetVoice = this.voices.find(voice => this.matchesLanguage(voice, lang));
-        }
-
+        const targetVoice = this.getTargetVoice(lang);
         if (targetVoice) {
             utterance.voice = targetVoice;
         }
 
-        this.synth.speak(utterance);
         return utterance;
+    }
+
+    getTargetVoice(lang) {
+        if (lang === 'ko-KR' && this.koVoice) {
+            return this.koVoice;
+        }
+        if (lang === 'en-US' && this.enVoice) {
+            return this.enVoice;
+        }
+
+        return this.voices.find(voice => this.matchesLanguage(voice, lang));
     }
 
     queueSpeech(text, lang, options) {
@@ -840,7 +886,7 @@ class QuizApp {
             this.showAnswerBtn.style.display = 'none';
 
             if (this.ttsManager.shouldAutoSpeakAnswer()) {
-                this.ttsManager.speak(this.answerText.textContent, 'en-US');
+                this.ttsManager.speak(this.answerText.textContent, 'en-US', { automatic: true });
             }
         });
 
@@ -1024,7 +1070,7 @@ class QuizApp {
         this.updateNavButtons();
 
         if (this.ttsManager.shouldAutoSpeakQuestion()) {
-            this.ttsManager.speak(currentItem.q, 'ko-KR');
+            this.ttsManager.speak(currentItem.q, 'ko-KR', { automatic: true });
         }
     }
 

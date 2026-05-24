@@ -113,6 +113,7 @@ function createClassContext({ voices = [], stored = {}, runTimersImmediately = t
             this.text = text;
             this.lang = '';
             this.rate = 1;
+            this.volume = 1;
             this.voice = null;
         }
     }
@@ -196,6 +197,12 @@ function createClassContext({ voices = [], stored = {}, runTimersImmediately = t
         runTimers() {
             while (timers.length) {
                 timers.shift().callback();
+            }
+        },
+        finishLastUtterance() {
+            const utterance = spoken[spoken.length - 1];
+            if (utterance && typeof utterance.onend === 'function') {
+                utterance.onend();
             }
         }
     };
@@ -291,7 +298,7 @@ test('TTS waits for voiceschanged before the first automatic speech uses a settl
     });
     const manager = new context.TTSManager();
 
-    manager.speak('안녕하세요.', 'ko-KR');
+    manager.speak('안녕하세요.', 'ko-KR', { automatic: true });
 
     assert.equal(context.spoken.length, 0);
 
@@ -329,6 +336,28 @@ test('TTS waits for a saved voice that appears after an early voiceschanged even
 
     assert.equal(context.spoken.length, 1);
     assert.equal(context.spoken[0].voice.voiceURI, 'google-ko');
+});
+
+test('TTS warms up silently before the first audible automatic speech', () => {
+    const context = createClassContext({
+        voices: [
+            { name: 'Google 한국어', lang: 'ko-KR', voiceURI: 'google-ko' }
+        ]
+    });
+    const manager = new context.TTSManager();
+
+    manager.speak('안녕하세요.', 'ko-KR', { automatic: true });
+
+    assert.equal(context.spoken.length, 1);
+    assert.equal(context.spoken[0].volume, 0);
+    assert.equal(context.spoken[0].voice.voiceURI, 'google-ko');
+
+    context.finishLastUtterance();
+
+    assert.equal(context.spoken.length, 2);
+    assert.equal(context.spoken[1].text, '안녕하세요.');
+    assert.equal(context.spoken[1].volume, 1);
+    assert.equal(context.spoken[1].voice.voiceURI, 'google-ko');
 });
 
 test('ReviewManager ignores corrupted localStorage stats instead of crashing', () => {
