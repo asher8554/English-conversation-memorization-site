@@ -749,10 +749,27 @@ class ReviewManager {
     parseReviews(value) {
         try {
             const parsed = JSON.parse(value);
-            return parsed && typeof parsed === 'object' ? parsed : {};
+            if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+
+            return Object.entries(parsed).reduce((reviews, [day, review]) => {
+                reviews[day] = this.normalizeReviewEntry(review);
+                return reviews;
+            }, {});
         } catch (error) {
             return {};
         }
+    }
+
+    normalizeReviewEntry(review) {
+        const count = Number(review && review.count);
+        const lastReviewed = review && typeof review.lastReviewed === 'string' && !Number.isNaN(Date.parse(review.lastReviewed))
+            ? review.lastReviewed
+            : null;
+
+        return {
+            count: Number.isFinite(count) && count > 0 ? Math.floor(count) : 0,
+            lastReviewed
+        };
     }
 
     /**

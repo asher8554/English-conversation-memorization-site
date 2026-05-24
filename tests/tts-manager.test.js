@@ -465,3 +465,26 @@ test('ReviewManager ignores corrupted localStorage stats instead of crashing', (
 
     assert.equal(Object.keys(manager.getAllReviews()).length, 0);
 });
+
+test('ReviewManager normalizes malformed stored review entries', () => {
+    const reviewedAt = '2026-05-24T12:00:00.000Z';
+    const { ReviewManager } = createClassContext({
+        stored: {
+            'reviewStats:conversation': JSON.stringify({
+                'Day 001': { count: '<img src=x onerror=alert(1)>', lastReviewed: '<b>bad</b>' },
+                'Day 002': { count: 2.8, lastReviewed: reviewedAt },
+                'Day 003': null
+            })
+        }
+    });
+
+    const manager = new ReviewManager('conversation');
+    const reviews = manager.getAllReviews();
+
+    assert.equal(reviews['Day 001'].count, 0);
+    assert.equal(reviews['Day 001'].lastReviewed, null);
+    assert.equal(reviews['Day 002'].count, 2);
+    assert.equal(reviews['Day 002'].lastReviewed, reviewedAt);
+    assert.equal(reviews['Day 003'].count, 0);
+    assert.equal(reviews['Day 003'].lastReviewed, null);
+});
