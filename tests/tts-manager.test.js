@@ -187,6 +187,9 @@ function createClassContext({ voices = [], stored = {}, runTimersImmediately = t
             return cancelCount;
         },
         spoken,
+        get timerDelays() {
+            return timers.map(timer => timer.delay);
+        },
         storage,
         setVoices(nextVoices) {
             currentVoices = nextVoices;
@@ -287,6 +290,21 @@ test('TTS does not force a mismatched language voice as fallback', () => {
     manager.speak('Hello.', 'en-US');
 
     assert.equal(context.spoken[0].voice, null);
+});
+
+test('TTS queues the first automatic speech without a fixed startup delay', () => {
+    const context = createClassContext({
+        runTimersImmediately: false,
+        voices: [
+            { name: 'Google Korean', lang: 'ko-KR', voiceURI: 'google-ko' }
+        ]
+    });
+    const manager = new context.TTSManager();
+    context.triggerVoicesChanged();
+
+    manager.speak('Hello.', 'ko-KR', { automatic: true });
+
+    assert.equal(context.timerDelays.at(-1), 0);
 });
 
 test('TTS waits for voiceschanged before the first automatic speech uses a settled voice', () => {

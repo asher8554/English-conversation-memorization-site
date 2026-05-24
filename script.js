@@ -130,7 +130,7 @@ class TTSManager {
         this.speechAfterWarmup = null;
         this.initialAutomaticSpeech = null;
         this.initialAutomaticSpeechTimer = null;
-        this.initialAutomaticDelayMs = 6000;
+        this.initialAutomaticDelayMs = 0;
         this.settings = this.getDefaultPlaybackSettings();
 
         this.settingsModal = document.getElementById('settingsModal');
