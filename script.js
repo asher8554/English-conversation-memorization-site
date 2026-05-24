@@ -113,10 +113,14 @@ class DarkModeManager {
  */
 class TTSManager {
     constructor() {
-        this.synth = window.speechSynthesis;
+        this.isSupported = Boolean(window.speechSynthesis && typeof SpeechSynthesisUtterance !== 'undefined');
+        this.synth = this.isSupported ? window.speechSynthesis : null;
         this.voices = [];
         this.koVoice = null;
         this.enVoice = null;
+        this.pendingSpeech = null;
+        this.pendingSpeechTimer = null;
+        this.settings = this.getDefaultPlaybackSettings();
 
         this.settingsModal = document.getElementById('settingsModal');
         this.settingsBtn = document.getElementById('settingsBtn');
@@ -125,22 +129,41 @@ class TTSManager {
         this.testVoiceBtn = document.getElementById('testVoiceBtn');
         this.koVoiceSelect = document.getElementById('koVoiceSelect');
         this.enVoiceSelect = document.getElementById('enVoiceSelect');
+        this.autoQuestionCheckbox = document.getElementById('autoQuestionTts');
+        this.autoAnswerCheckbox = document.getElementById('autoAnswerTts');
+        this.koRateRange = document.getElementById('koRateRange');
+        this.enRateRange = document.getElementById('enRateRange');
+        this.koRateValue = document.getElementById('koRateValue');
+        this.enRateValue = document.getElementById('enRateValue');
 
         this.init();
     }
 
     init() {
-        if (this.synth.onvoiceschanged !== undefined) {
-            this.synth.onvoiceschanged = () => {
-                this.populateVoiceList();
-                this.loadSettings();
-            };
+        if (!this.isSupported) {
+            this.renderUnsupportedState();
+            this.initEventListeners();
+            return;
         }
 
+        this.bindVoiceLoading();
         this.populateVoiceList();
         this.loadSettings();
-
         this.initEventListeners();
+    }
+
+    bindVoiceLoading() {
+        const handleVoicesChanged = () => {
+            this.populateVoiceList();
+            this.loadSettings();
+            this.flushPendingSpeech();
+        };
+
+        if (typeof this.synth.addEventListener === 'function') {
+            this.synth.addEventListener('voiceschanged', handleVoicesChanged);
+        } else if (this.synth.onvoiceschanged !== undefined) {
+            this.synth.onvoiceschanged = handleVoicesChanged;
+        }
     }
 
     initEventListeners() {
@@ -159,6 +182,14 @@ class TTSManager {
         if (this.testVoiceBtn) {
             this.testVoiceBtn.addEventListener('click', () => this.testVoices());
         }
+        [this.koRateRange, this.enRateRange].forEach(range => {
+            if (range) {
+                range.addEventListener('input', () => {
+                    this.settings = this.readPlaybackSettingsFromControls();
+                    this.updateRateLabels();
+                });
+            }
+        });
 
         // 모달 외부 클릭 시 닫기
         window.addEventListener('click', (e) => {
@@ -168,17 +199,25 @@ class TTSManager {
         });
     }
 
-    /**
-     * 사용 가능한 음성 목록을 가져와 드롭다운을 채웁니다.
-     * Google, Microsoft, Apple 등 자연스러운 프리미엄 목소리를 우선순위로 정렬합니다.
-     */
+    renderUnsupportedState() {
+        this.setEmptyOption(this.koVoiceSelect, '이 브라우저는 음성 합성을 지원하지 않습니다');
+        this.setEmptyOption(this.enVoiceSelect, '이 브라우저는 음성 합성을 지원하지 않습니다');
+        [this.saveSettingsBtn, this.testVoiceBtn, this.koRateRange, this.enRateRange].forEach(element => {
+            if (element) element.disabled = true;
+        });
+    }
+
     populateVoiceList() {
         this.voices = this.synth.getVoices();
 
-        if (this.voices.length === 0) return;
+        if (this.voices.length === 0) {
+            this.setEmptyOption(this.koVoiceSelect, '목소리를 불러오는 중입니다');
+            this.setEmptyOption(this.enVoiceSelect, '목소리를 불러오는 중입니다');
+            return;
+        }
 
-        this.koVoiceSelect.innerHTML = '';
-        this.enVoiceSelect.innerHTML = '';
+        this.clearSelect(this.koVoiceSelect);
+        this.clearSelect(this.enVoiceSelect);
 
         const excludedKeywords = [
             'Bells', 'Organ', 'Cello', 'Zarvox', 'Trinoids',
@@ -186,71 +225,144 @@ class TTSManager {
             'Bad News', 'Good News', 'Pipe Organ', 'Whisper'
         ];
 
-        const premiumKeywords = ['Google', 'Microsoft', 'Apple', 'Natural', 'Premium'];
-
-        const sortVoices = (a, b) => {
-            const getScore = (voice) => {
-                let score = 0;
-                premiumKeywords.forEach((keyword, index) => {
-                    if (voice.name.includes(keyword)) score += (10 - index);
-                });
-                return score;
-            };
-            return getScore(b) - getScore(a);
-        };
-
         const koVoices = this.voices
-            .filter(v => v.lang.includes('ko') || v.lang === 'ko_KR')
-            .sort(sortVoices);
+            .filter(voice => this.matchesLanguage(voice, 'ko-KR'))
+            .filter(voice => !this.hasExcludedKeyword(voice, excludedKeywords))
+            .sort((a, b) => this.scoreVoice(b, 'ko-KR') - this.scoreVoice(a, 'ko-KR'));
 
         const enVoices = this.voices
-            .filter(v => v.lang.startsWith('en-') || v.lang === 'en_US' || v.lang === 'en_GB')
-            .sort(sortVoices);
+            .filter(voice => this.matchesLanguage(voice, 'en-US'))
+            .filter(voice => !this.hasExcludedKeyword(voice, excludedKeywords))
+            .sort((a, b) => this.scoreVoice(b, 'en-US') - this.scoreVoice(a, 'en-US'));
 
-        const addOptions = (voiceList, selectElement) => {
-            voiceList.forEach(voice => {
-                const option = document.createElement('option');
-                let displayName = voice.name;
+        this.addVoiceOptions(koVoices, this.koVoiceSelect);
+        this.addVoiceOptions(enVoices, this.enVoiceSelect);
+    }
 
-                if (displayName.includes('Google')) displayName = displayName.replace('Google', 'Google (Natural)');
-                if (displayName.includes('Microsoft')) displayName = displayName.replace('Microsoft', 'MS');
-                
-                if (displayName.length > 40) {
-                     displayName = displayName.substring(0, 37) + '...';
-                }
+    clearSelect(selectElement) {
+        if (!selectElement) return;
 
-                option.textContent = `${displayName}`;
-                option.value = voice.name;
-                selectElement.appendChild(option);
-            });
+        selectElement.innerHTML = '';
+        selectElement.value = '';
+        if (selectElement.options) {
+            selectElement.options.length = 0;
+        }
+        selectElement.disabled = false;
+    }
 
-            if (voiceList.length === 0) {
-                const option = document.createElement('option');
-                option.textContent = "사용 가능한 목소리가 없습니다";
-                selectElement.appendChild(option);
-            }
-        };
+    setEmptyOption(selectElement, text) {
+        if (!selectElement) return;
 
-        addOptions(koVoices, this.koVoiceSelect);
-        addOptions(enVoices, this.enVoiceSelect);
+        this.clearSelect(selectElement);
+        const option = document.createElement('option');
+        option.textContent = text;
+        option.value = '';
+        option.disabled = true;
+        option.selected = true;
+        selectElement.appendChild(option);
+        selectElement.disabled = true;
+    }
+
+    addVoiceOptions(voiceList, selectElement) {
+        if (voiceList.length === 0) {
+            this.setEmptyOption(selectElement, '사용 가능한 목소리가 없습니다');
+            return;
+        }
+
+        voiceList.forEach(voice => {
+            const option = document.createElement('option');
+            option.textContent = `${this.formatVoiceName(voice)} (${voice.lang})`;
+            option.value = this.getVoiceKey(voice);
+            selectElement.appendChild(option);
+        });
+    }
+
+    formatVoiceName(voice) {
+        let displayName = voice.name;
+
+        if (displayName.includes('Google')) displayName = displayName.replace('Google', 'Google Natural');
+        if (displayName.includes('Microsoft')) displayName = displayName.replace('Microsoft', 'MS');
+
+        return displayName.length > 44 ? `${displayName.substring(0, 41)}...` : displayName;
+    }
+
+    hasExcludedKeyword(voice, excludedKeywords) {
+        const name = voice.name.toLowerCase();
+        return excludedKeywords.some(keyword => name.includes(keyword.toLowerCase()));
+    }
+
+    normalizeLang(lang) {
+        return (lang || '').replace('_', '-').toLowerCase();
+    }
+
+    matchesLanguage(voice, lang) {
+        const voiceLang = this.normalizeLang(voice.lang);
+        const targetLang = this.normalizeLang(lang);
+        const targetLanguage = targetLang.split('-')[0];
+
+        return voiceLang === targetLang || voiceLang.startsWith(`${targetLanguage}-`) || voiceLang === targetLanguage;
+    }
+
+    scoreVoice(voice, lang) {
+        const voiceLang = this.normalizeLang(voice.lang);
+        const targetLang = this.normalizeLang(lang);
+        const premiumKeywords = ['natural', 'neural', 'premium', 'google', 'microsoft', 'apple', 'siri', 'jenny', 'aria', 'samantha'];
+        let score = 0;
+
+        if (voiceLang === targetLang) score += 100;
+        if (voice.default) score += 5;
+
+        const name = voice.name.toLowerCase();
+        premiumKeywords.forEach((keyword, index) => {
+            if (name.includes(keyword)) score += premiumKeywords.length - index;
+        });
+
+        return score;
+    }
+
+    getVoiceKey(voice) {
+        return voice.voiceURI || `${voice.name} (${voice.lang})`;
+    }
+
+    findVoiceByKey(key) {
+        return this.voices.find(voice => this.getVoiceKey(voice) === key);
+    }
+
+    findVoiceKeyByLegacyName(name, lang) {
+        if (!name) return '';
+
+        const voice = this.voices.find(item => item.name === name && this.matchesLanguage(item, lang))
+            || this.voices.find(item => item.name === name);
+
+        return voice ? this.getVoiceKey(voice) : '';
+    }
+
+    selectVoice(selectElement, key) {
+        if (!selectElement) return;
+
+        const options = Array.from(selectElement.options || []);
+        const selectedOption = options.find(option => option.value === key && !option.disabled);
+        const fallbackOption = options.find(option => !option.disabled);
+
+        selectElement.value = selectedOption ? selectedOption.value : (fallbackOption ? fallbackOption.value : '');
     }
 
     /**
      * 저장된 목소리 설정을 불러옵니다.
      */
     loadSettings() {
-        const savedKoVoice = localStorage.getItem('koVoiceName');
-        const savedEnVoice = localStorage.getItem('enVoiceName');
+        this.settings = this.loadPlaybackSettings();
 
-        if (savedKoVoice && this.koVoiceSelect.querySelector(`option[value="${savedKoVoice}"]`)) {
-            this.koVoiceSelect.value = savedKoVoice;
-        }
+        const savedKoVoice = localStorage.getItem('koVoiceURI')
+            || this.findVoiceKeyByLegacyName(localStorage.getItem('koVoiceName'), 'ko-KR');
+        const savedEnVoice = localStorage.getItem('enVoiceURI')
+            || this.findVoiceKeyByLegacyName(localStorage.getItem('enVoiceName'), 'en-US');
 
-        if (savedEnVoice && this.enVoiceSelect.querySelector(`option[value="${savedEnVoice}"]`)) {
-            this.enVoiceSelect.value = savedEnVoice;
-        }
+        this.selectVoice(this.koVoiceSelect, savedKoVoice);
+        this.selectVoice(this.enVoiceSelect, savedEnVoice);
 
         this.updateCurrentVoices();
+        this.syncPlaybackControls();
     }
 
     /**
@@ -260,9 +372,11 @@ class TTSManager {
         const selectedKo = this.koVoiceSelect.value;
         const selectedEn = this.enVoiceSelect.value;
 
-        localStorage.setItem('koVoiceName', selectedKo);
-        localStorage.setItem('enVoiceName', selectedEn);
+        if (selectedKo) localStorage.setItem('koVoiceURI', selectedKo);
+        if (selectedEn) localStorage.setItem('enVoiceURI', selectedEn);
 
+        this.settings = this.readPlaybackSettingsFromControls();
+        this.savePlaybackSettings();
         this.updateCurrentVoices();
         alert('설정이 저장되었습니다.');
     }
@@ -271,8 +385,8 @@ class TTSManager {
      * 현재 선택된 음성 객체를 업데이트합니다.
      */
     updateCurrentVoices() {
-        this.koVoice = this.voices.find(v => v.name === this.koVoiceSelect.value);
-        this.enVoice = this.voices.find(v => v.name === this.enVoiceSelect.value);
+        this.koVoice = this.findVoiceByKey(this.koVoiceSelect.value);
+        this.enVoice = this.findVoiceByKey(this.enVoiceSelect.value);
     }
 
     /**
@@ -298,10 +412,11 @@ class TTSManager {
      * 목소리 테스트
      */
     testVoices() {
-        this.speak('안녕하세요, 한국어 목소리 테스트입니다.', 'ko-KR');
-        setTimeout(() => {
-            this.speak('Hello, this is an English voice test.', 'en-US');
-        }, 2500);
+        if (!this.isSupported) return;
+
+        this.synth.cancel();
+        this.speak('안녕하세요, 한국어 목소리 테스트입니다.', 'ko-KR', { interrupt: false });
+        this.speak('Hello, this is an English voice test.', 'en-US', { interrupt: false });
     }
 
     /**
@@ -309,14 +424,25 @@ class TTSManager {
      * @param {string} text - 읽을 텍스트
      * @param {string} lang - 언어 코드 ('ko-KR' or 'en-US')
      */
-    speak(text, lang = 'en-US') {
-        if (!text) return;
+    speak(text, lang = 'en-US', options = {}) {
+        if (!this.isSupported || !text) return null;
 
-        this.synth.cancel();
+        if (this.voices.length === 0) {
+            this.populateVoiceList();
+        }
+
+        if (this.voices.length === 0 && !options.allowFallback) {
+            this.queueSpeech(text, lang, options);
+            return null;
+        }
+
+        if (options.interrupt !== false) {
+            this.synth.cancel();
+        }
 
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = lang;
-        utterance.rate = 1.0;
+        utterance.rate = this.getRateForLang(lang);
 
         // 사용자가 설정한 목소리 우선 적용
         let targetVoice = null;
@@ -328,8 +454,7 @@ class TTSManager {
 
         // 설정된 목소리가 없으면 기본 로직
         if (!targetVoice) {
-            targetVoice = this.voices.find(v => v.lang === lang || v.lang.startsWith(lang.split('-')[0]))
-                || this.voices[0];
+            targetVoice = this.voices.find(voice => this.matchesLanguage(voice, lang));
         }
 
         if (targetVoice) {
@@ -337,6 +462,95 @@ class TTSManager {
         }
 
         this.synth.speak(utterance);
+        return utterance;
+    }
+
+    queueSpeech(text, lang, options) {
+        this.pendingSpeech = { text, lang, options };
+        if (this.pendingSpeechTimer) {
+            clearTimeout(this.pendingSpeechTimer);
+        }
+        this.pendingSpeechTimer = setTimeout(() => this.flushPendingSpeech(true), 700);
+    }
+
+    flushPendingSpeech(allowFallback = false) {
+        if (!this.pendingSpeech) return;
+        if (this.voices.length === 0 && !allowFallback) return;
+
+        const { text, lang, options } = this.pendingSpeech;
+        this.pendingSpeech = null;
+        this.pendingSpeechTimer = null;
+        this.speak(text, lang, { ...options, allowFallback: true });
+    }
+
+    getDefaultPlaybackSettings() {
+        return {
+            autoQuestion: true,
+            autoAnswer: true,
+            koRate: 1.0,
+            enRate: 0.9
+        };
+    }
+
+    loadPlaybackSettings() {
+        return {
+            autoQuestion: this.getStoredBoolean('ttsAutoQuestion', true),
+            autoAnswer: this.getStoredBoolean('ttsAutoAnswer', true),
+            koRate: this.getStoredRate('ttsKoRate', 1.0),
+            enRate: this.getStoredRate('ttsEnRate', 0.9)
+        };
+    }
+
+    getStoredBoolean(key, fallback) {
+        const value = localStorage.getItem(key);
+        return value === null ? fallback : value === 'true';
+    }
+
+    getStoredRate(key, fallback) {
+        const value = parseFloat(localStorage.getItem(key));
+        if (!Number.isFinite(value)) return fallback;
+        return Math.min(1.3, Math.max(0.6, value));
+    }
+
+    readPlaybackSettingsFromControls() {
+        return {
+            autoQuestion: this.autoQuestionCheckbox ? this.autoQuestionCheckbox.checked : this.settings.autoQuestion,
+            autoAnswer: this.autoAnswerCheckbox ? this.autoAnswerCheckbox.checked : this.settings.autoAnswer,
+            koRate: this.koRateRange ? parseFloat(this.koRateRange.value) : this.settings.koRate,
+            enRate: this.enRateRange ? parseFloat(this.enRateRange.value) : this.settings.enRate
+        };
+    }
+
+    savePlaybackSettings() {
+        localStorage.setItem('ttsAutoQuestion', this.settings.autoQuestion);
+        localStorage.setItem('ttsAutoAnswer', this.settings.autoAnswer);
+        localStorage.setItem('ttsKoRate', this.settings.koRate);
+        localStorage.setItem('ttsEnRate', this.settings.enRate);
+    }
+
+    syncPlaybackControls() {
+        if (this.autoQuestionCheckbox) this.autoQuestionCheckbox.checked = this.settings.autoQuestion;
+        if (this.autoAnswerCheckbox) this.autoAnswerCheckbox.checked = this.settings.autoAnswer;
+        if (this.koRateRange) this.koRateRange.value = this.settings.koRate;
+        if (this.enRateRange) this.enRateRange.value = this.settings.enRate;
+        this.updateRateLabels();
+    }
+
+    updateRateLabels() {
+        if (this.koRateValue) this.koRateValue.textContent = `${this.settings.koRate.toFixed(2)}x`;
+        if (this.enRateValue) this.enRateValue.textContent = `${this.settings.enRate.toFixed(2)}x`;
+    }
+
+    getRateForLang(lang) {
+        return this.matchesLanguage({ lang }, 'ko-KR') ? this.settings.koRate : this.settings.enRate;
+    }
+
+    shouldAutoSpeakQuestion() {
+        return this.settings.autoQuestion;
+    }
+
+    shouldAutoSpeakAnswer() {
+        return this.settings.autoAnswer;
     }
 }
 
@@ -365,14 +579,23 @@ class ReviewManager {
      */
     loadReviews() {
         const stored = localStorage.getItem(this.storageKey);
-        if (stored) return JSON.parse(stored);
+        if (stored) return this.parseReviews(stored);
 
         const legacyStats = localStorage.getItem('reviewStats');
         if (this.courseId === 'conversation' && legacyStats) {
-            return JSON.parse(legacyStats);
+            return this.parseReviews(legacyStats);
         }
 
         return {};
+    }
+
+    parseReviews(value) {
+        try {
+            const parsed = JSON.parse(value);
+            return parsed && typeof parsed === 'object' ? parsed : {};
+        } catch (error) {
+            return {};
+        }
     }
 
     /**
@@ -565,8 +788,9 @@ class QuizApp {
             this.answerText.classList.add('visible');
             this.showAnswerBtn.style.display = 'none';
 
-            // 정답 자동 읽기 (영어)
-            this.ttsManager.speak(this.answerText.textContent, 'en-US');
+            if (this.ttsManager.shouldAutoSpeakAnswer()) {
+                this.ttsManager.speak(this.answerText.textContent, 'en-US');
+            }
         });
 
         this.prevBtn.addEventListener('click', () => this.handlePrev());
@@ -748,8 +972,9 @@ class QuizApp {
 
         this.updateNavButtons();
 
-        // 질문 자동 읽기 (TTS)
-        this.ttsManager.speak(currentItem.q, 'ko-KR');
+        if (this.ttsManager.shouldAutoSpeakQuestion()) {
+            this.ttsManager.speak(currentItem.q, 'ko-KR');
+        }
     }
 
     /**

@@ -349,10 +349,58 @@ select:focus {
   font-size: 0.95rem;
 }
 
+.setting-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-setting {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.checkbox-setting input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--primary-color);
+}
+
+.rate-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.rate-label span {
+  color: var(--primary-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.voice-range {
+  width: 100%;
+  accent-color: var(--primary-color);
+}
+
 .setting-actions {
   display: flex;
   gap: 10px;
   margin-top: 2rem;
+}
+
+.setting-actions .btn {
+  flex: 1;
+  width: auto;
+  margin-bottom: 0;
 }
 
 .sort-controls {
@@ -462,4 +510,14 @@ select:focus {
   border-radius: 20px;
   border: 2px solid transparent;
   background-clip: content-box;
+}
+
+@media (max-width: 480px) {
+  .setting-row {
+    grid-template-columns: 1fr;
+  }
+
+  .setting-actions {
+    flex-direction: column;
+  }
 }
