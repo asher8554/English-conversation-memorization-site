@@ -120,6 +120,8 @@ class TTSManager {
         this.enVoice = null;
         this.pendingSpeech = null;
         this.pendingSpeechTimer = null;
+        this.voicesReady = false;
+        this.voiceReadinessTimer = null;
         this.settings = this.getDefaultPlaybackSettings();
 
         this.settingsModal = document.getElementById('settingsModal');
@@ -149,6 +151,7 @@ class TTSManager {
         this.bindVoiceLoading();
         this.populateVoiceList();
         this.loadSettings();
+        this.scheduleVoiceReadinessFallback();
         this.initEventListeners();
     }
 
@@ -156,7 +159,7 @@ class TTSManager {
         const handleVoicesChanged = () => {
             this.populateVoiceList();
             this.loadSettings();
-            this.flushPendingSpeech();
+            this.markVoicesReady();
         };
 
         if (typeof this.synth.addEventListener === 'function') {
@@ -164,6 +167,19 @@ class TTSManager {
         } else if (this.synth.onvoiceschanged !== undefined) {
             this.synth.onvoiceschanged = handleVoicesChanged;
         }
+    }
+
+    scheduleVoiceReadinessFallback() {
+        this.voiceReadinessTimer = setTimeout(() => this.markVoicesReady(), 700);
+    }
+
+    markVoicesReady() {
+        this.voicesReady = true;
+        if (this.voiceReadinessTimer) {
+            clearTimeout(this.voiceReadinessTimer);
+            this.voiceReadinessTimer = null;
+        }
+        this.flushPendingSpeech(true);
     }
 
     initEventListeners() {
@@ -415,8 +431,8 @@ class TTSManager {
         if (!this.isSupported) return;
 
         this.synth.cancel();
-        this.speak('안녕하세요, 한국어 목소리 테스트입니다.', 'ko-KR', { interrupt: false });
-        this.speak('Hello, this is an English voice test.', 'en-US', { interrupt: false });
+        this.speak('안녕하세요, 한국어 목소리 테스트입니다.', 'ko-KR', { interrupt: false, allowFallback: true });
+        this.speak('Hello, this is an English voice test.', 'en-US', { interrupt: false, allowFallback: true });
     }
 
     /**
@@ -431,7 +447,7 @@ class TTSManager {
             this.populateVoiceList();
         }
 
-        if (this.voices.length === 0 && !options.allowFallback) {
+        if ((!this.voicesReady || this.voices.length === 0) && !options.allowFallback) {
             this.queueSpeech(text, lang, options);
             return null;
         }

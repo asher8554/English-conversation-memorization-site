@@ -8,10 +8,12 @@ const vm = require('node:vm');
 const rootDir = path.resolve(__dirname, '..');
 const scriptPath = path.join(rootDir, 'script.js');
 
-function createClassContext({ voices = [], stored = {} } = {}) {
+function createClassContext({ voices = [], stored = {}, runTimersImmediately = true } = {}) {
+    let currentVoices = voices;
     const elements = {};
     const storage = new Map(Object.entries(stored));
     const timers = [];
+    const voiceChangeHandlers = [];
     const spoken = [];
     let cancelCount = 0;
 
@@ -91,9 +93,13 @@ function createClassContext({ voices = [], stored = {} } = {}) {
 
     const speechSynthesis = {
         getVoices() {
-            return voices;
+            return currentVoices;
         },
-        addEventListener() { },
+        addEventListener(eventName, handler) {
+            if (eventName === 'voiceschanged') {
+                voiceChangeHandlers.push(handler);
+            }
+        },
         cancel() {
             cancelCount++;
         },
@@ -123,7 +129,7 @@ function createClassContext({ voices = [], stored = {} } = {}) {
         },
         setTimeout(callback, delay) {
             timers.push({ callback, delay });
-            callback();
+            if (runTimersImmediately) callback();
             return timers.length;
         },
         clearTimeout() { },
@@ -132,7 +138,7 @@ function createClassContext({ voices = [], stored = {} } = {}) {
             addEventListener() { },
             setTimeout(callback, delay) {
                 timers.push({ callback, delay });
-                callback();
+                if (runTimersImmediately) callback();
                 return timers.length;
             },
             clearTimeout() { }
@@ -180,7 +186,18 @@ function createClassContext({ voices = [], stored = {} } = {}) {
             return cancelCount;
         },
         spoken,
-        storage
+        storage,
+        setVoices(nextVoices) {
+            currentVoices = nextVoices;
+        },
+        triggerVoicesChanged() {
+            voiceChangeHandlers.forEach(handler => handler());
+        },
+        runTimers() {
+            while (timers.length) {
+                timers.shift().callback();
+            }
+        }
     };
 }
 
@@ -263,6 +280,28 @@ test('TTS does not force a mismatched language voice as fallback', () => {
     manager.speak('Hello.', 'en-US');
 
     assert.equal(context.spoken[0].voice, null);
+});
+
+test('TTS waits for voiceschanged before the first automatic speech uses a settled voice', () => {
+    const context = createClassContext({
+        runTimersImmediately: false,
+        voices: [
+            { name: 'Temporary Korean', lang: 'ko-KR', voiceURI: 'ko-temporary' }
+        ]
+    });
+    const manager = new context.TTSManager();
+
+    manager.speak('안녕하세요.', 'ko-KR');
+
+    assert.equal(context.spoken.length, 0);
+
+    context.setVoices([
+        { name: 'Google 한국어', lang: 'ko-KR', voiceURI: 'google-ko' }
+    ]);
+    context.triggerVoicesChanged();
+
+    assert.equal(context.spoken.length, 1);
+    assert.equal(context.spoken[0].voice.voiceURI, 'google-ko');
 });
 
 test('ReviewManager ignores corrupted localStorage stats instead of crashing', () => {
