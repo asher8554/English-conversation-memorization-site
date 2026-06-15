@@ -65,3 +65,7 @@
 - 2026-06-15: 우선순위는 카드 갱신의 강제 레이아웃 읽기 제거, 정렬 변경 시 중복 렌더링 제거, 코스 데이터 정규화 캐시, TTS 음성 키 조회 캐시, 통계 테이블의 `innerHTML` 제거로 정했다. 이 변경들은 사용자 흐름을 바꾸지 않으면서 반복 작업과 동기 레이아웃 비용을 줄인다.
 - 2026-06-15: 강제 레이아웃 읽기 회귀 테스트는 기존 `offsetWidth` 접근에서 `forced layout read`로 실패하는 것을 확인한 뒤 구현했다. 변경 후 `node --test`는 24개 테스트 모두 통과했고 `node --check script.js`도 통과했다.
 - 2026-06-15: 로컬 서버 `http://127.0.0.1:8020`에서 Edge Playwright 검증을 수행했다. 영어회화 기본 로드, 기본동사 전환, Day 001 카드 이동, 역순 토글, 통계 테이블 35행 렌더링을 확인했고 콘솔 오류는 없었다.
+
+- 2026-06-15: 사용자가 Refresh Page 버튼 후 `Further Studies`가 안 불러와지는 것 같다고 보고했다. 원격 `data.json?v=8`에는 `Further Studies` 문자열이 63개 포함되어 있었지만 GitHub Pages 응답 헤더가 `Cache-Control: max-age=600`이라 같은 `data.json?v=8` URL을 계속 fetch하면 배포 직후 최대 10분 동안 예전 캐시를 볼 수 있다.
+- 2026-06-15: 현재 Refresh 버튼은 `window.location.reload()`만 실행하므로 HTML은 새로고침해도 `script.js`의 `fetch('data.json?v=8')` 캐시 키가 바뀌지 않는다. 해결은 버튼 클릭 시 페이지 URL에 `refresh=<timestamp>`를 붙이고, 데이터 fetch URL에도 같은 refresh 토큰을 붙여 새 데이터 요청을 강제하는 방식으로 정했다.
+- 2026-06-15: `DATA_VERSION`을 9로 올리고 `buildDataUrl`, `buildRefreshUrl` helper를 추가했다. Edge 로컬 검증에서 Refresh 클릭 후 페이지 URL은 `?refresh=...`로 바뀌었고 데이터 요청은 `data.json?v=9` 다음 `data.json?v=9&refresh=...`로 수행되었다. 같은 검증에서 기본동사 Day 001의 `Further Studies` 카드가 표시되었고 콘솔 오류는 없었다.

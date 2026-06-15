@@ -78,13 +78,19 @@ function createScriptContext() {
                 this.text = text;
                 this.value = value;
             }
-        }
+        },
+        URL,
+        URLSearchParams
     };
 
     context.globalThis = context;
 
     const script = fs.readFileSync(scriptPath, 'utf8');
-    vm.runInNewContext(`${script}\nglobalThis.__quizHelpers = { normalizeCourseData };`, context);
+    vm.runInNewContext(`${script}\nglobalThis.__quizHelpers = {
+        normalizeCourseData,
+        buildDataUrl: typeof buildDataUrl === 'function' ? buildDataUrl : undefined,
+        buildRefreshUrl: typeof buildRefreshUrl === 'function' ? buildRefreshUrl : undefined
+    };`, context);
 
     return context.__quizHelpers;
 }
@@ -151,4 +157,19 @@ test('preserves existing array-shaped day data', () => {
     assert.deepEqual(toPlainCards(normalized['Day 001']), [
         { q: '기존 질문', a: 'Existing answer.', section: undefined }
     ]);
+});
+
+test('data URL includes refresh cache buster when page URL has refresh token', () => {
+    const { buildDataUrl } = createScriptContext();
+
+    assert.equal(buildDataUrl('?refresh=12345'), 'data.json?v=9&refresh=12345');
+});
+
+test('refresh URL keeps the current path and adds a fresh refresh token', () => {
+    const { buildRefreshUrl } = createScriptContext();
+
+    assert.equal(
+        buildRefreshUrl('https://example.com/study/?course=basic-verbs', 12345),
+        'https://example.com/study/?course=basic-verbs&refresh=12345'
+    );
 });

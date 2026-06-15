@@ -26,6 +26,21 @@ const TTS_PREMIUM_KEYWORDS = [
     'apple', 'siri', 'jenny', 'aria', 'samantha'
 ];
 
+const DATA_VERSION = '9';
+
+function buildDataUrl(search = window.location.search) {
+    const params = new URLSearchParams(search);
+    const refreshToken = params.get('refresh');
+    const dataUrl = `data.json?v=${DATA_VERSION}`;
+    return refreshToken ? `${dataUrl}&refresh=${encodeURIComponent(refreshToken)}` : dataUrl;
+}
+
+function buildRefreshUrl(href = window.location.href, timestamp = Date.now()) {
+    const refreshUrl = new URL(href);
+    refreshUrl.searchParams.set('refresh', String(timestamp));
+    return refreshUrl.toString();
+}
+
 function replaceElementChildren(element, ...children) {
     if (!element) return;
 
@@ -1377,7 +1392,7 @@ class QuizApp {
 
 // 애플리케이션 초기화
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('data.json?v=8')
+    fetch(buildDataUrl())
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -1402,7 +1417,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshBtn = document.getElementById('refreshBtn');
     if (refreshBtn) {
         refreshBtn.addEventListener('click', () => {
-            window.location.reload();
+            window.location.assign(buildRefreshUrl());
         });
     }
 });

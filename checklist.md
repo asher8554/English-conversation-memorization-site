@@ -177,3 +177,12 @@
 - [x] 통계 테이블을 `innerHTML` 대신 DOM API와 `textContent`로 렌더링한다.
 - [x] 전체 테스트와 문법 검사를 실행한다.
 - [x] 하나의 논리 변경으로 커밋한다.
+
+## Refresh 데이터 캐시 무효화 체크리스트
+- [x] 원격 `data.json?v=8`에 `Further Studies`가 포함되어 있는지 확인한다.
+- [x] GitHub Pages `Cache-Control: max-age=600` 응답으로 캐시 가능성을 확인한다.
+- [x] Refresh 버튼과 데이터 fetch URL이 같은 캐시 키를 유지하는지 확인한다.
+- [x] 데이터 URL과 Refresh URL 캐시 버스트 실패 테스트를 추가한다.
+- [x] Refresh 버튼이 새 `refresh` 토큰 URL로 이동하도록 수정한다.
+- [x] 데이터 fetch가 `refresh` 토큰을 `data.json` 요청에도 반영하도록 수정한다.
+- [x] 테스트, 브라우저 검증, 커밋, push를 완료한다.
