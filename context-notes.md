@@ -50,3 +50,6 @@
 - 2026-06-15: `Further Studies` 추가 요청은 새 섹션의 내용을 기존 문제 카드 흐름에 합치는 작업으로 해석했다. 현재 앱은 `course.data[day]`가 배열이라고 가정하므로, 코스 전환 시 Day 데이터를 정규화하는 작은 레이어를 두는 방식이 가장 좁은 변경이다.
 - 2026-06-15: `Further Studies` 제목만 있고 내용이 비어 있는 경우는 추후 입력용 템플릿으로 보고 빈 문제를 만들지 않도록 한다. 기존 배열형 Day 데이터는 변경 없이 같은 카드 수를 유지해야 한다.
 - 2026-06-15: `normalizeCourseData` 테스트를 추가해 `Further Studies` 포함, 빈 섹션 무시, 기존 배열형 Day 보존을 검증했다. `node --test`, `node --check script.js`, Edge 기반 브라우저 스모크 테스트가 모두 통과했다.
+- 2026-06-15: 사용자가 Notion에는 Day 035까지 있는데 GitHub Pages에는 Day 025까지만 보인다고 보고했다. 라이브 `data.json`과 로컬 `data.json` 모두 `basic-verbs`가 Day 025에서 끝나므로 원인은 배포 지연이 아니라 데이터 누락이다.
+- 2026-06-15: Notion `loadPageChunk`와 `syncRecordValues`로 page recordMap을 조회하니 Day 026~035 헤딩과 자식 블록이 존재한다. Day00x는 템플릿이므로 제외하고 Day 026~035만 반영한다.
+- 2026-06-15: Day 026~035는 각각 11개 카드로 추출됐고, `basic-verbs`는 총 35일이 됐다. 로컬 브라우저에서 기본동사 선택 시 `기본동사 · 35 Days`, 마지막 옵션 `Day 035 - [Like] I don’t like to play golf, but I have to for my job.`을 확인했다.
