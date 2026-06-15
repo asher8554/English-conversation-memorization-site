@@ -31,6 +31,18 @@ const DAY_SECTION_KEYS = [
     'further_studies'
 ];
 
+const SECTION_NAME_BY_KEY = {
+    'Examples': 'Examples',
+    'Model Examples': 'Model Examples',
+    modelExamples: 'Model Examples',
+    'Small talk': 'Small talk',
+    'Small Talk': 'Small talk',
+    smallTalk: 'Small talk',
+    'Further Studies': 'Further Studies',
+    furtherStudies: 'Further Studies',
+    further_studies: 'Further Studies'
+};
+
 function normalizeCourseData(courseData) {
     return Object.entries(courseData || {}).reduce((normalized, [day, dayData]) => {
         normalized[day] = normalizeDayData(dayData);
@@ -54,28 +66,43 @@ function normalizeDayData(dayData) {
 
     return DAY_SECTION_KEYS.flatMap(sectionKey => (
         Object.prototype.hasOwnProperty.call(dayData, sectionKey)
-            ? normalizeCardList(dayData[sectionKey])
+            ? normalizeCardList(dayData[sectionKey], normalizeSectionName(sectionKey))
             : []
     ));
 }
 
-function normalizeCardList(cardList) {
+function normalizeCardList(cardList, section) {
     if (Array.isArray(cardList)) {
-        return cardList.flatMap(normalizeCardEntry);
+        return cardList.flatMap(card => normalizeCardEntry(card, section));
     }
 
-    return normalizeCardEntry(cardList);
+    return normalizeCardEntry(cardList, section);
 }
 
-function normalizeCardEntry(entry) {
+function normalizeCardEntry(entry, section) {
     if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
-        return Array.isArray(entry) ? normalizeCardList(entry) : [];
+        return Array.isArray(entry) ? normalizeCardList(entry, section) : [];
     }
 
     const q = pickNonBlankString(entry, ['q', 'question', 'ko', 'korean', 'prompt']);
     const a = pickNonBlankString(entry, ['a', 'answer', 'en', 'english', 'response']);
+    const entrySection = pickNonBlankString(entry, ['section', 'category', 'group']);
+    const normalizedSection = normalizeSectionName(entrySection) || section;
 
-    return q && a ? [{ q, a }] : [];
+    if (!q || !a) {
+        return [];
+    }
+
+    return normalizedSection ? [{ q, a, section: normalizedSection }] : [{ q, a }];
+}
+
+function normalizeSectionName(sectionKey) {
+    if (typeof sectionKey !== 'string') {
+        return '';
+    }
+
+    const trimmed = sectionKey.trim();
+    return SECTION_NAME_BY_KEY[trimmed] || trimmed;
 }
 
 function pickNonBlankString(source, keys) {
@@ -922,6 +949,7 @@ class QuizApp {
      */
     cacheDOM() {
         this.daySelect = document.getElementById('daySelect');
+        this.sectionLabel = document.getElementById('sectionLabel');
         this.questionText = document.getElementById('questionText');
         this.answerText = document.getElementById('answerText');
         this.showAnswerBtn = document.getElementById('showAnswerBtn');
@@ -1200,6 +1228,7 @@ class QuizApp {
 
         const currentItem = this.currentDayData[this.currentIndex];
 
+        this.renderSectionLabel(currentItem.section);
         this.questionText.textContent = currentItem.q;
         this.answerText.textContent = currentItem.a;
 
@@ -1231,9 +1260,28 @@ class QuizApp {
     renderEmptyState() {
         this.questionText.textContent = "이 날짜에 해당하는 질문이 없습니다.";
         this.answerText.textContent = "";
+        this.renderSectionLabel('');
         this.showAnswerBtn.style.display = 'none';
         this.prevBtn.disabled = true;
         this.nextBtn.disabled = true;
+    }
+
+    /**
+     * 현재 카드의 섹션 라벨을 표시하거나 숨깁니다.
+     */
+    renderSectionLabel(section) {
+        if (!this.sectionLabel) {
+            return;
+        }
+
+        if (section) {
+            this.sectionLabel.textContent = section;
+            this.sectionLabel.style.display = 'inline-flex';
+            return;
+        }
+
+        this.sectionLabel.textContent = '';
+        this.sectionLabel.style.display = 'none';
     }
 
     /**
@@ -1278,7 +1326,7 @@ class QuizApp {
 
 // 애플리케이션 초기화
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('data.json?v=7')
+    fetch('data.json?v=8')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

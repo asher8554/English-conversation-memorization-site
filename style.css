@@ -128,6 +128,19 @@ select:focus {
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
+.section-label {
+  display: none;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto 0.75rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--primary-color);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .question {
   font-size: 2rem;
   font-weight: 800;

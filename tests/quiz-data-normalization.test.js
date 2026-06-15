@@ -9,7 +9,7 @@ const rootDir = path.resolve(__dirname, '..');
 const scriptPath = path.join(rootDir, 'script.js');
 
 function toPlainCards(cards) {
-    return Array.from(cards, item => ({ q: item.q, a: item.a }));
+    return Array.from(cards, item => ({ q: item.q, a: item.a, section: item.section }));
 }
 
 function createScriptContext() {
@@ -106,10 +106,10 @@ test('normalizes section-shaped days by appending Further Studies cards', () => 
         }
     });
 
-    assert.deepEqual(Array.from(normalized['Day 001'], item => item.q), [
-        '기본 예문',
-        '짧은 대화',
-        '심화 학습'
+    assert.deepEqual(toPlainCards(normalized['Day 001']), [
+        { q: '기본 예문', a: 'Base example.', section: 'Model Examples' },
+        { q: '짧은 대화', a: 'Small talk.', section: 'Small talk' },
+        { q: '심화 학습', a: 'Further study.', section: 'Further Studies' }
     ]);
 });
 
@@ -134,7 +134,7 @@ test('ignores blank Further Studies placeholders', () => {
     });
 
     assert.deepEqual(toPlainCards(normalized['Day 001']), [
-        { q: '기본 예문', a: 'Base example.' }
+        { q: '기본 예문', a: 'Base example.', section: 'Model Examples' }
     ]);
     assert.deepEqual(Array.from(normalized['Day 002']), []);
 });
@@ -149,6 +149,6 @@ test('preserves existing array-shaped day data', () => {
     });
 
     assert.deepEqual(toPlainCards(normalized['Day 001']), [
-        { q: '기존 질문', a: 'Existing answer.' }
+        { q: '기존 질문', a: 'Existing answer.', section: undefined }
     ]);
 });

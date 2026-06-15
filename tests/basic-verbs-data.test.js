@@ -32,3 +32,22 @@ test('basic-verbs excludes empty Day00x templates', () => {
     assert.equal(Object.keys(course.data).some(day => /Day00x/i.test(day)), false);
     assert.equal(Object.keys(course.dayMainSentences).some(day => /Day00x/i.test(day)), false);
 });
+
+test('basic-verbs includes populated Further Studies cards with section labels', () => {
+    const course = loadBasicVerbsCourse();
+    const furtherStudies = course.data['Day 001'].filter(card => card.section === 'Further Studies');
+
+    assert.equal(furtherStudies.length, 4);
+    assert.deepEqual(furtherStudies.at(0), {
+        q: '그녀는 공포 영화보다는 영어 강의를 택할 겁니다.',
+        a: 'She would choose an English lecture over any horror movie.',
+        section: 'Further Studies'
+    });
+});
+
+test('basic-verbs skips blank Further Studies placeholders', () => {
+    const course = loadBasicVerbsCourse();
+
+    assert.equal(course.data['Day 013'].some(card => card.section === 'Further Studies'), false);
+    assert.equal(course.data['Day 013'].some(card => !card.q || !card.a), false);
+});
