@@ -55,3 +55,4 @@
 - 2026-06-15: Day 026~035는 각각 11개 카드로 추출됐고, `basic-verbs`는 총 35일이 됐다. 로컬 브라우저에서 기본동사 선택 시 `기본동사 · 35 Days`, 마지막 옵션 `Day 035 - [Like] I don’t like to play golf, but I have to for my job.`을 확인했다.
 - 2026-06-15: 사용자가 `Further Studies`가 여전히 안 보인다고 보고했다. 라이브 Day 001은 12개 카드만 있어 Notion의 Further Studies 문장이 누락되어 있고, 카드별 섹션 라벨도 렌더링하지 않는 것이 원인이다.
 - 2026-06-15: Notion에서 Day 001~035를 다시 추출해 각 예문 카드에 `section`을 저장했다. Day 001~012는 실제 `Further Studies` 문장이 있어 포함했고, Day 013~035는 `Further Studies` 내용이 비어 있어 빈 카드를 만들지 않았다. 로컬 Edge 검증에서 Day 001의 13번째 카드가 `Further Studies` 라벨과 함께 표시되고 답변 버튼도 정상 동작함을 확인했다.
+- 2026-06-15: GitHub Pages 배포 후 라이브 사이트에서 `script.js?v=19`, `data.json?v=8`, 기본동사 35일, Day 001의 16개 카드와 `Further Studies` 4개 카드가 확인됐다. 라이브 Edge 검증에서도 Day 001의 13번째 카드가 `Further Studies` 라벨과 함께 표시되고 답변이 정상 표시됐다.
