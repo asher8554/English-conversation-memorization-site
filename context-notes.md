@@ -74,3 +74,4 @@
 - 2026-06-15: Notion MCP fetch와 `loadPageChunk` 직접 조회로 `김재우 기본동사 100` 페이지의 Day 013~026 블록이 존재함을 확인했다. `loadPageChunk`는 상위 Day 블록까지만 내려주므로 하위 컬럼 문장 추출에는 child block ID를 대상으로 `syncRecordValues`를 재귀 호출해야 한다.
 - 2026-06-15: Notion에서 Day 013~026 `Further Studies`를 각각 4, 4, 4, 3, 6, 5, 7, 4, 5, 4, 5, 6, 5, 5개 문장쌍으로 추출해 `data.json`에 반영했다. 원본에 `This weather is os weird.`, `for yen years!`처럼 보이는 오타가 있었지만 이번 작업은 원본 동기화라 임의 수정하지 않았다.
 - 2026-06-15: `DATA_VERSION`을 10, `script.js` 쿼리 버전을 21로 올렸다. `node --test`는 27개 테스트 모두 통과했고, 로컬 Edge 검증에서 `Day 026`의 첫 `Further Studies` 카드 `꾸준히 연습하면 훌륭한 음악가가 될 거야.`가 표시되었으며 콘솔 오류는 없었다.
+- 2026-06-15: 커밋 `5220a87`을 `main`에 fast-forward 병합하고 GitHub Pages 배포 `27554640218` 성공을 확인했다. 라이브 사이트는 `script.js?v=21`과 `data.json?v=10&refresh=day026-ui-check`를 사용했고, Edge 검증에서 기본동사 Day 026의 `Further Studies` 첫 카드가 정상 표시됐으며 콘솔 오류와 실패 요청은 없었다.
