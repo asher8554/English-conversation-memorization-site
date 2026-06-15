@@ -9,6 +9,8 @@ const rootDir = path.resolve(__dirname, '..');
 const scriptPath = path.join(rootDir, 'script.js');
 
 function createElementStub(id) {
+    const listeners = {};
+
     return {
         id,
         value: '',
@@ -28,7 +30,16 @@ function createElementStub(id) {
                 return false;
             }
         },
-        addEventListener() { },
+        addEventListener(eventName, handler) {
+            listeners[eventName] = listeners[eventName] || [];
+            listeners[eventName].push(handler);
+        },
+        dispatchEvent(event) {
+            (listeners[event.type] || []).forEach(handler => handler(event));
+        },
+        click() {
+            this.dispatchEvent({ type: 'click', target: this });
+        },
         setAttribute(name, value) {
             this[name] = value;
         },
@@ -51,8 +62,9 @@ function createElementStub(id) {
     };
 }
 
-function createQuizContext() {
+function createQuizContext({ voices = [] } = {}) {
     const elements = {};
+    const spoken = [];
     [
         'daySelect',
         'sectionLabel',
@@ -117,11 +129,13 @@ function createQuizContext() {
             clearTimeout() { },
             speechSynthesis: {
                 getVoices() {
-                    return [];
+                    return voices;
                 },
                 addEventListener() { },
                 cancel() { },
-                speak() { }
+                speak(utterance) {
+                    spoken.push(utterance);
+                }
             }
         },
         document: {
@@ -174,7 +188,8 @@ function createQuizContext() {
 
     return {
         QuizApp: context.__classes.QuizApp,
-        elements
+        elements,
+        spoken
     };
 }
 
@@ -201,4 +216,71 @@ test('QuizApp renders the current card section label', () => {
 
     assert.equal(elements.sectionLabel.textContent, 'Further Studies');
     assert.equal(elements.sectionLabel.style.display, 'inline-flex');
+});
+
+test('QuizApp replays the Korean question when the question text is clicked', () => {
+    const { QuizApp, elements, spoken } = createQuizContext({
+        voices: [
+            { name: 'Korean Natural', lang: 'ko-KR', voiceURI: 'ko-natural' },
+            { name: 'English Natural', lang: 'en-US', voiceURI: 'en-natural' }
+        ]
+    });
+
+    new QuizApp({
+        defaultCourse: 'basic-verbs',
+        courses: {
+            'basic-verbs': {
+                title: 'Basic Verbs',
+                data: {
+                    'Day 001': [
+                        {
+                            q: '안녕하세요.',
+                            a: 'Hello.'
+                        }
+                    ]
+                }
+            }
+        }
+    });
+
+    spoken.length = 0;
+    elements.questionText.click();
+
+    assert.equal(spoken.length, 1);
+    assert.equal(spoken[0].text, '안녕하세요.');
+    assert.equal(spoken[0].lang, 'ko-KR');
+});
+
+test('QuizApp replays the English answer when the answer text is clicked', () => {
+    const { QuizApp, elements, spoken } = createQuizContext({
+        voices: [
+            { name: 'Korean Natural', lang: 'ko-KR', voiceURI: 'ko-natural' },
+            { name: 'English Natural', lang: 'en-US', voiceURI: 'en-natural' }
+        ]
+    });
+
+    new QuizApp({
+        defaultCourse: 'basic-verbs',
+        courses: {
+            'basic-verbs': {
+                title: 'Basic Verbs',
+                data: {
+                    'Day 001': [
+                        {
+                            q: '안녕하세요.',
+                            a: 'Hello.'
+                        }
+                    ]
+                }
+            }
+        }
+    });
+
+    elements.showAnswerBtn.click();
+    spoken.length = 0;
+    elements.answerText.click();
+
+    assert.equal(spoken.length, 1);
+    assert.equal(spoken[0].text, 'Hello.');
+    assert.equal(spoken[0].lang, 'en-US');
 });

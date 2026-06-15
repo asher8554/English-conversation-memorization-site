@@ -1068,6 +1068,8 @@ class QuizApp {
                 this.ttsManager.speak(this.answerText.textContent, 'en-US', { automatic: true });
             }
         });
+        this.questionText.addEventListener('click', () => this.replayQuestion());
+        this.answerText.addEventListener('click', () => this.replayAnswer());
 
         this.prevBtn.addEventListener('click', () => this.handlePrev());
         this.nextBtn.addEventListener('click', () => this.handleNext());
@@ -1251,6 +1253,20 @@ class QuizApp {
 
         if (this.ttsManager.shouldAutoSpeakQuestion()) {
             this.ttsManager.speak(currentItem.q, 'ko-KR', { automatic: true });
+        }
+    }
+
+    replayQuestion() {
+        const text = this.questionText.textContent.trim();
+        if (text) {
+            this.ttsManager.speak(text, 'ko-KR');
+        }
+    }
+
+    replayAnswer() {
+        const text = this.answerText.textContent.trim();
+        if (text) {
+            this.ttsManager.speak(text, 'en-US');
         }
     }
 

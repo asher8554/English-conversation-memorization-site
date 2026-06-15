@@ -56,3 +56,7 @@
 - 2026-06-15: 사용자가 `Further Studies`가 여전히 안 보인다고 보고했다. 라이브 Day 001은 12개 카드만 있어 Notion의 Further Studies 문장이 누락되어 있고, 카드별 섹션 라벨도 렌더링하지 않는 것이 원인이다.
 - 2026-06-15: Notion에서 Day 001~035를 다시 추출해 각 예문 카드에 `section`을 저장했다. Day 001~012는 실제 `Further Studies` 문장이 있어 포함했고, Day 013~035는 `Further Studies` 내용이 비어 있어 빈 카드를 만들지 않았다. 로컬 Edge 검증에서 Day 001의 13번째 카드가 `Further Studies` 라벨과 함께 표시되고 답변 버튼도 정상 동작함을 확인했다.
 - 2026-06-15: GitHub Pages 배포 후 라이브 사이트에서 `script.js?v=19`, `data.json?v=8`, 기본동사 35일, Day 001의 16개 카드와 `Further Studies` 4개 카드가 확인됐다. 라이브 Edge 검증에서도 Day 001의 13번째 카드가 `Further Studies` 라벨과 함께 표시되고 답변이 정상 표시됐다.
+- 2026-06-15: 사용자가 한글 텍스트 클릭 시 한글을 다시 읽고 영문 텍스트 클릭 시 영문을 다시 읽도록 요청했다. 현재 구조는 질문이 `questionText`, 답변이 `answerText`에 렌더링되고 자동 TTS만 연결되어 있으므로, `QuizApp`의 텍스트 요소 클릭 핸들러로 수동 재생을 추가하는 것이 가장 작은 변경이다.
+- 2026-06-15: 수동 클릭 재생은 자동 읽기 설정과 별개로 동작해야 한다고 판단했다. 자동 읽기 옵션은 카드 전환과 답변 표시 시 자동 재생 여부만 제어하고, 사용자가 직접 텍스트를 누르는 행동은 명시적 재생 의도로 처리한다.
+- 2026-06-15: 질문 클릭과 답변 클릭 테스트를 먼저 추가해 구현 전 실패를 확인했다. 이후 `QuizApp`에 `replayQuestion`, `replayAnswer`를 추가하고 각각 `ko-KR`, `en-US`로 `TTSManager.speak`를 호출하도록 했다.
+- 2026-06-15: `node --test`, `node --check script.js`, in-app Browser 로컬 검증을 통과했다. 브라우저에서는 `http://127.0.0.1:8019`에서 첫 카드 렌더링, 질문 클릭, Show Answer, 답변 클릭을 확인했고 콘솔 오류는 없었다.
