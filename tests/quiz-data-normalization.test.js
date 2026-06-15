@@ -162,7 +162,7 @@ test('preserves existing array-shaped day data', () => {
 test('data URL includes refresh cache buster when page URL has refresh token', () => {
     const { buildDataUrl } = createScriptContext();
 
-    assert.equal(buildDataUrl('?refresh=12345'), 'data.json?v=9&refresh=12345');
+    assert.equal(buildDataUrl('?refresh=12345'), 'data.json?v=10&refresh=12345');
 });
 
 test('refresh URL keeps the current path and adds a fresh refresh token', () => {

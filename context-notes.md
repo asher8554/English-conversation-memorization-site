@@ -69,3 +69,8 @@
 - 2026-06-15: 사용자가 Refresh Page 버튼 후 `Further Studies`가 안 불러와지는 것 같다고 보고했다. 원격 `data.json?v=8`에는 `Further Studies` 문자열이 63개 포함되어 있었지만 GitHub Pages 응답 헤더가 `Cache-Control: max-age=600`이라 같은 `data.json?v=8` URL을 계속 fetch하면 배포 직후 최대 10분 동안 예전 캐시를 볼 수 있다.
 - 2026-06-15: 현재 Refresh 버튼은 `window.location.reload()`만 실행하므로 HTML은 새로고침해도 `script.js`의 `fetch('data.json?v=8')` 캐시 키가 바뀌지 않는다. 해결은 버튼 클릭 시 페이지 URL에 `refresh=<timestamp>`를 붙이고, 데이터 fetch URL에도 같은 refresh 토큰을 붙여 새 데이터 요청을 강제하는 방식으로 정했다.
 - 2026-06-15: `DATA_VERSION`을 9로 올리고 `buildDataUrl`, `buildRefreshUrl` helper를 추가했다. Edge 로컬 검증에서 Refresh 클릭 후 페이지 URL은 `?refresh=...`로 바뀌었고 데이터 요청은 `data.json?v=9` 다음 `data.json?v=9&refresh=...`로 수행되었다. 같은 검증에서 기본동사 Day 001의 `Further Studies` 카드가 표시되었고 콘솔 오류는 없었다.
+
+- 2026-06-15: 사용자가 Notion에는 Day 026까지 `Further Studies`를 작성했지만 페이지에는 확인되지 않는다고 보고했다. 로컬 `data.json` 기준 기본동사 `Further Studies`는 Day 001~012까지만 존재했고, Day 013~026에는 section 값이 없었다.
+- 2026-06-15: Notion MCP fetch와 `loadPageChunk` 직접 조회로 `김재우 기본동사 100` 페이지의 Day 013~026 블록이 존재함을 확인했다. `loadPageChunk`는 상위 Day 블록까지만 내려주므로 하위 컬럼 문장 추출에는 child block ID를 대상으로 `syncRecordValues`를 재귀 호출해야 한다.
+- 2026-06-15: Notion에서 Day 013~026 `Further Studies`를 각각 4, 4, 4, 3, 6, 5, 7, 4, 5, 4, 5, 6, 5, 5개 문장쌍으로 추출해 `data.json`에 반영했다. 원본에 `This weather is os weird.`, `for yen years!`처럼 보이는 오타가 있었지만 이번 작업은 원본 동기화라 임의 수정하지 않았다.
+- 2026-06-15: `DATA_VERSION`을 10, `script.js` 쿼리 버전을 21로 올렸다. `node --test`는 27개 테스트 모두 통과했고, 로컬 Edge 검증에서 `Day 026`의 첫 `Further Studies` 카드 `꾸준히 연습하면 훌륭한 음악가가 될 거야.`가 표시되었으며 콘솔 오류는 없었다.

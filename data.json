@@ -2601,6 +2601,26 @@
             "q": "알겠습니다. 그럼 다른 부서 사람들과 점심 식사도 하려고 해야겠군요. (식사 자리를 통해 다른 부서 사람들과 어울리며 일도 자연스럽게 접해 봐야겠다는 의미)",
             "a": "I see. So I should try to have lunch with people from other departments.",
             "section": "Small talk"
+          },
+          {
+            "q": "늦어서 미안. 오래 기다렸어?",
+            "a": "Sorry I’m late. Were you waiting long?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "아니, 아니. 도착한 지 몇 분 안 됐어.",
+            "a": "No, no. I just got here a couple minutes ago.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "어, 다니엘, 네가 간 줄 알았어.",
+            "a": "Hey, Daniel, I thought you left.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그랬는데. 우산 가지러 다시 왔어.",
+            "a": "I did. I just came back to get my umbrella.",
+            "section": "Further Studies"
           }
         ],
         "Day 014": [
@@ -2667,6 +2687,26 @@
             "q": "맞아. 도대체 무슨 생각인지 모르겠어.",
             "a": "Right. I don’t get their logic.",
             "section": "Small talk"
+          },
+          {
+            "q": "날씨가 너무 이상해.",
+            "a": "This weather is os weird.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "맞아. 하루는 따뜻하고 해가 났다가, 다음 날은 춥고 비 오고.",
+            "a": "Seriously. One day it’s warm and sunny, and the next day it’s cold and rainy.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "나 미국으로 가. 거기에 직장 구했거든.",
+            "a": "I’m moving to the U.S. I got a job there.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "정말? 와. 축하해.",
+            "a": "Seriously? Wow. Congratulations.",
+            "section": "Further Studies"
           }
         ],
         "Day 015": [
@@ -2728,6 +2768,26 @@
             "q": "네, 좀 더 조용한 곳을 보여 드릴게요.",
             "a": "OK, I have some quieter places to show you.",
             "section": "Small talk"
+          },
+          {
+            "q": "나는 대체로 약속 시간에 늦는다. 그 때문에 자주 난처한 상황에 처한다.",
+            "a": "More often than not, I’m late for my appointments. That often puts me in awkward situations.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "제가 볼 때 <이코노미스트> 기사를 더 읽는 건 좋지 않습니다. 당신의 영어를 어색하게 만들 뿐입니다.",
+            "a": "I don’t think you should read any more articles from the Economist. All it does is make your English awkward.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "내 친구들 중에는 사회성이 부족한 사람이 많아요.",
+            "a": "Many of my friends are socially awkward.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "아는 사람이 없는 파티에 가면(파티에 아는 사람이 없는 상황에서) 늘 어색하고 불편해요.",
+            "a": "I always feel awkward at parties when I don’t know anyone.",
+            "section": "Further Studies"
           }
         ],
         "Day 016": [
@@ -2789,6 +2849,21 @@
             "q": "저런, 어떡해. 화장실 근처에 있어야겠다.",
             "a": "Oh, no. Sorry to hear that. Stay close to the toilet.",
             "section": "Small talk"
+          },
+          {
+            "q": "퇴근하고 은행에 들러야 해. (’그 은행’이 아니라, ‘은행’이라는 개념적 장소를 의미)",
+            "a": "I need to go to the bank after work.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "치과에 예약이 있어. (’그 치과’가 아니라, ‘치과’라는 개념적 공간을 의미)",
+            "a": "I have an appointment at the dentist.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "아직 사무실에 있어. (’그 사무실’이 아니라 ‘회사’나 ‘직장’ 같은 개념적 공간을 의미)",
+            "a": "I’m still in the office.",
+            "section": "Further Studies"
           }
         ],
         "Day 017": [
@@ -2850,6 +2925,36 @@
             "q": "와, 잠도 더 자고 아무도 안 늦고. 환상적이네.",
             "a": "Wow, you got extra sleep and no one was late. Perfect.",
             "section": "Small talk"
+          },
+          {
+            "q": "당분간 우리 부모님 댁으로 들어가서 사는 건 어때?",
+            "a": "Why don’t we move in with my parents for a while?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "절대 안 돼. 농담이라도 그런 말 하지 마.",
+            "a": "No way. Don’t even joke about that.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "눈 온다!",
+            "a": "It’s snowing!",
+            "section": "Further Studies"
+          },
+          {
+            "q": "말도 안 돼!",
+            "a": "No way!",
+            "section": "Further Studies"
+          },
+          {
+            "q": "케빈이 날 찼어.",
+            "a": "Kevin dumped me.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "말도 안 돼! 진짜야?",
+            "a": "No way! Seriously?",
+            "section": "Further Studies"
           }
         ],
         "Day 018": [
@@ -2911,6 +3016,31 @@
             "q": "없어. 발길 자체가 많지 않아. 요즘은 토요일조차도 말이야.",
             "a": "Nope. We don’t get much foot traffic, even on Saturdays now.",
             "section": "Small talk"
+          },
+          {
+            "q": "(의사가 환자에게 하는 말) 꼭 물을 충분히 섭취하세요.",
+            "a": "Make sure you get enough water.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "의사 선생님이 뭐라고 하든?",
+            "a": "What did the doctor say?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "늘 똑같지 뭐. 운동 좀 하고, 잠 충분히 자라고…",
+            "a": "Same thing she always says: get some exercise and plenty of sleep…",
+            "section": "Further Studies"
+          },
+          {
+            "q": "집중이 안 돼. 몇 시간째 화면만 보고 있어.",
+            "a": "I can’t forcus. I’ve been staring at my screen for hours.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "나가서 산책 좀 하면서 신선한 바람 좀 쐐.",
+            "a": "Go take a walk and get some fresh air.",
+            "section": "Further Studies"
           }
         ],
         "Day 019": [
@@ -2972,6 +3102,41 @@
             "q": "예약이 다 찼었는데, 직원이 강이 보이는 자리를 마련해 줬어.",
             "a": "They were fully booked, but the server managed to get us a booth with a view of the river.",
             "section": "Small talk"
+          },
+          {
+            "q": "올해 크리스마스 때는 유럽에 가 보는 게 어때?",
+            "a": "Why don’t we go to Europe for Christmas this year?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "아이들한테 어린이날 선물 뭐 해 줬어요?",
+            "a": "What did you get your kids for Children’s Day?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "이번 여름 휴가 계획 잡았어요?",
+            "a": "Do you have anything planned for this summer vacation?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "이번 추석 때는 뭐해?",
+            "a": "What are you doing for Chuseok this year?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "아내 생일이 5월 5일이라, 우리는 보통 5월 중순쯤에 그 기념으로 근사한 오마카세 식당에 가곤 해요.",
+            "a": "We usually go to a nice omakase restaurant in mid-May for my wife’s birth day, since she was born on May 5th.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "올해 내 생일날에 캐리비안 베이 가자.",
+            "a": "Let’s go to Caribbean Bay on my birthday this year.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "어린이날에 수족관에 다녀왔습니다.",
+            "a": "We went to the aquarium on Children’s Day.",
+            "section": "Further Studies"
           }
         ],
         "Day 020": [
@@ -3033,6 +3198,26 @@
             "q": "아뇨, 그럴 필요까진 없을 것 같아요. 선생님이 잘 판단해 주셨을 거라 믿어요.",
             "a": "Nah, I don’t think that’s necessary. I trust your judgment.",
             "section": "Small talk"
+          },
+          {
+            "q": "내가 볼 땐 그게 더 나은 계획인 듯해. (계획에 대해 판단하는 주체가 ‘나’)",
+            "a": "That sounds like a better plan to me.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "내가 볼 땐 흰색이 더 편할 듯해.  (색상에 대해 판단하는 주체가 ‘나’)",
+            "a": "To me, the white one seems more comfortable.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그곳은 너한테 너무 완벽한 곳인 것 같아. (특정 장소의 영향을 받는 대상이 ‘너’)",
+            "a": "That sounds like a perfect place for you.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "저에겐 재택근무는 불가능합니다. (상황의 영향을 받는 대상이 ‘나’)",
+            "a": "For me, working from home isn’t an option.",
+            "section": "Further Studies"
           }
         ],
         "Day 021": [
@@ -3094,6 +3279,31 @@
             "q": "그래도 그 사람이 변상하게 만들어야지!",
             "a": "Still, you should get him to pay for the damages!",
             "section": "Small talk"
+          },
+          {
+            "q": "그 가게는 아무 때나 문을 닫는다. (문 닫는 시간이 일정하지 않다.)",
+            "a": "They close at random hours.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그 친구는 볼 때마다 다른 여자랑 있어.",
+            "a": "I always see him with random girls.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "지하철에서 낯선 사람이 소리를 지르고 있었다.",
+            "a": "Some random guy was yelling on the subway.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "사라가 지금 부동산 중개인 되었다는 거 알아?",
+            "a": "Did you know Sarah is a real estate agent now?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그 걸 그룹 멤버? 정말 뜬금없네.",
+            "a": "The girl from that K-pop group? That’s random.",
+            "section": "Further Studies"
           }
         ],
         "Day 022": [
@@ -3155,6 +3365,26 @@
             "q": "그러게, 진짜 다정하고 배려심도 넘치셔",
             "a": "I know, she’s so kind and thoughtful.",
             "section": "Small talk"
+          },
+          {
+            "q": "저희 삼촌은 제2차 세계 대전 때 취사병으로 복무했습니다.",
+            "a": "My uncle served as a cook in World War II.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "혼자 먹으려고 요리하는 것보다 외식하는 게 더 싸서 요리를 잘 안해요.",
+            "a": "I don’t cook much because it’s cheaper to go out and eat than to cook for one person.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "저는 요리를 전혀 안 해요. 저랑은 안 맞아요.",
+            "a": "I don’t cook at all. It’s not my thing.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "여자들은 요리할 줄 아는 남자를 좋아한다.",
+            "a": "Women love a man that can cook.",
+            "section": "Further Studies"
           }
         ],
         "Day 023": [
@@ -3216,6 +3446,31 @@
             "q": "그래, 특히 넌 하루 종일 핸드폰을 하니…",
             "a": "Yeah, especially if you’re on your phone all day…",
             "section": "Small talk"
+          },
+          {
+            "q": "그 사람 같이 일하기에 너무 짜증 나는 스타일이야.",
+            "a": "He is irritating to work with.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "저랑 술 마시면 재미없을 텐데요.",
+            "a": "I’m not much fun to drink with.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "곱슬머리는 스타일링하기 어렵다.",
+            "a": "Curly hair is difficult to style.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "긴 머리는 말리는 데 한참 걸린다.",
+            "a": "Long hair takes a while to dry.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "금요일 밤에는 강남역 근처에서 택시 잡기 힘들다.",
+            "a": "Taxis are hard to find around Gangnam Sation Friday night.",
+            "section": "Further Studies"
           }
         ],
         "Day 024": [
@@ -3277,6 +3532,36 @@
             "q": "커플마다 다를 듯. 우리는 좋은데.",
             "a": "Depends on the couple, I guess. We like it.",
             "section": "Small talk"
+          },
+          {
+            "q": "어렸을 때 우리 형이 나한테 자기 방 청소를 시켰어. 무려 10년 동안이나!",
+            "a": "Back when we were kids, my brother made me clean his room - for yen years!",
+            "section": "Further Studies"
+          },
+          {
+            "q": "부모님은 내가 어릴 때 학교까지 걸어가게 하셨어.",
+            "a": "My parents made me walk to school when I was a kid.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "(갑자기 골절상을 당한 상황) 항공사에 부탁해서 일등석으로 업그레이드 받았어.",
+            "a": "I got the airline to upgrade my seat to first class.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "회사 하루 쉬려고 사라한테 나 대신 근무해 달라고 했어.",
+            "a": "I got Sarah to fill in for me at work so I could take the day off.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "사장님이 내게 회의 전에 나가서 커피 주문한 거 받아 오라고 했어.",
+            "a": "My boss had me go out and pick up the coffee order before the meeting.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "선생님이 나에게 반 아이들 숙제를 걷어 오라고 하셨어.",
+            "a": "The teacher had me pick up the homework from the class.",
+            "section": "Further Studies"
           }
         ],
         "Day 025": [
@@ -3338,6 +3623,31 @@
             "q": "혼자 일하다 보니 수입이 들쭉날쭉하면 마음이 불안해질 수 있다는 걸 알겠더라고요.",
             "a": "Working for myself made me realize that unreliable income can make you feel insecure.",
             "section": "Small talk"
+          },
+          {
+            "q": "요즘에는 사람들이 영화관에 그렇게 많이 안 간다.",
+            "a": "People don’t go to the movies that often anymore.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "영화 보러 갈래?",
+            "a": "Do you want to go see a movie?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "재미있겠다. 영화 어떤 거 상영 중인지 알아?",
+            "a": "That sounds fun. Do you know what’s playing?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "마블 영화 신작이 얼마 전에 개봉했어. 같이 보러 갈래?",
+            "a": "The new Marvel movie just came out. Do you wanna see it with me?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "저는 극장에 가서 영화를 그렇게 즐기는 타입은 아니에요. 전 주로 유튜브만 봐요.",
+            "a": "I’m not much of a movie-goer. I usually just stick to YouTube.",
+            "section": "Further Studies"
           }
         ],
         "Day 026": [
@@ -3399,6 +3709,31 @@
             "q": "최선을 다해 볼게! 그나저나 몇 시에 만나지?",
             "a": "I’ll try my best! What time are we meeting, by the way?",
             "section": "Small talk"
+          },
+          {
+            "q": "꾸준히 연습하면 훌륭한 음악가가 될 거야.",
+            "a": "If you keep practicing, you’ll make it as a great musician.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그의 이름이 최종 명단에 오르지 못했다.",
+            "a": "His name didn’t make it onto the final list.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "최고의 학생들만이 이 대학에 들어갈 수 있다.",
+            "a": "Only the best students make it into this university.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "(미국 유학 생활 이야기) 매주 포기할까 생각했어요. 그래도 학업을 계속해서 학기 말까지 버틴 게 너무 기쁩니다.",
+            "a": "I was thinking of quitting every week. I’m so glad I kept studying, and that I made it to the end of the semester.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "회의가 2주 조금 더 남아서 참석자 명단을 확인해야 합니다. 참석이 어려울 경우 가급적 빨리 회신 주시기 바랍니다.",
+            "a": "The conference is a little over two weeks away, and we need to verify our guest list. Please respond and let me know ASAP if you cannot make it",
+            "section": "Further Studies"
           }
         ],
         "Day 027": [

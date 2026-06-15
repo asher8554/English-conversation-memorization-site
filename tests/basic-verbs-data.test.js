@@ -48,6 +48,18 @@ test('basic-verbs includes populated Further Studies cards with section labels',
 test('basic-verbs skips blank Further Studies placeholders', () => {
     const course = loadBasicVerbsCourse();
 
-    assert.equal(course.data['Day 013'].some(card => card.section === 'Further Studies'), false);
-    assert.equal(course.data['Day 013'].some(card => !card.q || !card.a), false);
+    assert.equal(course.data['Day 027'].some(card => card.section === 'Further Studies'), false);
+    assert.equal(course.data['Day 027'].some(card => !card.q || !card.a), false);
+});
+
+test('basic-verbs includes Further Studies cards through Day 026', () => {
+    const course = loadBasicVerbsCourse();
+
+    for (let dayNumber = 13; dayNumber <= 26; dayNumber++) {
+        const day = `Day ${String(dayNumber).padStart(3, '0')}`;
+        const furtherStudies = course.data[day].filter(card => card.section === 'Further Studies');
+
+        assert.ok(furtherStudies.length > 0, `${day} should include Further Studies cards`);
+        assert.ok(furtherStudies.every(card => card.q && card.a), `${day} Further Studies cards should have both q and a`);
+    }
 });

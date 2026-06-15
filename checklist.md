@@ -186,3 +186,14 @@
 - [x] Refresh 버튼이 새 `refresh` 토큰 URL로 이동하도록 수정한다.
 - [x] 데이터 fetch가 `refresh` 토큰을 `data.json` 요청에도 반영하도록 수정한다.
 - [x] 테스트, 브라우저 검증, 커밋, push를 완료한다.
+
+## 기본동사 Day 013~026 Further Studies 반영 체크리스트
+- [x] 로컬/Pages 데이터가 Day 012까지만 `Further Studies`를 포함하는지 확인한다.
+- [x] Notion 페이지에 Day 013~026 블록이 존재하는지 확인한다.
+- [x] 작업 계획을 문서화한다.
+- [x] Day 026 `Further Studies` 누락 실패 테스트를 추가한다.
+- [x] Notion에서 Day 013~026 `Further Studies` 문장쌍을 추출한다.
+- [x] `data.json`의 기본동사 Day 013~026에 누락 문장쌍을 반영한다.
+- [x] 캐시 버전을 갱신한다.
+- [x] 테스트와 브라우저 검증을 실행한다.
+- [ ] 커밋, push, main 병합, Pages 검증을 완료한다.
