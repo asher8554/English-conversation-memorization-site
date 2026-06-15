@@ -15,6 +15,80 @@ function setStorageItem(key, value) {
     }
 }
 
+const DAY_SECTION_KEYS = [
+    'items',
+    'cards',
+    'sentences',
+    'examples',
+    'Examples',
+    'Model Examples',
+    'modelExamples',
+    'Small talk',
+    'Small Talk',
+    'smallTalk',
+    'Further Studies',
+    'furtherStudies',
+    'further_studies'
+];
+
+function normalizeCourseData(courseData) {
+    return Object.entries(courseData || {}).reduce((normalized, [day, dayData]) => {
+        normalized[day] = normalizeDayData(dayData);
+        return normalized;
+    }, {});
+}
+
+function normalizeDayData(dayData) {
+    if (Array.isArray(dayData)) {
+        return normalizeCardList(dayData);
+    }
+
+    if (!dayData || typeof dayData !== 'object') {
+        return [];
+    }
+
+    const directCards = normalizeCardEntry(dayData);
+    if (directCards.length > 0) {
+        return directCards;
+    }
+
+    return DAY_SECTION_KEYS.flatMap(sectionKey => (
+        Object.prototype.hasOwnProperty.call(dayData, sectionKey)
+            ? normalizeCardList(dayData[sectionKey])
+            : []
+    ));
+}
+
+function normalizeCardList(cardList) {
+    if (Array.isArray(cardList)) {
+        return cardList.flatMap(normalizeCardEntry);
+    }
+
+    return normalizeCardEntry(cardList);
+}
+
+function normalizeCardEntry(entry) {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+        return Array.isArray(entry) ? normalizeCardList(entry) : [];
+    }
+
+    const q = pickNonBlankString(entry, ['q', 'question', 'ko', 'korean', 'prompt']);
+    const a = pickNonBlankString(entry, ['a', 'answer', 'en', 'english', 'response']);
+
+    return q && a ? [{ q, a }] : [];
+}
+
+function pickNonBlankString(source, keys) {
+    for (const key of keys) {
+        const value = source[key];
+        if (typeof value === 'string' && value.trim()) {
+            return value;
+        }
+    }
+
+    return '';
+}
+
 /**
  * 폰트 크기 관리자
  * 질문과 정답 텍스트의 글자 크기를 조절하고 설정을 localStorage에 저장합니다.
@@ -902,7 +976,7 @@ class QuizApp {
         if (!course) return;
 
         this.currentCourseId = courseId;
-        this.data = course.data || {};
+        this.data = normalizeCourseData(course.data);
         this.dayMainSentences = course.dayMainSentences || {};
         this.reviewManager.setCourse(courseId);
 
