@@ -53,10 +53,13 @@ function createScriptContext() {
             },
             createElement() {
                 return {
+                    children: [],
                     classList,
                     style: {},
                     addEventListener() { },
-                    appendChild() { }
+                    appendChild(child) {
+                        this.children.push(child);
+                    }
                 };
             },
             createDocumentFragment() {
@@ -89,7 +92,8 @@ function createScriptContext() {
     vm.runInNewContext(`${script}\nglobalThis.__quizHelpers = {
         normalizeCourseData,
         buildDataUrl: typeof buildDataUrl === 'function' ? buildDataUrl : undefined,
-        buildRefreshUrl: typeof buildRefreshUrl === 'function' ? buildRefreshUrl : undefined
+        buildRefreshUrl: typeof buildRefreshUrl === 'function' ? buildRefreshUrl : undefined,
+        renderLoadFailure: typeof renderLoadFailure === 'function' ? renderLoadFailure : undefined
     };`, context);
 
     return context.__quizHelpers;
@@ -172,4 +176,21 @@ test('refresh URL keeps the current path and adds a fresh refresh token', () => 
         buildRefreshUrl('https://example.com/study/?course=basic-verbs', 12345),
         'https://example.com/study/?course=basic-verbs&refresh=12345'
     );
+});
+
+test('load failure renderer writes error details as text', () => {
+    const { renderLoadFailure } = createScriptContext();
+    const children = [];
+    const container = {
+        replaceChildren(child) {
+            children.length = 0;
+            children.push(child);
+        }
+    };
+
+    renderLoadFailure(container, new Error('<img src=x onerror=alert(1)>'));
+
+    assert.equal(children[0].children[0].textContent, '데이터 로딩 실패');
+    assert.equal(children[0].children[1].textContent, '<img src=x onerror=alert(1)>');
+    assert.equal(children[0].children[2].textContent, '페이지를 새로고침 해보세요.');
 });

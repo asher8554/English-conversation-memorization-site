@@ -56,6 +56,30 @@ function replaceElementChildren(element, ...children) {
     children.forEach(child => element.appendChild(child));
 }
 
+function renderLoadFailure(container, error) {
+    if (!container) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.style.textAlign = 'center';
+    wrapper.style.padding = '2rem';
+
+    const title = document.createElement('h3');
+    title.textContent = '데이터 로딩 실패';
+
+    const detail = document.createElement('p');
+    detail.style.color = 'red';
+    detail.style.fontWeight = 'bold';
+    detail.textContent = error && error.message ? error.message : 'Unknown error';
+
+    const hint = document.createElement('p');
+    hint.textContent = '페이지를 새로고침 해보세요.';
+
+    wrapper.appendChild(title);
+    wrapper.appendChild(detail);
+    wrapper.appendChild(hint);
+    replaceElementChildren(container, wrapper);
+}
+
 function restartElementAnimation(element, className) {
     if (!element) return;
 
@@ -1404,14 +1428,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Failed to load data:', error);
-            const container = document.querySelector('.container');
-            if (container) {
-                container.innerHTML = `<div style="text-align:center; padding: 2rem;">
-                    <h3>데이터 로딩 실패</h3>
-                    <p style="color: red; font-weight: bold;">${error.message}</p>
-                    <p>페이지를 새로고침 해보세요.</p>
-                </div>`;
-            }
+            renderLoadFailure(document.querySelector('.container'), error);
         });
 
     const refreshBtn = document.getElementById('refreshBtn');

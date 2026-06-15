@@ -197,3 +197,15 @@
 - [x] 캐시 버전을 갱신한다.
 - [x] 테스트와 브라우저 검증을 실행한다.
 - [x] 커밋, push, main 병합, Pages 검증을 완료한다.
+
+## Project hardening docs checklist
+- [x] Create `codex/project-hardening-docs` branch before implementation.
+- [x] Run baseline `node --test` and `node --check script.js`.
+- [x] Record hardening scope in `plan.md`, `checklist.md`, and `context-notes.md`.
+- [x] Add a regression test for safe startup load-failure rendering.
+- [x] Replace dynamic startup error `innerHTML` with DOM/text rendering.
+- [x] Bump `index.html` script query version while leaving `DATA_VERSION` unchanged.
+- [x] Run focused and full verification commands.
+- [x] Run a daily security review and record finding statuses.
+- [x] Produce Markdown, Word, and PDF hardening documentation with a Mermaid diagram.
+- [x] Commit the verified hardening/docs change.
