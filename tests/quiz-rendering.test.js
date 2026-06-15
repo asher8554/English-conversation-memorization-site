@@ -62,7 +62,7 @@ function createElementStub(id) {
     };
 }
 
-function createQuizContext({ voices = [] } = {}) {
+function createQuizContext({ voices = [], throwOnOffsetWidth = false } = {}) {
     const elements = {};
     const spoken = [];
     [
@@ -101,6 +101,14 @@ function createQuizContext({ voices = [] } = {}) {
 
     const courseButton = createElementStub('basicCourseButton');
     courseButton.dataset.courseId = 'basic-verbs';
+
+    if (throwOnOffsetWidth) {
+        Object.defineProperty(elements.cardContent, 'offsetWidth', {
+            get() {
+                throw new Error('forced layout read');
+            }
+        });
+    }
 
     const context = {
         console,
@@ -216,6 +224,29 @@ test('QuizApp renders the current card section label', () => {
 
     assert.equal(elements.sectionLabel.textContent, 'Further Studies');
     assert.equal(elements.sectionLabel.style.display, 'inline-flex');
+});
+
+test('QuizApp updates cards without reading layout synchronously', () => {
+    const { QuizApp, elements } = createQuizContext({ throwOnOffsetWidth: true });
+
+    new QuizApp({
+        defaultCourse: 'basic-verbs',
+        courses: {
+            'basic-verbs': {
+                title: 'Basic Verbs',
+                data: {
+                    'Day 001': [
+                        { q: '첫 질문', a: 'First answer.' },
+                        { q: '두 번째 질문', a: 'Second answer.' }
+                    ]
+                }
+            }
+        }
+    });
+
+    elements.nextBtn.click();
+
+    assert.equal(elements.questionText.textContent, '두 번째 질문');
 });
 
 test('QuizApp replays the Korean question when the question text is clicked', () => {

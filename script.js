@@ -15,6 +15,40 @@ function setStorageItem(key, value) {
     }
 }
 
+const TTS_EXCLUDED_KEYWORDS = [
+    'bells', 'organ', 'cello', 'zarvox', 'trinoids',
+    'deranged', 'hysterical', 'boing', 'bubbles',
+    'bad news', 'good news', 'pipe organ', 'whisper'
+];
+
+const TTS_PREMIUM_KEYWORDS = [
+    'natural', 'neural', 'premium', 'google', 'microsoft',
+    'apple', 'siri', 'jenny', 'aria', 'samantha'
+];
+
+function replaceElementChildren(element, ...children) {
+    if (!element) return;
+
+    if (typeof element.replaceChildren === 'function') {
+        element.replaceChildren(...children);
+        return;
+    }
+
+    element.innerHTML = '';
+    if (element.options) {
+        element.options.length = 0;
+    }
+    children.forEach(child => element.appendChild(child));
+}
+
+function restartElementAnimation(element, className) {
+    if (!element) return;
+
+    element.classList.remove(className);
+    const schedule = window.requestAnimationFrame || window.setTimeout || setTimeout;
+    schedule(() => element.classList.add(className));
+}
+
 const DAY_SECTION_KEYS = [
     'items',
     'cards',
@@ -234,6 +268,7 @@ class TTSManager {
         this.isSupported = Boolean(window.speechSynthesis && typeof SpeechSynthesisUtterance !== 'undefined');
         this.synth = this.isSupported ? window.speechSynthesis : null;
         this.voices = [];
+        this.voiceByKey = new Map();
         this.koVoice = null;
         this.enVoice = null;
         this.pendingSpeech = null;
@@ -368,6 +403,7 @@ class TTSManager {
 
     populateVoiceList() {
         this.voices = this.synth.getVoices();
+        this.voiceByKey = new Map(this.voices.map(voice => [this.getVoiceKey(voice), voice]));
 
         if (this.voices.length === 0) {
             this.setEmptyOption(this.koVoiceSelect, '목소리를 불러오는 중입니다');
@@ -378,20 +414,14 @@ class TTSManager {
         this.clearSelect(this.koVoiceSelect);
         this.clearSelect(this.enVoiceSelect);
 
-        const excludedKeywords = [
-            'Bells', 'Organ', 'Cello', 'Zarvox', 'Trinoids',
-            'Deranged', 'Hysterical', 'Boing', 'Bubbles',
-            'Bad News', 'Good News', 'Pipe Organ', 'Whisper'
-        ];
-
         const koVoices = this.voices
             .filter(voice => this.matchesLanguage(voice, 'ko-KR'))
-            .filter(voice => !this.hasExcludedKeyword(voice, excludedKeywords))
+            .filter(voice => !this.hasExcludedKeyword(voice))
             .sort((a, b) => this.scoreVoice(b, 'ko-KR') - this.scoreVoice(a, 'ko-KR'));
 
         const enVoices = this.voices
             .filter(voice => this.matchesLanguage(voice, 'en-US'))
-            .filter(voice => !this.hasExcludedKeyword(voice, excludedKeywords))
+            .filter(voice => !this.hasExcludedKeyword(voice))
             .sort((a, b) => this.scoreVoice(b, 'en-US') - this.scoreVoice(a, 'en-US'));
 
         this.addVoiceOptions(koVoices, this.koVoiceSelect);
@@ -401,11 +431,8 @@ class TTSManager {
     clearSelect(selectElement) {
         if (!selectElement) return;
 
-        selectElement.innerHTML = '';
+        replaceElementChildren(selectElement);
         selectElement.value = '';
-        if (selectElement.options) {
-            selectElement.options.length = 0;
-        }
         selectElement.disabled = false;
     }
 
@@ -445,9 +472,9 @@ class TTSManager {
         return displayName.length > 44 ? `${displayName.substring(0, 41)}...` : displayName;
     }
 
-    hasExcludedKeyword(voice, excludedKeywords) {
+    hasExcludedKeyword(voice) {
         const name = voice.name.toLowerCase();
-        return excludedKeywords.some(keyword => name.includes(keyword.toLowerCase()));
+        return TTS_EXCLUDED_KEYWORDS.some(keyword => name.includes(keyword));
     }
 
     normalizeLang(lang) {
@@ -465,15 +492,14 @@ class TTSManager {
     scoreVoice(voice, lang) {
         const voiceLang = this.normalizeLang(voice.lang);
         const targetLang = this.normalizeLang(lang);
-        const premiumKeywords = ['natural', 'neural', 'premium', 'google', 'microsoft', 'apple', 'siri', 'jenny', 'aria', 'samantha'];
         let score = 0;
 
         if (voiceLang === targetLang) score += 100;
         if (voice.default) score += 5;
 
         const name = voice.name.toLowerCase();
-        premiumKeywords.forEach((keyword, index) => {
-            if (name.includes(keyword)) score += premiumKeywords.length - index;
+        TTS_PREMIUM_KEYWORDS.forEach((keyword, index) => {
+            if (name.includes(keyword)) score += TTS_PREMIUM_KEYWORDS.length - index;
         });
 
         return score;
@@ -484,7 +510,7 @@ class TTSManager {
     }
 
     findVoiceByKey(key) {
-        return this.voices.find(voice => this.getVoiceKey(voice) === key);
+        return this.voiceByKey.get(key);
     }
 
     findVoiceKeyByLegacyName(name, lang) {
@@ -932,6 +958,7 @@ class QuizApp {
         this.dayMainSentences = {};
         this.currentDayData = [];
         this.currentIndex = 0;
+        this.normalizedCourseData = {};
 
         this.cacheDOM();
 
@@ -974,13 +1001,12 @@ class QuizApp {
      * Day 선택 드롭다운 생성
      */
     populateDaySelect() {
-        this.daySelect.innerHTML = '';
         const fragment = document.createDocumentFragment();
         Object.keys(this.data).forEach(day => {
             const label = this.dayMainSentences[day] ? `${day} - ${this.dayMainSentences[day]}` : day;
             fragment.appendChild(new Option(label, day));
         });
-        this.daySelect.appendChild(fragment);
+        replaceElementChildren(this.daySelect, fragment);
     }
 
     /**
@@ -1004,7 +1030,10 @@ class QuizApp {
         if (!course) return;
 
         this.currentCourseId = courseId;
-        this.data = normalizeCourseData(course.data);
+        if (!this.normalizedCourseData[courseId]) {
+            this.normalizedCourseData[courseId] = normalizeCourseData(course.data);
+        }
+        this.data = this.normalizedCourseData[courseId];
         this.dayMainSentences = course.dayMainSentences || {};
         this.reviewManager.setCourse(courseId);
 
@@ -1122,7 +1151,6 @@ class QuizApp {
     renderStats() {
         const reviews = this.reviewManager.getAllReviews();
         this.totalReviewsEl.textContent = this.reviewManager.getTotalReviews();
-        this.statsTableBody.innerHTML = '';
         const fragment = document.createDocumentFragment();
 
         Object.keys(this.data).forEach(day => {
@@ -1135,14 +1163,23 @@ class QuizApp {
                 lastReviewedText = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
 
-            tr.innerHTML = `
-                <td>${day}</td>
-                <td style="font-weight: bold; color: var(--primary-color);">${reviewData.count}</td>
-                <td>${lastReviewedText}</td>
-            `;
+            const dayCell = document.createElement('td');
+            dayCell.textContent = day;
+
+            const countCell = document.createElement('td');
+            countCell.textContent = reviewData.count;
+            countCell.style.fontWeight = 'bold';
+            countCell.style.color = 'var(--primary-color)';
+
+            const lastReviewedCell = document.createElement('td');
+            lastReviewedCell.textContent = lastReviewedText;
+
+            tr.appendChild(dayCell);
+            tr.appendChild(countCell);
+            tr.appendChild(lastReviewedCell);
             fragment.appendChild(tr);
         });
-        this.statsTableBody.appendChild(fragment);
+        replaceElementChildren(this.statsTableBody, fragment);
     }
 
     /**
@@ -1155,7 +1192,6 @@ class QuizApp {
             otherCheckbox.checked = false;
         }
         this.sortOptions();
-        this.updateCard();
     }
 
     /**
@@ -1174,8 +1210,9 @@ class QuizApp {
             optionsToSort.reverse();
         }
 
-        this.daySelect.innerHTML = '';
-        optionsToSort.forEach(opt => this.daySelect.add(opt));
+        const fragment = document.createDocumentFragment();
+        optionsToSort.forEach(opt => fragment.appendChild(opt));
+        replaceElementChildren(this.daySelect, fragment);
 
         if (isRandom && this.daySelect.options.length > 0) {
             this.daySelect.selectedIndex = 0;
@@ -1219,9 +1256,7 @@ class QuizApp {
      */
     updateCard() {
         this.answerText.classList.remove('visible');
-        this.cardContent.classList.remove('fade-in');
-        void this.cardContent.offsetWidth; // 리플로우 강제하여 애니메이션 재시작
-        this.cardContent.classList.add('fade-in');
+        restartElementAnimation(this.cardContent, 'fade-in');
 
         if (this.currentDayData.length === 0) {
             this.renderEmptyState();
