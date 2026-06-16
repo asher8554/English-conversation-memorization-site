@@ -233,6 +233,33 @@ function buildSyncedData(existingData, notionBlocks) {
     return nextData;
 }
 
+function formatNotionApiError(status, body) {
+    let parsed = null;
+    try {
+        parsed = JSON.parse(body);
+    } catch (error) {
+        parsed = null;
+    }
+
+    if (status === 404 && parsed?.code === 'object_not_found') {
+        return [
+            'Notion 페이지를 찾지 못했습니다.',
+            'NOTION_PAGE_ID가 올바른지 확인하고, 해당 Notion 페이지 우상단 메뉴의 Connections에서 이 integration을 추가하세요.',
+            `Notion 원문 오류: ${body}`
+        ].join(' ');
+    }
+
+    if (status === 401 || status === 403) {
+        return [
+            'Notion 인증 또는 권한 검증에 실패했습니다.',
+            'GitHub secret NOTION_TOKEN 값과 Notion integration의 페이지 접근 권한을 확인하세요.',
+            `Notion 원문 오류: ${body}`
+        ].join(' ');
+    }
+
+    return `Notion API 요청 실패: ${status} ${body}`;
+}
+
 async function notionGetJson(url, token, notionVersion) {
     const response = await fetch(url, {
         headers: {
@@ -243,7 +270,7 @@ async function notionGetJson(url, token, notionVersion) {
 
     if (!response.ok) {
         const body = await response.text();
-        throw new Error(`Notion API 요청 실패: ${response.status} ${body}`);
+        throw new Error(formatNotionApiError(response.status, body));
     }
 
     return response.json();
@@ -337,6 +364,7 @@ module.exports = {
     buildSyncedData,
     collectDayBlocks,
     extractPairsFromBlocks,
+    formatNotionApiError,
     getBlockText,
     parseDayKey,
     splitSectionGroups

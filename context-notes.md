@@ -93,3 +93,4 @@
 - 2026-06-16: `scripts/sync-notion-data.js`는 Notion block tree에서 Day 블록, `Model Examples`, `Small talk`, `Further Studies` 섹션과 column list 문장쌍을 추출해 `courses.basic-verbs`만 갱신한다. `Day00x`와 빈 문장쌍은 제외한다.
 - 2026-06-16: `.github/workflows/sync-notion-data.yml`은 수동 실행과 6시간 주기 실행을 지원한다. `NOTION_TOKEN` secret이 없으면 실패하고, 변경된 `data.json`이 있을 때만 `github-actions[bot]` 커밋을 만든다.
 - 2026-06-16: 검증은 `node --test` 32개 통과, `node --check script.js`, `node --check scripts\sync-notion-data.js`, `node --check tests\notion-sync.test.js`, `git diff --check` 종료 코드 0으로 확인했다. 실제 Notion API 호출은 이 환경에 `NOTION_TOKEN`이 없어 실행하지 못했고, 토큰 누락 시 명확히 실패하는 것은 확인했다.
+- 2026-06-16: GitHub Actions 수동 실행 `27587692020`은 `NOTION_TOKEN` 존재 검증까지 통과했지만, Notion API가 `object_not_found`를 반환했다. 원인은 `NOTION_PAGE_ID` 페이지가 integration `asher`와 공유되지 않은 상태로 판단했고, 같은 실패가 다시 나도 해결 방법이 바로 보이도록 오류 메시지를 보강했다.

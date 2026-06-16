@@ -6,6 +6,7 @@ const {
     buildBasicVerbsCourseFromBlocks,
     buildSyncedData,
     extractPairsFromBlocks,
+    formatNotionApiError,
     parseDayKey
 } = require('../scripts/sync-notion-data');
 
@@ -148,4 +149,17 @@ test('buildSyncedData replaces only basic-verbs course', () => {
     assert.deepEqual(synced.courses.conversation, existing.courses.conversation);
     assert.equal(synced.courses['basic-verbs'].data['Day 001'].length, 2);
     assert.equal(synced.courses['basic-verbs'].note, 'Notion 원문에서 생성했습니다. 빈 섹션과 Day00x 템플릿은 제외합니다.');
+});
+
+test('formatNotionApiError explains missing page connection', () => {
+    const message = formatNotionApiError(404, JSON.stringify({
+        object: 'error',
+        status: 404,
+        code: 'object_not_found',
+        message: 'Could not find block with ID: page-id. Make sure the relevant pages and databases are shared with your integration "asher".'
+    }));
+
+    assert.match(message, /Notion 페이지를 찾지 못했습니다/);
+    assert.match(message, /Connections/);
+    assert.match(message, /integration/);
 });
