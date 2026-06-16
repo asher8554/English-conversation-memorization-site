@@ -208,3 +208,13 @@
 - [x] Markdown, Word, PDF에서 한글 깨짐과 필수 섹션을 검증한다.
 - [x] 코드 회귀 검증과 공백 검사를 다시 실행한다.
 - [x] 한글 문서 보정 변경 사항을 커밋한다.
+
+## Notion 데이터 자동 동기화 체크리스트
+- [x] Refresh 버튼이 Notion 재조회가 아니라 `data.json` 캐시 우회만 수행하는지 확인한다.
+- [x] 정적 GitHub Pages에서 Notion/GitHub 쓰기 토큰을 직접 사용할 수 없다는 보안 경계를 확정한다.
+- [x] Notion block tree를 기본동사 `data.json` 구조로 변환하는 스크립트를 추가한다.
+- [x] 변환 스크립트 fixture 테스트를 추가한다.
+- [x] GitHub Actions 수동 실행과 예약 실행 workflow를 추가한다.
+- [x] README에 `NOTION_TOKEN`, `NOTION_PAGE_ID`, 실행 방법을 문서화한다.
+- [x] `node --test`, `node --check script.js`, `git diff --check`를 통과시킨다.
+- [x] 하나의 논리 변경으로 커밋한다.

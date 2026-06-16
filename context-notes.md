@@ -86,3 +86,10 @@
 - 2026-06-16: `docs/project-hardening-report.docx`와 `docs/project-hardening-report.pdf`를 한글 본문 기준으로 다시 생성했다. PDF는 맑은 고딕 글꼴을 등록해 4쪽짜리 보고서로 만들었다.
 - 2026-06-16: Markdown, DOCX 표 셀 포함 전체 텍스트, PDF 추출 텍스트에서 필수 섹션과 깨진 한글 패턴을 검사했고 문제가 없었다. `soffice`와 `pdftoppm`이 없어 DOCX/PDF 렌더 기반 시각 검증은 수행하지 못했고, 텍스트 추출과 구조 검증으로 대체했다.
 - 2026-06-16: 문서 보정 후 `node --test`는 28개 테스트 모두 통과했고, `node --check script.js`와 `git diff --check`도 종료 코드 0으로 끝났다.
+
+- 2026-06-16: 사용자가 선택한 2번 개선은 Notion 원문을 읽어 `data.json`을 갱신하고 GitHub Pages에 보이게 하는 자동화로 해석했다. 현재 Refresh 버튼은 `?refresh=<timestamp>`를 붙여 배포된 JSON 캐시만 우회하며 Notion이나 GitHub API를 호출하지 않는다.
+- 2026-06-16: 정적 GitHub Pages에서 Notion 토큰과 GitHub 쓰기 권한을 브라우저에 넣으면 토큰이 노출되므로, 자동 동기화는 GitHub Actions에서 수행해야 한다고 결정했다. Refresh 버튼은 새 배포본을 다시 불러오는 역할로 남긴다.
+- 2026-06-16: Notion 공식 API는 페이지 내용을 block children endpoint로 읽고, 자식 블록은 필요하면 재귀적으로 다시 조회해야 한다. 이전 작업 메모와도 일치하게 `Further Studies`의 column list 하위 블록까지 읽는 방향으로 스크립트를 설계한다.
+- 2026-06-16: `scripts/sync-notion-data.js`는 Notion block tree에서 Day 블록, `Model Examples`, `Small talk`, `Further Studies` 섹션과 column list 문장쌍을 추출해 `courses.basic-verbs`만 갱신한다. `Day00x`와 빈 문장쌍은 제외한다.
+- 2026-06-16: `.github/workflows/sync-notion-data.yml`은 수동 실행과 6시간 주기 실행을 지원한다. `NOTION_TOKEN` secret이 없으면 실패하고, 변경된 `data.json`이 있을 때만 `github-actions[bot]` 커밋을 만든다.
+- 2026-06-16: 검증은 `node --test` 32개 통과, `node --check script.js`, `node --check scripts\sync-notion-data.js`, `node --check tests\notion-sync.test.js`, `git diff --check` 종료 코드 0으로 확인했다. 실제 Notion API 호출은 이 환경에 `NOTION_TOKEN`이 없어 실행하지 못했고, 토큰 누락 시 명확히 실패하는 것은 확인했다.

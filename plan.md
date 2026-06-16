@@ -157,3 +157,29 @@ git status --short
 git add plan.md checklist.md context-notes.md docs/project-hardening-report.md docs/project-hardening-report.docx docs/project-hardening-report.pdf
 git commit -m "docs: translate hardening report to Korean"
 ```
+
+---
+
+# Notion 데이터 자동 동기화 계획
+
+**목표.** Notion 원문을 사람이 수동으로 복사하지 않아도 GitHub Actions가 `data.json`을 갱신하고, GitHub Pages가 새 학습 데이터를 배포할 수 있게 합니다.
+
+**보안 경계.** 정적 GitHub Pages 버튼은 Notion 토큰이나 GitHub 쓰기 토큰을 안전하게 보관할 수 없습니다. 따라서 브라우저의 Refresh 버튼은 배포된 데이터를 다시 불러오는 역할로 유지하고, Notion 원문 조회와 커밋은 GitHub Actions에서만 수행합니다.
+
+**성공 기준.**
+
+- Notion API 토큰은 GitHub Actions secret `NOTION_TOKEN`으로만 사용합니다.
+- 기본동사 Notion 페이지 ID는 GitHub Actions variable `NOTION_PAGE_ID` 또는 기본 페이지 ID로 공급합니다.
+- 동기화 스크립트는 `data.json`의 `courses.basic-verbs`만 재생성하고 영어회화 코스는 보존합니다.
+- 빈 `Further Studies`와 `Day00x` 템플릿은 배포 데이터에 넣지 않습니다.
+- 스크립트 변환 로직은 fixture 기반 Node 테스트로 검증합니다.
+- 변경이 있을 때만 workflow가 커밋합니다.
+
+## 작업 목록
+
+- [x] 현재 Refresh 버튼이 캐시 우회만 수행한다는 사실을 확인합니다.
+- [x] Notion 자동 조회는 GitHub Actions로 분리하는 구조를 확정합니다.
+- [x] Notion block tree를 기본동사 코스 데이터로 바꾸는 Node 스크립트를 추가합니다.
+- [x] GitHub Actions workflow를 추가합니다.
+- [x] README에 secret/variable 설정과 실행 방법을 적습니다.
+- [x] 테스트와 문법 검사를 통과시킨 뒤 커밋합니다.

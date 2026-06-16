@@ -1,0 +1,61 @@
+# Notion 원문을 data.json으로 동기화하고 변경이 있으면 커밋하는 워크플로우
+name: Sync Notion data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-notion-data
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_PAGE_ID: ${{ vars.NOTION_PAGE_ID || '32f3d76f88748069b726d6b6d47f5afd' }}
+      NOTION_VERSION: '2022-06-28'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate Notion token
+        run: |
+          if [ -z "$NOTION_TOKEN" ]; then
+            echo "::error::NOTION_TOKEN secret이 필요합니다."
+            exit 1
+          fi
+
+      - name: Sync data from Notion
+        run: node scripts/sync-notion-data.js
+
+      - name: Run tests
+        run: |
+          node --test
+          node --check script.js
+          git diff --check
+
+      - name: Commit updated data
+        run: |
+          if git diff --quiet -- data.json; then
+            echo "data.json 변경 사항이 없습니다."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "data: sync basic verbs from Notion"
+          git push
