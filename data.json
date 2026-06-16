@@ -1497,8 +1497,8 @@
       "data": {
         "Day 001": [
           {
-            "q": "애완동물 있어요?",
-            "a": "Do you have any pets?"
+            "q": "내 조카는 거북이를 키운다.",
+            "a": "My nephew has a turtle."
           },
           {
             "q": "내 조카는 거북이를 키운다.",
@@ -1578,8 +1578,8 @@
         ],
         "Day 002": [
           {
-            "q": "방금 간식을 먹어서 그렇게 배고프지는 않아요.",
-            "a": "I just had a snack, so I’m not that hungry."
+            "q": "나는 아침으로 주로 시리얼을 먹는다.",
+            "a": "I usually have cereal for breakfast."
           },
           {
             "q": "나는 아침으로 주로 시리얼을 먹는다.",
@@ -1664,8 +1664,8 @@
         ],
         "Day 003": [
           {
-            "q": "어제 이상한 아침을 보냈어요.",
-            "a": "I had a weird morning yesterday."
+            "q": "우리는 지난주 일본에서 정말 좋은 시간을 보냈어요.",
+            "a": "We had a great time in Japan last week."
           },
           {
             "q": "우리는 지난주 일본에서 정말 좋은 시간을 보냈어요.",
@@ -1745,8 +1745,8 @@
         ],
         "Day 004": [
           {
-            "q": "삼성은 오늘 신제품 출시 행사를 합니다.",
-            "a": "Samsung is having a new-product launch today."
+            "q": "제가 이번 주말에 집들이를 합니다.",
+            "a": "I’m having a housewarming party this weekend."
           },
           {
             "q": "제가 이번 주말에 집들이를 합니다.",
@@ -1846,8 +1846,8 @@
         ],
         "Day 005": [
           {
-            "q": "오후에 해야 할 집안일이 좀 있어요.",
-            "a": "I have some chores to do in the afternoon."
+            "q": "할 일이 산더미같이 쌓여 있다.",
+            "a": "I have tons of work to do."
           },
           {
             "q": "할 일이 산더미같이 쌓여 있다.",
@@ -1932,8 +1932,8 @@
         ],
         "Day 006": [
           {
-            "q": "교토 기온 지구는 매력적인 분위기가 있어요.",
-            "a": "The Gion district in Kyoto has a charming vibe."
+            "q": "이 컵은 손잡이가 독특하다.",
+            "a": "This cup has a unique handle."
           },
           {
             "q": "이 컵은 손잡이가 독특하다.",
@@ -2033,8 +2033,8 @@
         ],
         "Day 007": [
           {
-            "q": "저녁 식사에 초대해 주셔서 감사합니다.",
-            "a": "Thank you for having us over for dinner."
+            "q": "나는 간단한 메모를 위해 항상 펜을 곁에 둔다.",
+            "a": "I always have a pen nearby to take quick notes."
           },
           {
             "q": "나는 간단한 메모를 위해 항상 펜을 곁에 둔다.",
@@ -2124,8 +2124,8 @@
         ],
         "Day 008": [
           {
-            "q": "다니엘에게 태워 달라고 부탁해도 돼요.",
-            "a": "You could have Daniel give you a ride."
+            "q": "(당근마켓에서의 거래) 남편한테 역 근처에서 만나라고 할게요.",
+            "a": "I’ll have my husband meet you near the station."
           },
           {
             "q": "(당근마켓에서의 거래) 남편한테 역 근처에서 만나라고 할게요.",
@@ -2210,8 +2210,8 @@
         ],
         "Day 009": [
           {
-            "q": "제 남자친구가 콘서트 표를 구했어요.",
-            "a": "My boy friend got a ticket to the concert."
+            "q": "지난주에 이 핸드폰 샀어. (지난주에 이 핸드폰 선물로 받았어.)",
+            "a": "I got this phone last week."
           },
           {
             "q": "지난주에 이 핸드폰 샀어. (지난주에 이 핸드폰 선물로 받았어.)",
@@ -2296,8 +2296,8 @@
         ],
         "Day 010": [
           {
-            "q": "거기 자리 잡으려면 훨씬 미리 예약해야 해요.",
-            "a": "You have to book way in advance to get a table there."
+            "q": "드디어 서울 마라톤 대회 참가 자격을 얻었다.",
+            "a": "I finally managed to get a spot in the Seoul Marathon."
           },
           {
             "q": "드디어 서울 마라톤 대회 참가 자격을 얻었다.",
@@ -2367,8 +2367,8 @@
         ],
         "Day 011": [
           {
-            "q": "퇴근 후에 한잔하자.",
-            "a": "Let’s get a drink after work."
+            "q": "혹시 많이 안 바쁘시면, 언제 술이나 한잔해도 좋고요.",
+            "a": "If you’re not too busy, maybe we could get a drink sometime."
           },
           {
             "q": "혹시 많이 안 바쁘시면, 언제 술이나 한잔해도 좋고요.",
@@ -2468,8 +2468,8 @@
         ],
         "Day 012": [
           {
-            "q": "라지 아메리카노 한 잔 받을 수 있을까요?",
-            "a": "Can I get a large Americano?"
+            "q": "레몬차 주시겠어요?",
+            "a": "Can I get a lemon tea, please?"
           },
           {
             "q": "레몬차 주시겠어요?",
@@ -2544,8 +2544,8 @@
         ],
         "Day 013": [
           {
-            "q": "우리는 어젯밤에 막 돌아왔어요.",
-            "a": "We just got back last night."
+            "q": "나 방금 도착했어.",
+            "a": "I just got here."
           },
           {
             "q": "나 방금 도착했어.",
@@ -2625,8 +2625,8 @@
         ],
         "Day 014": [
           {
-            "q": "그녀가 왜 그렇게 화났는지 이해가 안 돼요.",
-            "a": "I don’t get why she’s so upset."
+            "q": "이 수학 문제 이해가 안 돼요.",
+            "a": "I don’t get this math problem."
           },
           {
             "q": "이 수학 문제 이해가 안 돼요.",
@@ -2711,8 +2711,8 @@
         ],
         "Day 015": [
           {
-            "q": "제 영어가 녹슬고 있는 것 같아요.",
-            "a": "I feel like my English is getting rusty."
+            "q": "요즘 날씨가 더 추워지고 있다.",
+            "a": "It’s getting colder these days."
           },
           {
             "q": "요즘 날씨가 더 추워지고 있다.",
@@ -2792,8 +2792,8 @@
         ],
         "Day 016": [
           {
-            "q": "커피를 안 마시면 두통이 생겨요.",
-            "a": "I get a headache if I don’t drink coffee."
+            "q": "열대 지역으로 여행 가서 말라리아에 걸리는 사람들이 있다.",
+            "a": "Some people get malaria when they travel to tropical countries."
           },
           {
             "q": "열대 지역으로 여행 가서 말라리아에 걸리는 사람들이 있다.",
@@ -2868,8 +2868,8 @@
         ],
         "Day 017": [
           {
-            "q": "이 식료품들을 집에 가져가야 해요.",
-            "a": "I need to get these groceries home."
+            "q": "여권이 만료되기 직전에 서류를 대사관에 보냈어요.",
+            "a": "I got my documents to the embassy right before my passport expired."
           },
           {
             "q": "여권이 만료되기 직전에 서류를 대사관에 보냈어요.",
@@ -2959,8 +2959,8 @@
         ],
         "Day 018": [
           {
-            "q": "이 지역은 햇볕이 많이 들지 않아요.",
-            "a": "This area doesn’t get much sunshine."
+            "q": "여름에는 관광객들이 이곳을 많이 찾아요.",
+            "a": "We get a lot of tourists in the summer."
           },
           {
             "q": "여름에는 관광객들이 이곳을 많이 찾아요.",
@@ -3045,8 +3045,8 @@
         ],
         "Day 019": [
           {
-            "q": "우리가 네 옆자리를 잡아 놨어.",
-            "a": "We got you a spot next to us."
+            "q": "강아지 생일이라 케이크를 사 줬어.",
+            "a": "I got my dog a cake for his birthday."
           },
           {
             "q": "강아지 생일이라 케이크를 사 줬어.",
@@ -3141,8 +3141,8 @@
         ],
         "Day 020": [
           {
-            "q": "어제 머리를 염색했어요.",
-            "a": "I got my hair dyed yesterday."
+            "q": "내 차의 앞 유리를 교체해야 한다.",
+            "a": "I need to get my windshield replaced on my car."
           },
           {
             "q": "내 차의 앞 유리를 교체해야 한다.",
@@ -3205,7 +3205,7 @@
             "section": "Further Studies"
           },
           {
-            "q": "내가 볼 땐 흰색이 더 편할 듯해.  (색상에 대해 판단하는 주체가 ‘나’)",
+            "q": "내가 볼 땐 흰색이 더 편할 듯해. (색상에 대해 판단하는 주체가 ‘나’)",
             "a": "To me, the white one seems more comfortable.",
             "section": "Further Studies"
           },
@@ -3222,8 +3222,8 @@
         ],
         "Day 021": [
           {
-            "q": "어떻게 하면 아이들이 채소를 먹게 할 수 있을까요?",
-            "a": "How can I get my kids to eat vegetables?"
+            "q": "어떻게 남편이 담배 끊게 만든 거야?",
+            "a": "How did you get your husband to quit smoking?"
           },
           {
             "q": "어떻게 남편이 담배 끊게 만든 거야?",
@@ -3308,8 +3308,8 @@
         ],
         "Day 022": [
           {
-            "q": "원하면 찜갈비 만들어 줄 수 있어.",
-            "a": "I can make you steamed galbi, if you want."
+            "q": "아내가 이 목도리를 만들어 줬어요.",
+            "a": "My wife made me this scarf."
           },
           {
             "q": "아내가 이 목도리를 만들어 줬어요.",
@@ -3389,8 +3389,8 @@
         ],
         "Day 023": [
           {
-            "q": "아이를 갖고 나니 더 좋은 남편이 되었어요.",
-            "a": "Having children has made me a better husband."
+            "q": "팬데믹(코로나)으로 온라인 학습이 새로운 표준이 되었다.",
+            "a": "The pandemic made online learning the new norm."
           },
           {
             "q": "팬데믹(코로나)으로 온라인 학습이 새로운 표준이 되었다.",
@@ -3475,8 +3475,8 @@
         ],
         "Day 024": [
           {
-            "q": "오늘은 억지로라도 헬스장에 갔어요.",
-            "a": "I made myself go to the gym today."
+            "q": "(여름 캠프에 가기 싫은 아들이 하는 말) 엄마가 저를 강제로 보낼 순 없어요.",
+            "a": "You can’t make me go."
           },
           {
             "q": "(여름 캠프에 가기 싫은 아들이 하는 말) 엄마가 저를 강제로 보낼 순 없어요.",
@@ -3566,8 +3566,8 @@
         ],
         "Day 025": [
           {
-            "q": "차 막히는 데 앉아 있으면 불안해져요.",
-            "a": "Sitting in traffic makes me feel anxious."
+            "q": "달리기를 하면 기분 전환이 된다.",
+            "a": "Running usually makes me feel better."
           },
           {
             "q": "달리기를 하면 기분 전환이 된다.",
@@ -3856,6 +3856,41 @@
             "q": "응, 그래서 많은 개발자들이 그걸 두고 불평해.",
             "a": "Yeah, a lot of developers complain about it.",
             "section": "Small talk"
+          },
+          {
+            "q": "아메리카노 한 잔 주시겠어요?",
+            "a": "Can I get an Americano?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "냅킨 좀 더 주시겠어요?",
+            "a": "Can I get some extra napkins?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "맥주 한 잔 주실래요?",
+            "a": "Can I get a beer?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "(비행기에서) 생선으로 먹을게요.",
+            "a": "I’ll have the fish, please.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "블랙커피로 마시겠습니다. (get보다 조금 더 격식 있게 들림.)",
+            "a": "I’ll have a black coffee.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "치킨 샐러드로 할게요. (여러 개 중에 선택하는 느낌)",
+            "a": "I’ll take the chicken salad.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "위스키를 온더록스로 할게요.",
+            "a": "I’ll take a whisky on the rocks.",
+            "section": "Further Studies"
           }
         ],
         "Day 029": [
@@ -3917,6 +3952,31 @@
             "q": "죄송합니다. 지금은 추가 질문을 받을 수 없습니다.",
             "a": "I’m sorry. I can’t take any more questions at this time.",
             "section": "Small talk"
+          },
+          {
+            "q": "오늘 예약이 다 차긴 했는데, 예약 없이 오는 손님 몇 분은 받을 수 있을 듯합니다.",
+            "a": "We’re fully booked today, but we might be able to take a few walk-ins.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "비예약 방문도 환영하지만, 예약을 하는 것이 더 좋습니다.",
+            "a": "Walk-ins are welcome, but appointments are preferred.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "죄송하지만, 저희는 비예약 방문을 받지 않습니다. 미리 예약을 하셔야 합니다.",
+            "a": "Sorry, we don’t accept walk-ins. You’ll need to make an appointment.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "선생님이 오전 9시에서 11시까지만 비예약 환자를 진료합니다.",
+            "a": "The doctor only sees walk-ins between 9 and 11 a.m.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "나는 몇 년 동안 실력이 좋은 특정 디자이너 때문에 유명 미용실에 다녔다. 내 근무 스케줄이 일정하지 않아서, 이 디자이너가 예약 없이 방문해도 받아 주는 점이 마음에 들었다. 하지만 시간이 가면서, 디자이너가 내가 예약하는 걸 더 선호한다는 걸 느꼈다. 그래서 그때부터는 웬만하면 예약을 하려고 노력했다.",
+            "a": "For a couple years, I used to go to a popular salon for a particular stylist who did a good job. My work schedule was unpredictable, so I liked that she allowed walk-ins. Over time, though, I sensed that my stylist would prefer me to make reservations. I did my best to make a reservation from then on.",
+            "section": "Further Studies"
           }
         ],
         "Day 030": [
@@ -3978,6 +4038,26 @@
             "q": "이미 맡았어. 다음 주부터 시작해.",
             "a": "I already did. I’m starting next week.",
             "section": "Small talk"
+          },
+          {
+            "q": "내 동생이 생활이 어려워서 돈 좀 빌려줘야겠어요.",
+            "a": "My brother can’t make ends meet, so I’m going to lend him some money.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "우리 부모님은 늘 하루 벌어 하루 먹고 사셨다.",
+            "a": "My parents always lived paycheck to paycheck.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "월세가 3개월이나 밀려서, 너랑 유럽에 가는 건 꿈도 못 꿔.",
+            "a": "I’m three months be hind on rent, so there’s no way I can go with you to Europe.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "매달 돈 나갈 데가 너무 많아요. 저축은 불가능해요.",
+            "a": "I have a lot of bills to pay every month. It’s impossible to save.",
+            "section": "Further Studies"
           }
         ],
         "Day 031": [
@@ -4039,6 +4119,36 @@
             "q": "동감입니다. 그는 사람들을 화합시키는 방법을 알고 있어요.",
             "a": "Agreed. He knows how to bring people together.",
             "section": "Small talk"
+          },
+          {
+            "q": "그 사람 지금 극심한 고통을 겪고 있습니다.",
+            "a": "He’s in a great deal of pain.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그 사람 지금 많이 아파요.",
+            "a": "He’s in a lot of pain.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "저희 어머니는 정말 지혜로운 분이셨어요.",
+            "a": "My mother had a great deal of wisdom.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "제 사촌이 칠레에서 오래 생활을 해서 스페인어를 할 줄 알아요.",
+            "a": "My cousin spent a great deal of time in Chile, so she speaks Spanish.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "우리 아직 개발자 한 명 더 채용해야 하는데, 아는 사람 있어?",
+            "a": "We still need to hire another developer. Do you know anyone?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "응, 있어. 내 사촌이 개발자 인데 지식과 경험이 풍부해.",
+            "a": "Yeah, actually. My cousin is a developer with a great deal of knowledge and experience.",
+            "section": "Further Studies"
           }
         ],
         "Day 032": [
@@ -4100,6 +4210,41 @@
             "q": "이게 이렇게 오래 걸릴 일인가 싶어요.",
             "a": "I can’t believe it took them this long.",
             "section": "Small talk"
+          },
+          {
+            "q": "그림 그리기가 마음이 편해지는 취미라고들 한다.",
+            "a": "Some say painting is a relaxing hobby.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그 사람이랑 이야기하면 마음이 편해진다.",
+            "a": "Talking to hime is very calming.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "농장에서 일하는 건 힘들지만, 육체노동을 하면 마음이 편하다.",
+            "a": "Working on the farm is demanding, but it pus me at ease to work with my hands.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "오늘은 대체로 스트레스 없는 하루였어. 별다른 이슈가 없었거든.",
+            "a": "Today was preety stress-free. No issues at all.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "나는 드럼을 치면 스트레스가 풀린다.",
+            "a": "Playing the drums is a stress reliever for me.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "캐모마일 차는 스트레스를 완화하는 데 도움이 된다.",
+            "a": "Some chamomile tea can help ease your stress.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "(엄마가 자녀에게 하는 말) 네가 하루 종일 집 안을 그렇게 계속 돌아다니는 걸 보니까 정신없다. 좀 앉아서 차분하게 있으렴.",
+            "a": "Watching you walk around the house all day stresses me out. Please sit down and relax for a while.",
+            "section": "Further Studies"
           }
         ],
         "Day 033": [
@@ -4161,6 +4306,36 @@
             "q": "맞아요, 그래도 애들은 오히려 저보다 이사에 더 잘 적응하고 있어요. 벌써 새 친구들도 생긴걸요.",
             "a": "Right, but they’re taking the move better than me. They already have new friends.",
             "section": "Small talk"
+          },
+          {
+            "q": "영화 어땠어? (재미있었지?)",
+            "a": "How did you like the movie?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "음식 어때? (괜찮지?)",
+            "a": "How do you like your food?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "유튜브 영상 만드는 거 재미있어요?",
+            "a": "How do you like making YouTube videos?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "(유럽 여행에서 돌아온 친구에게) 런던은 좋았어?",
+            "a": "How did you like London?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "잭, 은퇴 생활은 어때요?",
+            "a": "How do you like retirement, Jack?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "일하는 것보단 낫긴 한데, 예상했던 것보다 훨씬 지루하네요.",
+            "a": "It’s better than working, but more boring than I expected.",
+            "section": "Further Studies"
           }
         ],
         "Day 034": [
@@ -4222,6 +4397,26 @@
             "q": "대신 스트레스를 많이 줄일 수 있을 거야. 그건 돈하고 바꿀 수 없잖아, 친구야.",
             "a": "It would save you a lot of stress. That is priceless, my friend.",
             "section": "Small talk"
+          },
+          {
+            "q": "여자 친구 생일 선물로 멋진 시계를 사 줬다.",
+            "a": "I got my girlfriend a nice watch for her birthday.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "온라인 뱅킹으로 은행에 가는 수고를 덜 수 있다.",
+            "a": "Online banking saves us a trip to the bank.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "오는 길에 커피 좀 사다 줄 수 있어요?",
+            "a": "Do you mind grabbing me some coffee on your way?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그가 집에 태워 주겠다고 했어요.",
+            "a": "He offered me a ride home.",
+            "section": "Further Studies"
           }
         ],
         "Day 035": [
@@ -4283,47 +4478,77 @@
             "q": "오, 그건 진짜 아니다.",
             "a": "Oh, that does sound awful.",
             "section": "Small talk"
+          },
+          {
+            "q": "난 말차 안 좋아해.",
+            "a": "I don’t like matcha.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "난 밤에 밖에 나가는 거 안 좋아해.",
+            "a": "I don’t like going out at night.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "이 머그잔 너무 싫어.",
+            "a": "I hate this mug.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "메뉴에 아무런 표시도 없이 치즈피자 위에 옥수수를 얹으면 정말 싫어",
+            "a": "I hate when they put corn on cheese pizza without any warning on the menu.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "당신 부모님이랑 다음 달에 캠핑 가는 거 어때?",
+            "a": "How about going camping with your parents next month?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "안 돼, 우리 부모님은 야외 활동 하는 거 별로 안 좋아하셔. 투덜거리기만 하실 거야.",
+            "a": "Nah, my parents dislike the outdoors. They’d just complain.",
+            "section": "Further Studies"
           }
         ]
       },
       "dayMainSentences": {
-        "Day 001": "[Have] Do you have any pets?",
-        "Day 002": "[Have] I just had a snack, so I’m not that hungry.",
-        "Day 003": "[Have] I had a weird morning yesterday.",
-        "Day 004": "[Have] Samsung is having a new-product launch today.",
-        "Day 005": "[Have] I have some chores to do in the afternoon.",
-        "Day 006": "[Have] The Gion district in Kyoto has a charming vibe.",
-        "Day 007": "[Have] Thank you for having us over for dinner.",
-        "Day 008": "[Have] You could have Daniel give you a ride.",
-        "Day 009": "[Get] My boyfriend got a ticket to the concert.",
-        "Day 010": "[Get] You have to book way in advance to get a table there.",
-        "Day 011": "[Get] Let’s get a drink after work.",
-        "Day 012": "[Get] Can I get a large Americano?",
-        "Day 013": "[Get] We just got back last night.",
-        "Day 014": "[Get] I don’t get why she’s so upset.",
-        "Day 015": "[Get] I feel like my English is getting rusty.",
-        "Day 016": "[Get] I get a headache if I don’t drink coffee.",
-        "Day 017": "[Get] I need to get these groceries home.",
-        "Day 018": "[Get] This area doesn’t get much sunshine.",
-        "Day 019": "[Get] We got you a spot next to us.",
-        "Day 020": "[Get] I got my hair dyed yesterday.",
-        "Day 021": "[Get] How can I get my kids to eat vegetables?",
-        "Day 022": "[Make] I can make you steamed galbi, if you want",
-        "Day 023": "[Make] Having children has made me a better husband.",
-        "Day 024": "[Make] I made myself go to the gym today.",
-        "Day 025": "[Make] Sitting in traffic makes me feel anxious.",
-        "Day 026": "[Make] They made it to the finals.",
-        "Day 027": "[Make] Those two would make a great couple.",
-        "Day 028": "[Take] If we can’t finish, we can take the leftovers home.",
-        "Day 029": "[Take] That kindergarten doesn’t take kids under five.",
-        "Day 030": "[Take] Kevin doesn’t take advice from anyone.",
-        "Day 031": "[Take] It takes a lot to make me angry.",
-        "Day 032": "[Take] It took me months to finish reading that book.",
-        "Day 033": "[Take] She didn’t take it well.",
-        "Day 034": "[Do] I do a lot of admin work at my job.",
-        "Day 035": "[Like] I don’t like to play golf, but I have to for my job."
+        "Day 001": "[Have] : Do you have any pets?",
+        "Day 002": "[Have] : I just had a snack, so I’m not that hungry.",
+        "Day 003": "[Have] : I had a weird morning yesterday.",
+        "Day 004": "[Have] : Samsung is having a new-product launch today.",
+        "Day 005": "[Have] : I have some chores to do in the afternoon.",
+        "Day 006": "[Have] : The Gion district in Kyoto has a charming vibe.",
+        "Day 007": "[Have] : Thank you for having us over for dinner.",
+        "Day 008": "[Have] : You could have Daniel give you a ride.",
+        "Day 009": "[Get] : My boyfriend got a ticket to the concert.",
+        "Day 010": "[Get] : You have to book way in advance to get a table there.",
+        "Day 011": "[Get] : Let’s get a drink after work.",
+        "Day 012": "[Get] : Can I get a large Americano?",
+        "Day 013": "[Get] : We just got back last night.",
+        "Day 014": "[Get] : I don’t get why she’s so upset.",
+        "Day 015": "[Get] : I feel like my English is getting rusty.",
+        "Day 016": "[Get] : I get a headache if I don’t drink coffee.",
+        "Day 017": "[Get] : I need to get these groceries home.",
+        "Day 018": "[Get] : This area doesn’t get much sunshine.",
+        "Day 019": "[Get] : We got you a spot next to us.",
+        "Day 020": "[Get] : I got my hair dyed yesterday.",
+        "Day 021": "[Get] : How can I get my kids to eat vegetables?",
+        "Day 022": "[Make] : I can make you steamed galbi, if you want",
+        "Day 023": "[Make] : Having children has made me a better husband.",
+        "Day 024": "[Make] : I made myself go to the gym today.",
+        "Day 025": "[Make] : Sitting in traffic makes me feel anxious.",
+        "Day 026": "[Make] : They made it to the finals.",
+        "Day 027": "[Make] : Those two would make a great couple.",
+        "Day 028": "[Take] : If we can’t finish, we can take the leftovers home.",
+        "Day 029": "[Take] : That kindergarten doesn’t take kids under five.",
+        "Day 030": "[Take] : Kevin doesn’t take advice from anyone.",
+        "Day 031": "[Take] : It takes a lot to make me angry.",
+        "Day 032": "[Take] : It took me months to finish reading that book.",
+        "Day 033": "[Take] : She didn’t take it well.",
+        "Day 034": "[Do] : I do a lot of admin work at my job.",
+        "Day 035": "[Like] : I don’t like to play golf, but I have to for my job."
       },
-      "note": "Notion?? ?? ??? Small talk? ??? Day? ?????. Day00x ???? ??????."
+      "note": "Notion 원문에서 생성했습니다. 빈 섹션과 Day00x 템플릿은 제외합니다."
     }
   }
 }
