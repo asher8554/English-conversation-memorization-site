@@ -30,6 +30,14 @@ function heading(text, children = []) {
     return textBlock('heading_2', text, children);
 }
 
+function divider() {
+    return {
+        id: `divider-${Math.random()}`,
+        type: 'divider',
+        divider: {}
+    };
+}
+
 function column(children) {
     return {
         id: `column-${children.length}-${Math.random()}`,
@@ -55,6 +63,7 @@ function columnList(leftTexts, rightTexts) {
 
 test('parseDayKey normalizes real days and skips templates', () => {
     assert.equal(parseDayKey('Day 1 [Have] Do you have any pets?'), 'Day 001');
+    assert.equal(parseDayKey('Day001 [Have] : Do you have any pets?'), 'Day 001');
     assert.equal(parseDayKey('Day 026 [Make] They made it to the finals.'), 'Day 026');
     assert.equal(parseDayKey('Day00x 템플릿'), null);
 });
@@ -122,6 +131,49 @@ test('buildBasicVerbsCourseFromBlocks creates ordered sectioned cards and skips 
     });
 });
 
+test('buildBasicVerbsCourseFromBlocks reads section labels inside Notion column lists', () => {
+    const blocks = [
+        heading('Day001 [Have] : Do you have any pets?', [
+            columnList(
+                ['[Model Examples]', '내 조카는 거북이를 키운다.'],
+                ['', 'My nephew has a turtle.']
+            ),
+            divider(),
+            columnList(
+                ['[Small talk]', '프로젝트가 끝나서 좋죠?'],
+                ['', 'Are you glad the project is over?']
+            ),
+            divider(),
+            columnList(
+                ['음대 대신 의대를 선택한 거 맞지?', '응, 힘든 결정이었어.'],
+                ['You chose med school over music, right?', 'Yeah, it was a tough decision.']
+            ),
+            divider(),
+            columnList(
+                ['[Further Studies]', '그녀는 공포 영화보다는 영어 강의를 택할 겁니다.'],
+                ['', 'She would choose an English lecture over any horror movie.']
+            )
+        ])
+    ];
+
+    const course = buildBasicVerbsCourseFromBlocks(blocks, { title: '기본동사' });
+
+    assert.deepEqual(Object.keys(course.data), ['Day 001']);
+    assert.deepEqual(course.data['Day 001'].map(card => card.section || null), [
+        null,
+        'Model Examples',
+        'Small talk',
+        'Small talk',
+        'Small talk',
+        'Further Studies'
+    ]);
+    assert.deepEqual(course.data['Day 001'].at(-1), {
+        q: '그녀는 공포 영화보다는 영어 강의를 택할 겁니다.',
+        a: 'She would choose an English lecture over any horror movie.',
+        section: 'Further Studies'
+    });
+});
+
 test('buildSyncedData replaces only basic-verbs course', () => {
     const existing = {
         defaultCourse: 'conversation',
@@ -149,6 +201,23 @@ test('buildSyncedData replaces only basic-verbs course', () => {
     assert.deepEqual(synced.courses.conversation, existing.courses.conversation);
     assert.equal(synced.courses['basic-verbs'].data['Day 001'].length, 2);
     assert.equal(synced.courses['basic-verbs'].note, 'Notion 원문에서 생성했습니다. 빈 섹션과 Day00x 템플릿은 제외합니다.');
+});
+
+test('buildSyncedData fails before writing empty basic-verbs data', () => {
+    const existing = {
+        courses: {
+            'basic-verbs': {
+                title: '기본동사',
+                data: {},
+                dayMainSentences: {}
+            }
+        }
+    };
+
+    assert.throws(
+        () => buildSyncedData(existing, []),
+        /기본동사 Day 데이터를 찾지 못했습니다/
+    );
 });
 
 test('formatNotionApiError explains missing page connection', () => {

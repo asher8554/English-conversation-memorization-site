@@ -49,9 +49,25 @@ function extractDayMainSentence(text) {
     );
 }
 
+function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function normalizeSectionText(text) {
+    return normalizeText(text)
+        .replace(/\\/g, '')
+        .replace(/[[\]()*_`]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+}
+
 function matchSectionName(text) {
-    const normalized = normalizeText(text).toLowerCase();
-    return SECTION_NAMES.find(section => normalized === section.toLowerCase()) || null;
+    const normalized = normalizeSectionText(text);
+    return SECTION_NAMES.find(section => {
+        const pattern = new RegExp(`(^|\\s)${escapeRegExp(section.toLowerCase())}(\\s|$)`, 'i');
+        return pattern.test(normalized);
+    }) || null;
 }
 
 function collectDayBlocks(blocks, result = [], seen = new Set()) {
@@ -77,10 +93,14 @@ function splitSectionGroups(dayBlock) {
     let currentSection = null;
 
     for (const child of getBlockChildren(dayBlock)) {
-        const section = matchSectionName(getBlockText(child));
+        const section = findSectionInBlock(child);
         if (section) {
             currentSection = section;
-            groups.get(section).push(...getBlockChildren(child));
+            if (child.type === 'column_list') {
+                groups.get(section).push(child);
+            } else {
+                groups.get(section).push(...getBlockChildren(child));
+            }
             continue;
         }
 
@@ -90,6 +110,18 @@ function splitSectionGroups(dayBlock) {
     }
 
     return groups;
+}
+
+function findSectionInBlock(block) {
+    const ownSection = matchSectionName(getBlockText(block));
+    if (ownSection) return ownSection;
+
+    for (const child of getBlockChildren(block)) {
+        const childSection = findSectionInBlock(child);
+        if (childSection) return childSection;
+    }
+
+    return null;
 }
 
 function isStructuralText(text) {
@@ -225,6 +257,11 @@ function buildSyncedData(existingData, notionBlocks) {
     const nextData = JSON.parse(JSON.stringify(existingData));
     const existingCourse = nextData.courses?.['basic-verbs'] || {};
     const nextCourse = buildBasicVerbsCourseFromBlocks(notionBlocks, existingCourse);
+    const dayCount = Object.keys(nextCourse.data || {}).length;
+
+    if (dayCount === 0) {
+        throw new Error('Notion 본문에서 기본동사 Day 데이터를 찾지 못했습니다. Day 토글과 섹션 컬럼 구조를 확인하세요.');
+    }
 
     if (!nextData.courses) {
         nextData.courses = {};

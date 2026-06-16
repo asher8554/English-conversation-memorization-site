@@ -94,3 +94,5 @@
 - 2026-06-16: `.github/workflows/sync-notion-data.yml`은 수동 실행과 6시간 주기 실행을 지원한다. `NOTION_TOKEN` secret이 없으면 실패하고, 변경된 `data.json`이 있을 때만 `github-actions[bot]` 커밋을 만든다.
 - 2026-06-16: 검증은 `node --test` 32개 통과, `node --check script.js`, `node --check scripts\sync-notion-data.js`, `node --check tests\notion-sync.test.js`, `git diff --check` 종료 코드 0으로 확인했다. 실제 Notion API 호출은 이 환경에 `NOTION_TOKEN`이 없어 실행하지 못했고, 토큰 누락 시 명확히 실패하는 것은 확인했다.
 - 2026-06-16: GitHub Actions 수동 실행 `27587692020`은 `NOTION_TOKEN` 존재 검증까지 통과했지만, Notion API가 `object_not_found`를 반환했다. 원인은 `NOTION_PAGE_ID` 페이지가 integration `asher`와 공유되지 않은 상태로 판단했고, 같은 실패가 다시 나도 해결 방법이 바로 보이도록 오류 메시지를 보강했다.
+- 2026-06-16: 사용자가 Notion integration 연결을 완료한 뒤 수동 실행 `27587889860`을 다시 돌렸고, 이번에는 Notion 조회 단계가 성공했다. 실패 지점은 테스트 단계였으며, 동기화 스크립트가 실제 Notion 구조의 섹션 라벨을 읽지 못해 `basic-verbs.data`를 비운 것이 원인이다.
+- 2026-06-16: 실제 Notion 페이지는 Day 토글 아래에서 `[Model Examples]`, `[Small talk]`, `[Further Studies]` 라벨이 별도 형제 문단이 아니라 각 컬럼 리스트의 첫 왼쪽 셀에 들어간다. 파서는 이 컬럼 내부 라벨을 섹션 시작으로 인식하고, 빈 기본동사 데이터가 만들어지면 커밋 전에 실패하도록 보정한다.

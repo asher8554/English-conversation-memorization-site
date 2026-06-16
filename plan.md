@@ -183,3 +183,16 @@ git commit -m "docs: translate hardening report to Korean"
 - [x] GitHub Actions workflow를 추가합니다.
 - [x] README에 secret/variable 설정과 실행 방법을 적습니다.
 - [x] 테스트와 문법 검사를 통과시킨 뒤 커밋합니다.
+
+## Notion 동기화 재실행 보정 계획
+
+**목표.** Notion 연결 성공 후에도 실제 페이지 구조 차이 때문에 빈 기본동사 데이터가 생성되지 않게 하고, GitHub Actions가 새 데이터를 정상 커밋하도록 합니다.
+
+**확인한 원인.** 실제 Notion 페이지는 섹션 라벨을 Day 토글의 직접 자식 문단으로 두지 않고 컬럼 리스트의 첫 왼쪽 셀에 둡니다. 기존 파서는 직접 자식 문단만 섹션 라벨로 인식해 모든 컬럼 리스트를 섹션 밖 데이터로 버렸습니다.
+
+**보정 범위.**
+
+- 컬럼 리스트 내부의 `[Model Examples]`, `[Small talk]`, `[Further Studies]` 라벨을 섹션 시작으로 인식합니다.
+- 라벨과 빈 셀은 문제 카드로 만들지 않습니다.
+- 추출 결과가 0일이면 `data.json`을 쓰기 전에 실패시킵니다.
+- 보정 후 로컬 테스트와 GitHub Actions 수동 실행으로 검증합니다.
