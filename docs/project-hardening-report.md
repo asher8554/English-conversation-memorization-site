@@ -1,128 +1,127 @@
-# English Conversation Memorization Site Hardening Report
+# 영어 회화 암기 사이트 하드닝 보고서
 
-Date: 2026-06-16
+작성일. 2026-06-16
 
-Branch: `codex/project-hardening-docs`
+브랜치. `codex/project-hardening-docs`
 
-## Executive Summary
+## 요약
 
-This pass kept the project architecture intentionally small: static HTML, CSS, JavaScript, and `data.json` served by GitHub Pages. The only code hardening change replaces the startup data-load failure `innerHTML` template with DOM nodes and `textContent`, then bumps the script query key from `script.js?v=21` to `script.js?v=22`.
+이번 하드닝 작업은 정적 GitHub Pages 구조를 유지한 상태에서 실제 위험이 확인된 부분만 좁게 수정했습니다. 핵심 코드 변경은 `data.json` 로딩 실패 화면에서 동적 `innerHTML` 템플릿을 제거하고, DOM 노드와 `textContent`로 오류 메시지를 렌더링하도록 바꾼 것입니다.
 
-Verification passed locally with Node tests, JavaScript syntax check, whitespace diff check, and a real Microsoft Edge browser flow against `http://127.0.0.1:8022/`.
+`data.json`은 변경하지 않았으므로 `DATA_VERSION`은 `10`으로 유지했습니다. `script.js`만 변경되었기 때문에 `index.html`의 스크립트 캐시 키는 `script.js?v=21`에서 `script.js?v=22`로 올렸습니다.
 
-## Project Purpose
+## 프로젝트 목적
 
-The site is a personal memorization helper for English conversation and basic verb practice. It lets the learner choose a course, select a day, reveal answers, replay Korean or English TTS, switch ordering modes, and store review progress in browser `localStorage`.
+이 사이트는 영어 회화와 기본동사 학습 문장을 반복 암기하기 위한 개인용 정적 웹 애플리케이션입니다. 사용자는 코스를 선택하고, Day를 고르고, 답변을 표시하고, 한국어 질문과 영어 답변을 다시 들을 수 있습니다. 글자 크기, 다크 모드, TTS 음성, 복습 기록은 브라우저 `localStorage`에 저장됩니다.
 
-## Runtime Architecture
+## 런타임 아키텍처
 
 ```mermaid
 flowchart LR
-  Browser["Browser UI"] --> Index["index.html"]
+  Browser["브라우저 UI"] --> Index["index.html"]
   Index --> Script["script.js?v=22"]
   Index --> Styles["style.css?v=9"]
   Script --> Data["data.json?v=10"]
   Script --> Storage["localStorage"]
   Script --> Speech["Web Speech API"]
-  Data --> CourseData["Conversation and Basic Verbs courses"]
-  Storage --> Preferences["TTS, theme, font, review stats"]
+  Data --> CourseData["영어회화와 기본동사 코스 데이터"]
+  Storage --> Preferences["TTS, 테마, 글자 크기, 복습 통계"]
 ```
 
-Fallback flow table.
+읽기용 대체 흐름 표입니다.
 
-| From | To | Purpose |
+| 출발 | 도착 | 역할 |
 |---|---|---|
-| Browser UI | `index.html` | Static page shell and controls. |
-| `index.html` | `script.js?v=22` | Cache-busted runtime logic. |
-| `script.js` | `data.json?v=10` | Public course and card data. |
-| `script.js` | `localStorage` | User-only preferences and review history. |
-| `script.js` | Web Speech API | Browser-native TTS playback. |
+| 브라우저 UI | `index.html` | 정적 페이지 구조와 학습 컨트롤을 제공합니다. |
+| `index.html` | `script.js?v=22` | 캐시 키가 붙은 런타임 로직을 불러옵니다. |
+| `index.html` | `style.css?v=9` | 화면 레이아웃과 모달, 카드, 다크 모드를 적용합니다. |
+| `script.js` | `data.json?v=10` | 공개 학습 데이터를 가져옵니다. |
+| `script.js` | `localStorage` | 사용자별 설정과 복습 기록을 저장합니다. |
+| `script.js` | Web Speech API | 브라우저 내장 음성 합성을 사용합니다. |
 
-## Module Map
+## 모듈 지도
 
-| File | Role |
+| 파일 | 역할 |
 |---|---|
-| `index.html` | Static document structure, controls, modals, and cache-busted script/style references. |
-| `style.css` | Responsive layout, dark mode, modal, card, controls, and stats table styling. |
-| `script.js` | Data loading, course/day normalization, rendering, navigation, TTS, theme/font settings, review stats, and refresh cache busting. |
-| `data.json` | Public course data for conversation and basic verbs lessons. |
-| `tests/*.test.js` | Node VM tests for normalization, rendering, TTS behavior, storage resilience, and course data integrity. |
+| `index.html` | 정적 문서 구조, 코스 선택, Day 선택, 모달, 카드 영역, 캐시 키가 붙은 자원 참조를 담당합니다. |
+| `style.css` | 반응형 레이아웃, 다크 모드, 카드, 버튼, 설정 모달, 통계 모달 스타일을 담당합니다. |
+| `script.js` | 데이터 로딩, 코스와 Day 정규화, 카드 렌더링, 이동 버튼, TTS, 설정 저장, 복습 통계, Refresh 캐시 무효화를 담당합니다. |
+| `data.json` | 영어회화와 기본동사 코스의 공개 학습 문장을 보관합니다. |
+| `tests/*.test.js` | Node VM 기반으로 데이터 정규화, 렌더링, TTS, 저장소 내구성, 기본동사 데이터 무결성을 검증합니다. |
 
-## Key Flows
+## 핵심 사용자 흐름
 
-1. Page load calls `fetch(buildDataUrl())`, where `DATA_VERSION` remains `10`.
-2. A `refresh` query parameter on the page is copied into the `data.json` URL so the Refresh button busts the GitHub Pages JSON cache.
-3. `QuizApp` normalizes course data once per course and renders card text with `textContent`.
-4. TTS calls stay in browser APIs and store voice/rate settings locally.
-5. Review stats are namespaced by course in `localStorage` as `reviewStats:<courseId>`.
-6. If `data.json` fails to load, `renderLoadFailure()` now creates DOM nodes and writes the error detail via `textContent`.
+1. 페이지 로드 시 `fetch(buildDataUrl())`가 `data.json?v=10`을 요청합니다.
+2. 페이지 URL에 `refresh` 값이 있으면 같은 값이 `data.json` 요청에도 붙습니다.
+3. Refresh 버튼은 문서 URL과 데이터 요청 URL을 모두 새로 만들어 GitHub Pages의 JSON 캐시를 우회합니다.
+4. `QuizApp`은 코스별 데이터를 한 번 정규화한 뒤 Day 카드 목록을 렌더링합니다.
+5. 질문과 답변 텍스트는 `textContent`로 렌더링됩니다.
+6. TTS는 Web Speech API를 사용하고, 음성 선택과 속도 설정은 `localStorage`에 저장됩니다.
+7. 복습 통계는 `reviewStats:<courseId>` 키로 코스별 분리 저장됩니다.
+8. `data.json` 로딩이 실패하면 `renderLoadFailure()`가 한글 오류 화면을 DOM 노드로 구성합니다.
 
-## Hardening Change
+## 하드닝 변경 사항
 
-Confirmed issue fixed.
-
-| Status | Area | Evidence | Resolution |
+| 상태 | 영역 | 확인 근거 | 처리 결과 |
 |---|---|---|---|
-| Fixed | Startup error rendering | `HEAD` used `container.innerHTML` with `${error.message}` in the load failure path. | Added `renderLoadFailure()` and regression coverage so error details are written as text nodes. |
-| Verified safe | Remaining `innerHTML` use | Current source has only `element.innerHTML = ''` in the `replaceElementChildren()` fallback. | It clears children and does not interpolate external data. Modern browsers use `replaceChildren()`. |
-| Verified safe | Stats table rendering | `renderStats()` creates cells and assigns `textContent`. | Malformed `localStorage` stats are normalized by tests. |
-| Verified safe | Refresh token handling | `buildDataUrl()` encodes the page `refresh` parameter before appending it to `data.json`. | Existing cache-busting behavior preserved. |
+| 수정 완료 | 시작 시 데이터 로딩 실패 화면 | 이전 코드가 실패 메시지를 `${error.message}`로 `innerHTML`에 삽입했습니다. | `renderLoadFailure()`를 추가해 오류 메시지를 `textContent`로 표시하도록 변경했습니다. |
+| 안전 확인 | 남은 `innerHTML` 사용 | 현재 런타임 코드의 남은 사용은 `replaceElementChildren()`의 `element.innerHTML = ''` fallback입니다. | 외부 데이터 삽입이 아니라 자식 노드 초기화 용도입니다. 최신 브라우저에서는 `replaceChildren()`가 우선 사용됩니다. |
+| 안전 확인 | 통계 표 렌더링 | `renderStats()`가 `td`를 만들고 `textContent`로 값을 채웁니다. | 깨진 `localStorage` 통계는 테스트로 정규화 동작을 확인했습니다. |
+| 안전 확인 | Refresh 캐시 무효화 | `buildDataUrl()`가 `refresh` 값을 `encodeURIComponent()`로 인코딩합니다. | 기존 캐시 우회 동작을 유지했습니다. |
 
-## Security Review
+## 보안 검토
 
-Mode: daily, zero-noise review.
+검토 모드. 일상 점검 모드.
 
-Attack surface.
-
-| Surface | Result |
+| 표면 | 결과 |
 |---|---|
-| Public endpoints | Static GitHub Pages files only. |
-| Auth/session | None. No server-side account or privileged flow. |
-| Secrets | No concrete key-format matches in source scan. `.env` is ignored, and no `.env` history was found. |
-| Dependencies | No `package.json` or lockfile; runtime has no npm dependency supply-chain surface. |
-| CI/CD | No `.github` workflow directory in the current tree. |
-| Data | `data.json` is public learning content and should not contain private source-only material. |
+| 공개 엔드포인트 | GitHub Pages가 제공하는 정적 파일만 있습니다. |
+| 인증과 세션 | 서버 인증, 계정, 권한 상승 흐름이 없습니다. |
+| 비밀값 | 구체적인 키 형식 검색에서 비밀값 후보가 발견되지 않았습니다. `.env`는 `.gitignore`에 포함되어 있고, `.env` 추적 이력도 발견되지 않았습니다. |
+| 의존성 | `package.json`과 lockfile이 없어 런타임 npm 공급망 표면이 없습니다. |
+| CI/CD | 현재 트리에 `.github` 워크플로우 디렉터리가 없습니다. |
+| 데이터 | `data.json`은 공개 학습 콘텐츠입니다. 비공개 원문이나 민감한 학습 메모를 넣으면 안 됩니다. |
 
-Findings.
+확인된 보안 항목입니다.
 
-| Severity | Confidence | Status | Finding |
+| 심각도 | 신뢰도 | 상태 | 내용 |
 |---|---:|---|---|
-| Medium | 9/10 | Fixed | Startup failure path used dynamic `innerHTML`; fixed in this pass. |
+| 중간 | 9/10 | 수정 완료 | 데이터 로딩 실패 화면에서 동적 `innerHTML`을 사용하던 경로를 제거했습니다. |
 
-No remaining high-confidence vulnerabilities were found in the daily review. This is not a substitute for a professional security audit.
+이번 일상 점검에서 남아 있는 고신뢰 보안 취약점은 발견하지 못했습니다. 이 결과는 전문 보안 감사의 대체물이 아닙니다.
 
-## Performance Notes
+## 성능 메모
 
-Recent performance improvements are preserved: course data normalization is cached per course, stats rendering uses DOM nodes, TTS voice lookup is cached, and card transitions no longer rely on forced synchronous layout reads. This pass does not change the normal render hot path except for the cold error state.
+최근 성능 개선은 유지되었습니다. 코스 데이터 정규화는 코스별로 캐시되고, 통계 표는 DOM API와 `textContent`로 렌더링되며, TTS 음성 조회는 반복 검색을 줄입니다. 카드 전환은 강제 동기 레이아웃 읽기에 의존하지 않습니다. 이번 문서 보정 작업은 런타임 성능 경로를 변경하지 않습니다.
 
-## Build, Run, and Test Commands
+## 실행과 테스트 명령
 
-| Purpose | Command |
+| 목적 | 명령 |
 |---|---|
-| Run static site | `python -m http.server 8022 --bind 127.0.0.1` |
-| Full tests | `node --test` |
-| Syntax check | `node --check script.js` |
-| Whitespace check | `git diff --check` |
-| Browser QA URL | `http://127.0.0.1:8022/` |
+| 정적 사이트 실행 | `python -m http.server 8022 --bind 127.0.0.1` |
+| 전체 테스트 | `node --test` |
+| 문법 검사 | `node --check script.js` |
+| 공백 오류 검사 | `git diff --check` |
+| 브라우저 검증 URL | `http://127.0.0.1:8022/` |
 
-## Verification Evidence
+## 검증 증거
 
-| Check | Result |
+| 검사 | 결과 |
 |---|---|
-| Baseline tests | `node --test` passed 27/27 before code changes. |
-| Red test | Focused test failed with `renderLoadFailure is not a function`. |
-| Focused test after fix | `node --test tests\quiz-data-normalization.test.js` passed 6/6. |
-| Full tests after fix | `node --test` passed 28/28. |
-| Syntax | `node --check script.js` exited 0. |
-| Whitespace | `git diff --check` exited 0. |
-| Browser normal flow | Edge loaded `script.js?v=22`, switched to basic verbs, showed 35 day options, and revealed the answer. |
-| Browser failure flow | Forced `data.json` 500 rendered `데이터 로딩 실패`; injected-looking input created 0 image/script tags. |
+| 기준 테스트 | 코드 변경 전 `node --test`가 27개 테스트를 통과했습니다. |
+| 실패 테스트 | `renderLoadFailure is not a function` 오류로 새 테스트가 먼저 실패했습니다. |
+| 집중 테스트 | 구현 후 `node --test tests\quiz-data-normalization.test.js`가 6개 테스트를 통과했습니다. |
+| 전체 테스트 | 구현 후 `node --test`가 28개 테스트를 통과했습니다. |
+| 문법 검사 | `node --check script.js`가 종료 코드 0으로 끝났습니다. |
+| 공백 검사 | `git diff --check`가 종료 코드 0으로 끝났습니다. |
+| 브라우저 정상 흐름 | Edge에서 `script.js?v=22` 로드, 기본동사 전환, 35개 Day 옵션, 답변 표시를 확인했습니다. |
+| 브라우저 실패 흐름 | 강제 `data.json` 500 응답에서 `데이터 로딩 실패`가 정상 표시되고 이미지와 스크립트 태그가 생성되지 않음을 확인했습니다. |
 
-## Remaining Risks
+## 남은 위험
 
-| Risk | Status | Next Action |
+| 위험 | 상태 | 다음 조치 |
 |---|---|---|
-| Manual Notion-to-`data.json` sync can drift. | Accepted risk. | Continue using data tests and live Pages checks after content syncs. |
-| No committed secret-scanner config. | Accepted risk for this static personal site. | Add `.gitleaks.toml` or equivalent if secrets or automation return. |
-| No CSP meta policy. | Accepted risk. | Consider adding and browser-testing a CSP only if the app starts handling untrusted content. |
-| `data.json` is public. | Accepted by design. | Do not place private or source-only study notes in deployed data. |
+| Notion 원문과 `data.json` 수동 동기화가 어긋날 수 있습니다. | 수용된 위험입니다. | 콘텐츠 동기화 후 데이터 테스트와 라이브 Pages 확인을 계속 수행합니다. |
+| 비밀값 스캐너 설정 파일이 커밋되어 있지 않습니다. | 현재 정적 개인 사이트 범위에서는 수용된 위험입니다. | 자동화나 비밀값 취급이 돌아오면 `.gitleaks.toml` 같은 설정을 추가합니다. |
+| CSP 메타 정책이 없습니다. | 현재 구조에서는 수용된 위험입니다. | 외부 입력 또는 비신뢰 콘텐츠를 다루기 시작하면 CSP를 추가하고 브라우저 회귀 검증을 수행합니다. |
+| `data.json`은 공개 배포됩니다. | 설계상 수용된 위험입니다. | 비공개 원문, 개인 메모, 인증 정보는 배포 데이터에 넣지 않습니다. |

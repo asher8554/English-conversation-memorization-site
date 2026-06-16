@@ -1,169 +1,125 @@
-# Project Hardening Docs Implementation Plan
+# 프로젝트 하드닝 문서 보정 계획
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> 에이전트 작업자용 메모. 이 계획은 `project-hardening-docs` 스킬을 적용해 기존 하드닝 결과물을 한글 문서 기준에 맞게 보정하는 절차입니다. 작업 상태는 체크박스로 추적합니다.
 
-**Goal:** Harden the static memorization app with one evidence-backed code improvement, verify the app, run a daily security review, and produce reader-ready Word/PDF architecture documentation.
+**목표.** 기존 하드닝 코드 변경은 유지하고, 사용자-facing 문서와 Word/PDF 보고서를 한글로 재작성하며 한글 깨짐이 없는지 검증합니다.
 
-**Architecture:** Keep the existing vanilla HTML/CSS/JavaScript GitHub Pages architecture. Avoid module splitting in this pass because the tests execute `script.js` directly in a VM and prior work favored small surgical improvements over structural churn.
+**아키텍처.** 사이트 구조는 기존 정적 GitHub Pages 구조를 유지합니다. `index.html`, `style.css`, `script.js`, `data.json`이 런타임 표면이고, 이번 작업은 문서 산출물과 검증 기록만 다룹니다.
 
-**Tech Stack:** Static HTML, CSS, vanilla JavaScript, `data.json`, browser `localStorage`, Web Speech API, Node built-in test runner.
+**기술 스택.** HTML, CSS, Vanilla JavaScript, `data.json`, 브라우저 `localStorage`, Web Speech API, Node 내장 테스트 러너, Python 기반 DOCX/PDF 생성 도구.
 
 ---
 
-### Task 1: Establish Baseline and Work Artifacts
+### 작업 1. 현재 상태 확인
 
-**Files:**
-- Modify: `plan.md`
-- Modify: `checklist.md`
-- Modify: `context-notes.md`
+**파일.**
+- 확인. `plan.md`
+- 확인. `docs/project-hardening-report.md`
+- 확인. `docs/project-hardening-report.docx`
+- 확인. `docs/project-hardening-report.pdf`
 
-- [x] **Step 1: Record the branch and baseline commands**
+- [x] **1단계. 현재 브랜치와 작업 트리를 확인합니다.**
 
-Run:
+실행 명령.
 
 ```powershell
 git status --short --branch
-node --test
-node --check script.js
 ```
 
-Expected:
+기대 결과.
 
 ```text
 ## codex/project-hardening-docs
-# pass 27
 ```
 
-- [x] **Step 2: Capture success criteria**
+- [x] **2단계. 기존 문서의 언어와 깨짐 상태를 확인합니다.**
 
-Record these criteria in `checklist.md` and `context-notes.md`.
+확인 기준.
 
 ```text
-Module structure: no broad rewrite of script.js.
-Maintainability: startup failure rendering uses DOM APIs and textContent.
-Dead-code cleanup: remove only code made unused by this pass.
-Performance: keep existing render hot-path improvements intact.
-Security: no dynamic startup error HTML interpolation.
-Documentation: create Markdown, Word, and PDF reports with an architecture diagram.
+사용자-facing 문서는 한글이어야 합니다.
+완료 보고서에는 깨진 한글, mojibake, 대체 문자, 누락 글리프가 없어야 합니다.
+기존 코드 하드닝 결과는 유지합니다.
 ```
 
-### Task 2: Harden Startup Error Rendering
+### 작업 2. 한글 문서로 재작성
 
-**Files:**
-- Modify: `script.js`
-- Modify: `tests/quiz-data-normalization.test.js`
-- Modify: `index.html`
+**파일.**
+- 수정. `plan.md`
+- 수정. `checklist.md`
+- 수정. `context-notes.md`
+- 수정. `docs/project-hardening-report.md`
 
-- [x] **Step 1: Add a failing test for safe load-failure rendering**
+- [x] **1단계. 계획서를 한글로 교체합니다.**
 
-Add this helper export to the VM harness.
+검증 기준.
 
-```javascript
-renderLoadFailure: typeof renderLoadFailure === 'function' ? renderLoadFailure : undefined
+```text
+계획의 목표, 범위, 검증 기준이 한글로 읽힙니다.
+영어 보고서 문장이나 깨진 한글 문자열이 남지 않습니다.
 ```
 
-Add this test.
+- [x] **2단계. 작업 로그를 한글로 갱신합니다.**
 
-```javascript
-test('load failure renderer writes error details as text', () => {
-    const { renderLoadFailure } = createScriptContext();
-    const children = [];
-    const container = {
-        innerHTML: 'existing',
-        appendChild(child) {
-            children.push(child);
-        }
-    };
+검증 기준.
 
-    renderLoadFailure(container, new Error('<img src=x onerror=alert(1)>'));
-
-    assert.equal(container.innerHTML, 'existing');
-    assert.equal(children[0].children[0].textContent, '데이터 로딩 실패');
-    assert.equal(children[0].children[1].textContent, '<img src=x onerror=alert(1)>');
-});
+```text
+이번 보정 작업의 결정과 검증 기준이 checklist.md와 context-notes.md에 한글로 남습니다.
 ```
 
-Run:
+- [x] **3단계. 하드닝 보고서 Markdown을 한글로 재작성합니다.**
 
-```powershell
-node --test tests/quiz-data-normalization.test.js
+포함할 내용.
+
+```text
+프로젝트 목적
+모듈 지도
+실행과 테스트 명령
+핵심 사용자 흐름
+보안 검토 결과
+성능 메모
+남은 위험
+Mermaid 아키텍처 다이어그램
+읽기용 대체 흐름 표
 ```
 
-Expected before implementation: FAIL because `renderLoadFailure` is not exported.
+### 작업 3. Word/PDF 산출물 재생성
 
-- [x] **Step 2: Implement the minimal renderer**
+**파일.**
+- 수정. `docs/project-hardening-report.docx`
+- 수정. `docs/project-hardening-report.pdf`
 
-Add this function near the DOM helper functions in `script.js`.
+- [x] **1단계. 한글 Word 문서를 재생성합니다.**
 
-```javascript
-function renderLoadFailure(container, error) {
-    if (!container) return;
+문서 프리셋.
 
-    const wrapper = document.createElement('div');
-    wrapper.style.textAlign = 'center';
-    wrapper.style.padding = '2rem';
-
-    const title = document.createElement('h3');
-    title.textContent = '데이터 로딩 실패';
-
-    const detail = document.createElement('p');
-    detail.style.color = 'red';
-    detail.style.fontWeight = 'bold';
-    detail.textContent = error.message;
-
-    const hint = document.createElement('p');
-    hint.textContent = '페이지를 새로고침 해보세요.';
-
-    wrapper.appendChild(title);
-    wrapper.appendChild(detail);
-    wrapper.appendChild(hint);
-    replaceElementChildren(container, wrapper);
-}
+```text
+standard_business_brief
+본문 기본 글꼴은 맑은 고딕 계열을 우선합니다.
+표는 실제 비교와 상태 요약에만 사용합니다.
 ```
 
-Replace the fetch `.catch()` container `innerHTML` block with this call.
+- [x] **2단계. 한글 PDF 문서를 재생성합니다.**
 
-```javascript
-renderLoadFailure(document.querySelector('.container'), error);
+검증 기준.
+
+```text
+PDF에서 주요 섹션 텍스트가 추출됩니다.
+추출 텍스트에 깨진 한글 또는 대체 문자가 없어야 합니다.
 ```
 
-- [x] **Step 3: Bump the script cache key**
+### 작업 4. 검증
 
-Change `index.html` from:
+**파일.**
+- 테스트. `tests/*.test.js`
+- 확인. `script.js`
+- 확인. `docs/project-hardening-report.md`
+- 확인. `docs/project-hardening-report.docx`
+- 확인. `docs/project-hardening-report.pdf`
 
-```html
-<script src="script.js?v=21"></script>
-```
+- [x] **1단계. 코드 회귀 검증을 실행합니다.**
 
-to:
-
-```html
-<script src="script.js?v=22"></script>
-```
-
-Leave `DATA_VERSION` unchanged because `data.json` is not changing.
-
-### Task 3: Verify Hardening
-
-**Files:**
-- Test: `tests/quiz-data-normalization.test.js`
-- Test: `tests/quiz-rendering.test.js`
-- Test: `tests/tts-manager.test.js`
-- Test: `tests/basic-verbs-data.test.js`
-
-- [x] **Step 1: Run focused test**
-
-Run:
-
-```powershell
-node --test tests/quiz-data-normalization.test.js
-```
-
-Expected: PASS.
-
-- [x] **Step 2: Run full verification**
-
-Run:
+실행 명령.
 
 ```powershell
 node --test
@@ -171,56 +127,33 @@ node --check script.js
 git diff --check
 ```
 
-Expected: all commands exit 0.
-
-### Task 4: Security Review and Documentation
-
-**Files:**
-- Create: `docs/project-hardening-report.md`
-- Create: `docs/project-hardening-report.docx`
-- Create: `docs/project-hardening-report.pdf`
-- Modify: `checklist.md`
-- Modify: `context-notes.md`
-
-- [x] **Step 1: Run daily security review**
-
-Review:
+기대 결과.
 
 ```text
-Static attack surface: index.html, script.js, style.css, data.json.
-Supply chain: no runtime package manifest or third-party dependencies.
-CI/CD: check for .github workflows.
-Secrets: scan tracked source for common secret patterns.
-Client storage: review localStorage usage for executable rendering paths.
+모든 명령이 종료 코드 0으로 끝납니다.
 ```
 
-Expected report status: fixed, verified safe, accepted risk, or needs human review for every candidate.
+- [x] **2단계. 문서 구조와 한글 깨짐을 검증합니다.**
 
-- [x] **Step 2: Create final documentation**
-
-The final report must include:
+검증 기준.
 
 ```text
-Project purpose
-Module map
-Build, run, and test commands
-Key user flows
-Security posture
-Performance notes
-Remaining risks
-Mermaid architecture diagram
+Markdown, DOCX, PDF에 필수 섹션이 존재합니다.
+깨진 한글, mojibake, 대체 문자, 누락 글리프가 없어야 합니다.
+LibreOffice 또는 Poppler가 없으면 렌더 기반 시각 검증 한계를 기록합니다.
 ```
 
-- [x] **Step 3: Generate Word and PDF files**
+### 작업 5. 커밋
 
-Create `docs/project-hardening-report.docx` and `docs/project-hardening-report.pdf` from the final Markdown content.
+**파일.**
+- 수정. 문서 산출물과 작업 로그.
 
-- [x] **Step 4: Commit the logical change**
+- [x] **1단계. 변경 사항을 하나의 논리 커밋으로 기록합니다.**
 
-Run:
+실행 명령.
 
 ```powershell
 git status --short
-git add plan.md checklist.md context-notes.md script.js index.html tests/quiz-data-normalization.test.js docs/project-hardening-report.md docs/project-hardening-report.docx docs/project-hardening-report.pdf
-git commit -m "chore: harden startup error rendering and document architecture"
+git add plan.md checklist.md context-notes.md docs/project-hardening-report.md docs/project-hardening-report.docx docs/project-hardening-report.pdf
+git commit -m "docs: translate hardening report to Korean"
 ```

@@ -198,14 +198,13 @@
 - [x] 테스트와 브라우저 검증을 실행한다.
 - [x] 커밋, push, main 병합, Pages 검증을 완료한다.
 
-## Project hardening docs checklist
-- [x] Create `codex/project-hardening-docs` branch before implementation.
-- [x] Run baseline `node --test` and `node --check script.js`.
-- [x] Record hardening scope in `plan.md`, `checklist.md`, and `context-notes.md`.
-- [x] Add a regression test for safe startup load-failure rendering.
-- [x] Replace dynamic startup error `innerHTML` with DOM/text rendering.
-- [x] Bump `index.html` script query version while leaving `DATA_VERSION` unchanged.
-- [x] Run focused and full verification commands.
-- [x] Run a daily security review and record finding statuses.
-- [x] Produce Markdown, Word, and PDF hardening documentation with a Mermaid diagram.
-- [x] Commit the verified hardening/docs change.
+## 프로젝트 하드닝 문서 보정 체크리스트
+- [x] `project-hardening-docs` 스킬의 한글 문서 규칙을 확인한다.
+- [x] 기존 하드닝 보고서와 `plan.md`에 영어 문서와 깨진 한글 문자열이 남아 있는지 확인한다.
+- [x] `plan.md`를 한글 기준의 보정 계획으로 다시 작성한다.
+- [x] Markdown 하드닝 보고서를 한글로 다시 작성한다.
+- [x] Word 보고서를 한글로 다시 생성한다.
+- [x] PDF 보고서를 한글로 다시 생성한다.
+- [x] Markdown, Word, PDF에서 한글 깨짐과 필수 섹션을 검증한다.
+- [x] 코드 회귀 검증과 공백 검사를 다시 실행한다.
+- [x] 한글 문서 보정 변경 사항을 커밋한다.
