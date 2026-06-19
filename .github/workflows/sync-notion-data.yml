@@ -43,9 +43,8 @@ jobs:
 
       - name: Run tests
         run: |
-          node --test
-          node --check script.js
-          git diff --check
+          npm test
+          npm run check
 
       - name: Commit updated data
         run: |

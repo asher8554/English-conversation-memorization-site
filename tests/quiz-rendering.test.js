@@ -226,6 +226,29 @@ test('QuizApp renders the current card section label', () => {
     assert.equal(elements.sectionLabel.style.display, 'inline-flex');
 });
 
+test('QuizApp stats modal updates aria-hidden when opening and closing', () => {
+    const { QuizApp, elements } = createQuizContext();
+    const app = new QuizApp({
+        defaultCourse: 'basic-verbs',
+        courses: {
+            'basic-verbs': {
+                title: 'Basic Verbs',
+                data: {
+                    'Day 001': [
+                        { q: '첫 질문', a: 'First answer.' }
+                    ]
+                }
+            }
+        }
+    });
+
+    app.openStats();
+    assert.equal(elements.statsModal['aria-hidden'], 'false');
+
+    app.closeStats();
+    assert.equal(elements.statsModal['aria-hidden'], 'true');
+});
+
 test('QuizApp updates cards without reading layout synchronously', () => {
     const { QuizApp, elements } = createQuizContext({ throwOnOffsetWidth: true });
 

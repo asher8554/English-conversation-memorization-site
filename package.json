@@ -1,0 +1,13 @@
+{
+  "name": "english-conversation-memorization-site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check script.js && node --check scripts/sync-notion-data.js && git diff --check"
+  },
+  "engines": {
+    "node": ">=18.17"
+  }
+}

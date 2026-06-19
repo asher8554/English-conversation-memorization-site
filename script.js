@@ -625,6 +625,7 @@ class TTSManager {
      * 설정 화면 열기
      */
     openSettings() {
+        this.settingsModal.setAttribute('aria-hidden', 'false');
         this.settingsModal.style.display = 'flex';
         // 애니메이션을 위해 잠시 대기
         setTimeout(() => this.settingsModal.classList.add('show'), 10);
@@ -634,6 +635,7 @@ class TTSManager {
      * 설정 화면 닫기
      */
     closeSettings() {
+        this.settingsModal.setAttribute('aria-hidden', 'true');
         this.settingsModal.classList.remove('show');
         setTimeout(() => {
             this.settingsModal.style.display = 'none';
@@ -1176,11 +1178,13 @@ class QuizApp {
 
     openStats() {
         this.renderStats();
+        this.statsModal.setAttribute('aria-hidden', 'false');
         this.statsModal.style.display = 'flex';
         setTimeout(() => this.statsModal.classList.add('show'), 10);
     }
 
     closeStats() {
+        this.statsModal.setAttribute('aria-hidden', 'true');
         this.statsModal.classList.remove('show');
         setTimeout(() => {
             this.statsModal.style.display = 'none';

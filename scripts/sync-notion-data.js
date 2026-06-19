@@ -347,7 +347,12 @@ function parseArgs(argv) {
     for (let index = 0; index < argv.length; index++) {
         const arg = argv[index];
         if (arg === '--data') {
-            args.dataPath = path.resolve(argv[++index]);
+            const dataPath = argv[index + 1];
+            if (!dataPath || dataPath.startsWith('--')) {
+                throw new Error('--data 인자에는 파일 경로가 필요합니다.');
+            }
+            args.dataPath = path.resolve(dataPath);
+            index++;
         } else if (arg === '--dry-run') {
             args.dryRun = true;
         } else {

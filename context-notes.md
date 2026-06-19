@@ -96,3 +96,10 @@
 - 2026-06-16: GitHub Actions 수동 실행 `27587692020`은 `NOTION_TOKEN` 존재 검증까지 통과했지만, Notion API가 `object_not_found`를 반환했다. 원인은 `NOTION_PAGE_ID` 페이지가 integration `asher`와 공유되지 않은 상태로 판단했고, 같은 실패가 다시 나도 해결 방법이 바로 보이도록 오류 메시지를 보강했다.
 - 2026-06-16: 사용자가 Notion integration 연결을 완료한 뒤 수동 실행 `27587889860`을 다시 돌렸고, 이번에는 Notion 조회 단계가 성공했다. 실패 지점은 테스트 단계였으며, 동기화 스크립트가 실제 Notion 구조의 섹션 라벨을 읽지 못해 `basic-verbs.data`를 비운 것이 원인이다.
 - 2026-06-16: 실제 Notion 페이지는 Day 토글 아래에서 `[Model Examples]`, `[Small talk]`, `[Further Studies]` 라벨이 별도 형제 문단이 아니라 각 컬럼 리스트의 첫 왼쪽 셀에 들어간다. 파서는 이 컬럼 내부 라벨을 섹션 시작으로 인식하고, 빈 기본동사 데이터가 만들어지면 커밋 전에 실패하도록 보정한다.
+
+- 2026-06-19: 사용자가 현재까지 구현된 프로그램의 보완점과 유지보수 우려를 상세히 점검하고, 고칠 수 있는 문제는 직접 고쳐 달라고 요청했다. 이번 점검은 정적 앱 구조를 유지하면서 실행 진입점, 접근성 계약, Notion 동기화 CLI 오류 메시지처럼 회귀 위험이 낮고 유지보수 효익이 분명한 항목을 우선한다.
+- 2026-06-19: 기준선으로 `node --test` 35개 통과, `node --check script.js`, `node --check scripts\sync-notion-data.js` 종료 코드 0을 확인했다. 한글 파일은 PowerShell 기본 출력에서 깨져 보일 수 있으나 `python -X utf8`로 읽으면 UTF-8 본문과 이모지가 정상이고 replacement character는 없었다.
+- 2026-06-19: 구조적 우려로는 단일 `script.js`가 1,400줄을 넘는 점, Notion block tree 파서가 실제 페이지 구조에 강하게 결합된 점, 브라우저 Web Speech API가 환경별 차이를 갖는 점이 남아 있다. 이번 변경에서는 큰 모듈 분리는 사용자 흐름과 테스트 표면을 크게 흔들 수 있어 보류한다.
+- 2026-06-19: 접근성 보완은 아이콘 버튼의 명시적 `aria-label`과 `type="button"`, 코스 버튼의 초기 `aria-pressed`, 설정과 통계 모달의 dialog 속성 및 닫기 버튼 전환으로 제한했다. 모달 열기와 닫기에서는 `aria-hidden`을 함께 갱신한다.
+- 2026-06-19: Notion CLI는 `--data` 뒤에 경로가 없거나 다음 값이 다른 옵션이면 `--data 인자에는 파일 경로가 필요합니다.`로 실패하게 했다. 이 오류는 `NOTION_TOKEN` 검사보다 먼저 발생해 사용자가 실제 잘못 입력한 인자를 바로 볼 수 있다.
+- 2026-06-19: 검증은 `npm test` 41개 통과, `npm run check` 종료 코드 0으로 확인했다. 브라우저 스모크는 `%TEMP%\codex-playwright-smoke-english-site`에 임시 Playwright를 설치해 Edge 채널로 실행했고, 영어회화 33 Days, 기본동사 35 Days, 답변 표시, 설정과 통계 모달 `aria-hidden` 전환, 콘솔 오류 없음, 실패 요청 없음까지 확인했다.

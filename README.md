@@ -30,6 +30,17 @@ python -m http.server 8000
 실행 후 브라우저에서 `http://localhost:8000`을 엽니다.
 복습 통계와 사용자 설정은 현재 브라우저의 `localStorage`에 저장됩니다.
 
+### 유지보수 검증
+
+코드를 바꾼 뒤에는 아래 명령을 실행합니다.
+
+```bash
+npm test
+npm run check
+```
+
+`npm test`는 Node 내장 테스트 러너로 전체 회귀 테스트를 실행합니다. `npm run check`는 주요 JavaScript 파일의 문법 검사와 `git diff --check` 공백 검사를 함께 실행합니다.
+
 ### Notion 데이터 자동 동기화
 
 기본동사 코스는 GitHub Actions workflow로 Notion 원문을 읽어 `data.json`에 반영할 수 있습니다. 브라우저의 Refresh 버튼은 이미 배포된 `data.json` 캐시를 우회하는 기능이며, Notion을 직접 읽거나 GitHub에 커밋하지 않습니다.

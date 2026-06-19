@@ -55,6 +55,9 @@ function createClassContext({ voices = [], stored = {}, runTimersImmediately = t
             style: {},
             classList: createClassList(),
             addEventListener() { },
+            setAttribute(name, value) {
+                this[name] = value;
+            },
             appendChild(child) {
                 this.children = this.children || [];
                 this.children.push(child);
@@ -261,6 +264,17 @@ test('TTS settings load legacy voice names without selector interpolation', () =
     new TTSManager();
 
     assert.equal(elements.enVoiceSelect.value, 'quoted-uri');
+});
+
+test('TTS settings modal updates aria-hidden when opening and closing', () => {
+    const { TTSManager, elements } = createClassContext();
+    const manager = new TTSManager();
+
+    manager.openSettings();
+    assert.equal(elements.settingsModal['aria-hidden'], 'false');
+
+    manager.closeSettings();
+    assert.equal(elements.settingsModal['aria-hidden'], 'true');
 });
 
 test('TTS test voices cancel once and queue both language samples', () => {

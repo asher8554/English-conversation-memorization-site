@@ -1,5 +1,7 @@
 // Notion 동기화 스크립트의 데이터 변환 규칙을 검증하는 Node 테스트
 const assert = require('node:assert/strict');
+const { spawnSync } = require('node:child_process');
+const path = require('node:path');
 const test = require('node:test');
 
 const {
@@ -9,6 +11,8 @@ const {
     formatNotionApiError,
     parseDayKey
 } = require('../scripts/sync-notion-data');
+
+const scriptPath = path.resolve(__dirname, '..', 'scripts', 'sync-notion-data.js');
 
 function textBlock(type, text, children = []) {
     return {
@@ -231,4 +235,19 @@ test('formatNotionApiError explains missing page connection', () => {
     assert.match(message, /Notion 페이지를 찾지 못했습니다/);
     assert.match(message, /Connections/);
     assert.match(message, /integration/);
+});
+
+test('CLI rejects --data without a file path before reading secrets', () => {
+    [
+        ['--data'],
+        ['--data', '--dry-run']
+    ].forEach(args => {
+        const result = spawnSync(process.execPath, [scriptPath, ...args], {
+            encoding: 'utf8',
+            env: {}
+        });
+
+        assert.equal(result.status, 1);
+        assert.match(result.stderr, /--data 인자에는 파일 경로가 필요합니다/);
+    });
 });

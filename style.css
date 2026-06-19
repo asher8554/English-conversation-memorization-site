@@ -329,14 +329,19 @@ select:focus {
   position: absolute;
   top: 15px;
   right: 20px;
+  border: 0;
+  background: transparent;
   color: var(--text-secondary);
   font-size: 28px;
   font-weight: bold;
+  line-height: 1;
+  padding: 0;
   cursor: pointer;
   transition: color 0.2s;
 }
 
-.close-modal:hover {
+.close-modal:hover,
+.close-modal:focus-visible {
   color: var(--primary-color);
 }
 
