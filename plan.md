@@ -218,3 +218,16 @@ git commit -m "docs: translate hardening report to Korean"
 4. 모달 열기와 닫기 시 `aria-hidden` 상태를 함께 갱신합니다.
 5. `scripts/sync-notion-data.js --data` 값 누락을 명확한 오류로 바꾸고 테스트로 고정합니다.
 6. 전체 검증과 브라우저 스모크 테스트를 실행한 뒤 남은 구조적 우려를 보고합니다.
+
+## 2026-06-22 Notion Day 039 동기화 실패 보정 계획
+
+**목표.** Notion에 Day 039까지 추가된 정상 데이터가 GitHub Actions 테스트를 통과하고 `data.json`으로 커밋되도록 보정합니다.
+
+**확인한 원인.** 2026-06-22 `Sync Notion data` run `27930877394`에서 Notion 조회와 `data.json` 생성은 성공했습니다. 실패 지점은 `Run tests`였고, `tests/basic-verbs-data.test.js`가 마지막 Day를 `Day 035`로 고정해 새로 생성된 `Day 039`를 실패로 처리했습니다.
+
+**보정 범위.**
+
+- 기본동사 데이터 테스트가 마지막 Day 숫자를 고정하지 않도록 바꿉니다.
+- `Day 026`부터 현재 마지막 Day까지 비어 있지 않은 카드와 메인 문장이 있는지 확인합니다.
+- 빈 템플릿과 빈 q/a 카드가 전체 기본동사 데이터에 남지 않는지 확인합니다.
+- 동기화 workflow를 다시 실행해 Day 039 데이터 커밋과 Pages 배포까지 확인합니다.

@@ -12,14 +12,24 @@ function loadBasicVerbsCourse() {
     return quizData.courses['basic-verbs'];
 }
 
-test('basic-verbs includes populated Day 026 through Day 035 data', () => {
+function dayNumber(day) {
+    const match = day.match(/\d+/);
+    return match ? Number(match[0]) : 0;
+}
+
+function formatDay(dayNumberValue) {
+    return `Day ${String(dayNumberValue).padStart(3, '0')}`;
+}
+
+test('basic-verbs includes populated Day 026 through latest synced day data', () => {
     const course = loadBasicVerbsCourse();
     const days = Object.keys(course.data);
+    const latestDayNumber = dayNumber(days.at(-1));
 
-    assert.equal(days.at(-1), 'Day 035');
+    assert.ok(latestDayNumber >= 35, 'basic-verbs should include at least Day 035');
 
-    for (let dayNumber = 26; dayNumber <= 35; dayNumber++) {
-        const day = `Day ${String(dayNumber).padStart(3, '0')}`;
+    for (let currentDayNumber = 26; currentDayNumber <= latestDayNumber; currentDayNumber++) {
+        const day = formatDay(currentDayNumber);
         assert.ok(Array.isArray(course.data[day]), `${day} should be an array`);
         assert.ok(course.data[day].length > 0, `${day} should have cards`);
         assert.ok(course.dayMainSentences[day], `${day} should have a main sentence`);
@@ -45,18 +55,19 @@ test('basic-verbs includes populated Further Studies cards with section labels',
     });
 });
 
-test('basic-verbs skips blank Further Studies placeholders', () => {
+test('basic-verbs skips blank question and answer placeholders', () => {
     const course = loadBasicVerbsCourse();
 
-    assert.equal(course.data['Day 027'].some(card => card.section === 'Further Studies'), false);
-    assert.equal(course.data['Day 027'].some(card => !card.q || !card.a), false);
+    Object.entries(course.data).forEach(([day, cards]) => {
+        assert.equal(cards.some(card => !card.q || !card.a), false, `${day} should not include blank cards`);
+    });
 });
 
 test('basic-verbs includes Further Studies cards through Day 026', () => {
     const course = loadBasicVerbsCourse();
 
     for (let dayNumber = 13; dayNumber <= 26; dayNumber++) {
-        const day = `Day ${String(dayNumber).padStart(3, '0')}`;
+        const day = formatDay(dayNumber);
         const furtherStudies = course.data[day].filter(card => card.section === 'Further Studies');
 
         assert.ok(furtherStudies.length > 0, `${day} should include Further Studies cards`);

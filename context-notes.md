@@ -103,3 +103,9 @@
 - 2026-06-19: 접근성 보완은 아이콘 버튼의 명시적 `aria-label`과 `type="button"`, 코스 버튼의 초기 `aria-pressed`, 설정과 통계 모달의 dialog 속성 및 닫기 버튼 전환으로 제한했다. 모달 열기와 닫기에서는 `aria-hidden`을 함께 갱신한다.
 - 2026-06-19: Notion CLI는 `--data` 뒤에 경로가 없거나 다음 값이 다른 옵션이면 `--data 인자에는 파일 경로가 필요합니다.`로 실패하게 했다. 이 오류는 `NOTION_TOKEN` 검사보다 먼저 발생해 사용자가 실제 잘못 입력한 인자를 바로 볼 수 있다.
 - 2026-06-19: 검증은 `npm test` 41개 통과, `npm run check` 종료 코드 0으로 확인했다. 브라우저 스모크는 `%TEMP%\codex-playwright-smoke-english-site`에 임시 Playwright를 설치해 Edge 채널로 실행했고, 영어회화 33 Days, 기본동사 35 Days, 답변 표시, 설정과 통계 모달 `aria-hidden` 전환, 콘솔 오류 없음, 실패 요청 없음까지 확인했다.
+
+- 2026-06-22: 사용자가 Notion에 Day 039까지 작성하고 사이트 Update/Refresh와 GitHub Actions 수동 실행을 했지만 반영되지 않는다고 보고했다. 현재 live `data.json?refresh=...`와 로컬 `data.json`은 모두 기본동사 35 Days, 마지막 Day 035였다.
+- 2026-06-22: 최근 실패 run `27930877394`, `27925213050`, `27924224416`은 모두 `Sync data from Notion` 단계가 성공해 `data.json`을 갱신했지만, 그 다음 `Run tests` 단계에서 실패해 커밋 단계가 skip되었다. 최신 로그의 실제 실패는 `tests/basic-verbs-data.test.js:19`에서 actual `Day 039`, expected `Day 035`였다.
+- 2026-06-22: root cause는 Notion 파서나 인증 문제가 아니라 데이터 성장에 취약한 테스트 하드코딩이다. 테스트는 최소 보장 범위인 Day 026~035와 빈 템플릿 제거를 검증하되, Day 036 이후 새 콘텐츠는 정상 확장으로 허용해야 한다.
+- 2026-06-22: `tests/basic-verbs-data.test.js`는 마지막 Day가 35 이상인지 확인하고, Day 026부터 현재 마지막 Day까지 배열, 카드, 메인 문장이 모두 채워졌는지 확인하도록 바꿨다. 특정 Day 027에 `Further Studies`가 없어야 한다는 콘텐츠 고정도 제거하고, 전체 기본동사 카드에 빈 q/a가 없는지 검증하도록 바꿨다.
+- 2026-06-22: 로컬 검증은 `node --test tests\basic-verbs-data.test.js`, `npm test`, `npm run check`로 실행했고 모두 종료 코드 0이었다. 현재 로컬 데이터는 아직 Day 035까지라, 실제 Day 039 반영 여부는 main push 후 `Sync Notion data` 재실행으로 확인해야 한다.
