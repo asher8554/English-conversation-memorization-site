@@ -4509,6 +4509,390 @@
             "a": "Nah, my parents dislike the outdoors. They’d just complain.",
             "section": "Further Studies"
           }
+        ],
+        "Day 036": [
+          {
+            "q": "저 새 봤어?",
+            "a": "Did you see that bird?"
+          },
+          {
+            "q": "저 새 봤어?",
+            "a": "Did you see that bird?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "저기 아래쪽에 지하철역이 보이는 것 같은데.",
+            "a": "I think I see a subway station down that way.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "최근에 닉 만난 적 있어?",
+            "a": "Have you seen Nick lately?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "비 오는지 확인 좀 해 줄래?",
+            "a": "Can you see if it’s raining?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "토요일에 시간 되는지 한번 볼게요.",
+            "a": "Let me see if I’m free on Saturday.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "이 주차장은 너무 넓어서 정말 헷갈려.",
+            "a": "These huge parking lots are so confusing.",
+            "section": "Small talk"
+          },
+          {
+            "q": "아, 우리 차 보이는 것 같아. 빨간색 바로 옆에. 너도 보이지?",
+            "a": "Oh, I think I see our car. Next to the red one. Do you see it?",
+            "section": "Small talk"
+          },
+          {
+            "q": "토니 말로는 금요일 밤 파티에서 널 봤다는데.",
+            "a": "Tony said he saw you at the party Friday night.",
+            "section": "Small talk"
+          },
+          {
+            "q": "응, 우연히 그를 보게 돼서 놀랐어. 고등학교 이후로 얼굴 본 적 없거든.",
+            "a": "Yeah, I was surprised to run into him. I hadn’t seen him since high school.",
+            "section": "Small talk"
+          },
+          {
+            "q": "언제 한번 다 같이 모여서 밀린 이야기하자.",
+            "a": "We should all get together sometime and catch up.",
+            "section": "Small talk"
+          },
+          {
+            "q": "그럼 너무 좋지. 나도 끼워 줘.",
+            "a": "That’d be great. Count me in.",
+            "section": "Small talk"
+          },
+          {
+            "q": "지금 사귀는 사람 있나요?",
+            "a": "Are you seeing anyone right now?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "아, 이제 무슨말인지 알겠네요.",
+            "a": "Oh, I see what you mean now.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "이 두 가지 옵션의 차이점을 아시겠어요?",
+            "a": "Do you see the difference between the two options?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "내일 비가 올 것 같은데, 한번 보자고.",
+            "a": "I think it’s going to rain tomorrow, but we’ll see.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "우리 할머니는 다음 주에 아흔이 되신다. 평생을 살면서 정말 많은 일을 겪으셨다.",
+            "a": "My grandma turns 90 next week. She has definitely seen a lot in her lifetime.",
+            "section": "Further Studies"
+          }
+        ],
+        "Day 037": [
+          {
+            "q": "여기서 멀지 않은 괜찮은 곳을 알아.",
+            "a": "I know a good place not far from here."
+          },
+          {
+            "q": "여기서 멀지 않은 괜찮은 곳을 알아.",
+            "a": "I know a good place not far from here.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "괜찮은 식당 아는 데 있어. 예전부터 한번 가 보고 싶었거든.",
+            "a": "I know of a good place. I’ve been wanting to try it.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "난 텍사스 출신 사람들을 많이 알아.",
+            "a": "I know many people from Texas.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "텍사스 출신 유명한 사람들 몇 명 알고는 있지.",
+            "a": "I know of some famous people from Texas.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "고등학교 때는 너를 잘 몰랐지만, 너의 존재는 알고 있었지.",
+            "a": "I didn’t know you in high school, but I knew of you.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "신디 잘 알지?",
+            "a": "Do you know Cindy?",
+            "section": "Small talk"
+          },
+          {
+            "q": "알긴 알지. 네가 항상 그 친구 이야기를 하니까. 하지만 만난 적은 없어.",
+            "a": "I know of her, because you always talk about her, but I haven’t met her.",
+            "section": "Small talk"
+          },
+          {
+            "q": "이 의류 브랜드 들어 봤어?",
+            "a": "Do you know of this clothing brand?",
+            "section": "Small talk"
+          },
+          {
+            "q": "사람들이 입고 다니는 건 봤는데, 이름은 몰랐어.",
+            "a": "I’ve seen people wearing it, but I didn’t know the name.",
+            "section": "Small talk"
+          },
+          {
+            "q": "응, 요즘 아주 핫해.",
+            "a": "Yeah, it’s pretty trendy these days.",
+            "section": "Small talk"
+          },
+          {
+            "q": "네가 좋아하는 스타일인 듯. 너한테 잘 어울릴 것 같아.",
+            "a": "It seems like your style. It would suit you.",
+            "section": "Small talk"
+          },
+          {
+            "q": "어제 우리 동네에서 사람들이 뉴스 촬영하고 있는 것을 봤어.",
+            "a": "I saw some people filming a news report on my street yesterday.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "자전거 타고 가는 저 여자애 봤어? 내가 아는 애 같은데.",
+            "a": "Did you see that girl riding the bike? I think I know her.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "오늘 점심 때 샐리가 네 험담하는 것을 들었어.",
+            "a": "I heard Sally talking behind your back at lunch today.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "어젯밤에 누가 소리를 지르는 걸 들었어.",
+            "a": "I heard someone screaming last night.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "뭐 타는 냄새 안 나니?",
+            "a": "Do you smell something burning?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "잠깐만, 요리하는 냄새가 나네. 냄새 너무 좋다.",
+            "a": "Wait, I smell something cooking. Smells great.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "어젯밤에 뭔가 내 몸에 기어다니는 느낌이 들었어요.",
+            "a": "I felt something crawling on me last night.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "건물 흔들리는 거 느꼈어?",
+            "a": "Did you feel the building shaking?",
+            "section": "Further Studies"
+          }
+        ],
+        "Day 038": [
+          {
+            "q": "이 학습 방법은 아이들에게 너무 잘 맞는다.",
+            "a": "This learning method works really well with kids."
+          },
+          {
+            "q": "이 학습 방법은 아이들에게 너무 잘 맞는다.",
+            "a": "This learning method works really well with kids.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "화요일 시간 가능하세요?",
+            "a": "Does Tuesday work for you?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "침이 나한테는 정말 잘 맞아. 너도 한번 맞아 보는 게 어때?",
+            "a": "Acupuncture really works for me. Why don’t you give it a shot?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "강남이나 용산에서 봐도 돼. 너 편한 대로 해.",
+            "a": "We can meet in Gangnam or Yongsan - wherever works best for you.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "간헐적 단식을 해 봤는데, 나한테는 별로였어.",
+            "a": "I tried intermittent fasting, but it didn’t work for me.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "내일 점심 전에 나랑 공부할래?",
+            "a": "Do you want to study with me before lunch tomorrow?",
+            "section": "Small talk"
+          },
+          {
+            "q": "아니, 괜찮아. 난 밤늦게 공부하는 게 더 맞거든.",
+            "a": "No thanks, Studying late at night works better for me.",
+            "section": "Small talk"
+          },
+          {
+            "q": "토요일에 하이킹 가자고 할까 생각 중이었어.",
+            "a": "I was thinking we could go hiking on Saturday.",
+            "section": "Small talk"
+          },
+          {
+            "q": "우리 4시에 결혼식 가야 하지 않아?",
+            "a": "Don’t we have a wedding to go to at 4?",
+            "section": "Small talk"
+          },
+          {
+            "q": "아, 맞다. 그럼 일요일은 어때?",
+            "a": "Oh, right. Then maybe Sunday instead?",
+            "section": "Small talk"
+          },
+          {
+            "q": "응, 그게 더 나을 것 같아.",
+            "a": "Yeah, that works better.",
+            "section": "Small talk"
+          },
+          {
+            "q": "내가 마라톤을 완주할 수 있을지 모르겠어.",
+            "a": "I’m not sure I could finish a marathon.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "지금 당장은 아니더라도, 훈련하면 할 수도 있을 거야. 도전해 봐!",
+            "a": "Maybe not today, but if you trained for it, you could. Give it a shot!",
+            "section": "Further Studies"
+          },
+          {
+            "q": "이 무료 그림 그리기 수업 들어야 할까?",
+            "a": "Should I take this free painting class?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "뭘 망설여. 한번 해 봐.",
+            "a": "Why not? Go for it.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "이 맥주 정말 맛있어. 여기, 한번 마셔 봐.",
+            "a": "This beer is really good. Here, have a try.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "이 피클 단지 못 열겠어.",
+            "a": "I can’t open this pickle jar.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "내가 한번 해 볼게. 오늘 헬스장 다녀왔거든.",
+            "a": "Let me have a try - I went to the gym today.",
+            "section": "Further Studies"
+          }
+        ],
+        "Day 039": [
+          {
+            "q": "누군가가 너를 억지로 사랑하게 만들 수는 없어. 사랑이라는 게 그런 게 아니잖아.",
+            "a": "You can’t force someone to love you - it doesn’t work that way."
+          },
+          {
+            "q": "누군가가 너를 억지로 사랑하게 만들 수는 없어. 사랑이라는 게 그런 게 아니잖아.",
+            "a": "You can’t force someone to love you - it doesn’t work that way.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "반바지를 입고 사무실에 간다? 여기서는 안 됩니다.",
+            "a": "Wearing shorts to the office? That won’t work around here.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "(당일 취소 수수료 면제 문의에) 죄송한데, 저희 앱은 그렇게 운영되지 않습니다.",
+            "a": "Sorry, but the app doesn’t work that way.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "무료 환승이 택시에는 적용이 안 되는구나.",
+            "a": "I couldn’t use my free transportation transfer with a taxi.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "응, 교통 카드를 그렇게는 쓸 수 없어.",
+            "a": "Yeah, transportation cards don’t work that way.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "은퇴하면 삶이 좀 편해질 줄 알았더니.",
+            "a": "I thought life would get easier after retiring.",
+            "section": "Small talk"
+          },
+          {
+            "q": "삶이라는 게 꼭 그렇지가 않잖아. 상황이 변한다고 더 편해지는 건 아니지.",
+            "a": "Life doesn’t really work that way. Things change, but they don’t get easier.",
+            "section": "Small talk"
+          },
+          {
+            "q": "이 차 나오기를 2년이나 기다렸어요.",
+            "a": "I’ve been waiting two years for this car to come out.",
+            "section": "Small talk"
+          },
+          {
+            "q": "그 말을 들으니 기쁘네요. 물론 오늘까지 계약금 3백만 원을 내셔야 합니다.",
+            "a": "We’re happy to hear that. Of course, you’ll need to make a 3 million won deposit today.",
+            "section": "Small talk"
+          },
+          {
+            "q": "괜찮습니다. 그런데 무슨 일 생기면 계약금을 돌려받을 수 있나요?",
+            "a": "Not a problem. If something comes up, though, is it possible for me to get my deposit back?",
+            "section": "Small talk"
+          },
+          {
+            "q": "안타깝지만 그건 안 됩니다. 계약금은 환불이 안 됩니다.",
+            "a": "It doesn’t work that way, unfortunately. All deposits are non-refundable.",
+            "section": "Small talk"
+          },
+          {
+            "q": "오늘 조금 일찍 퇴근해 봐야 할지도 모르겠어요. 괜찮을까요?",
+            "a": "I might need to leave a bit early today. Would that be OK?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "괜찮아요. 퇴근 전에 팀원들에게 말만 해 줘요.",
+            "a": "Not a problem. Just let the team know before you go.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "데리러 와 줘서 고마워!",
+            "a": "Thanks for picking me up!",
+            "section": "Further Studies"
+          },
+          {
+            "q": "천만에. 어차피 가는 길이었는걸.",
+            "a": "Not a problem. I was on my way anyway.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "이 바지 다른 사이즈로 교환해야겠어요.",
+            "a": "I need to exchange these pants for a different size.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "영수증 있으신가요?",
+            "a": "Do you have the receipt?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "아니요, 선물로 받은 거라서요.",
+            "a": "No, they were a gift.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "괜찮습니다. 이 태그만 스캔하면 돼요.",
+            "a": "Not a problem. I just need to scan this tag.",
+            "section": "Further Studies"
+          }
         ]
       },
       "dayMainSentences": {
@@ -4546,7 +4930,11 @@
         "Day 032": "[Take] : It took me months to finish reading that book.",
         "Day 033": "[Take] : She didn’t take it well.",
         "Day 034": "[Do] : I do a lot of admin work at my job.",
-        "Day 035": "[Like] : I don’t like to play golf, but I have to for my job."
+        "Day 035": "[Like] : I don’t like to play golf, but I have to for my job.",
+        "Day 036": "[See] : I haven’t seen you for a while.",
+        "Day 037": "[Know] : I know the owner.",
+        "Day 038": "[Work] : This diet really worked for me.",
+        "Day 039": "[Work] : Dating doesn’t work that way anymore. Times have changed."
       },
       "note": "Notion 원문에서 생성했습니다. 빈 섹션과 Day00x 템플릿은 제외합니다."
     }
