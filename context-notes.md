@@ -109,3 +109,6 @@
 - 2026-06-22: root cause는 Notion 파서나 인증 문제가 아니라 데이터 성장에 취약한 테스트 하드코딩이다. 테스트는 최소 보장 범위인 Day 026~035와 빈 템플릿 제거를 검증하되, Day 036 이후 새 콘텐츠는 정상 확장으로 허용해야 한다.
 - 2026-06-22: `tests/basic-verbs-data.test.js`는 마지막 Day가 35 이상인지 확인하고, Day 026부터 현재 마지막 Day까지 배열, 카드, 메인 문장이 모두 채워졌는지 확인하도록 바꿨다. 특정 Day 027에 `Further Studies`가 없어야 한다는 콘텐츠 고정도 제거하고, 전체 기본동사 카드에 빈 q/a가 없는지 검증하도록 바꿨다.
 - 2026-06-22: 로컬 검증은 `node --test tests\basic-verbs-data.test.js`, `npm test`, `npm run check`로 실행했고 모두 종료 코드 0이었다. 현재 로컬 데이터는 아직 Day 035까지라, 실제 Day 039 반영 여부는 main push 후 `Sync Notion data` 재실행으로 확인해야 한다.
+- 2026-06-22: 수정 커밋을 `main`에 fast-forward 병합하고 push한 뒤 수동 실행 `27945837355`를 시작했다. 해당 실행은 `Sync data from Notion` 단계에서 장시간 진행 중이며, 스크립트의 Notion `fetch` 호출에 명시적 타임아웃이 없어 API 응답 지연이 Actions 전체를 오래 붙잡을 수 있음을 추가 위험으로 확인했다.
+- 2026-06-22: 수동 실행 `27945837355`는 2분 53초 만에 성공했고, `fb1349d data: sync basic verbs from Notion` 커밋으로 `data.json`이 갱신되었다. 로컬과 live `data.json?refresh=...` 모두 기본동사 39일, 마지막 `Day 039`, 마지막 Day 20카드, 마지막 핵심 문장 `[Work] : Dating doesn’t work that way anymore. Times have changed.`로 확인했다.
+- 2026-06-22: 추가 보수로 Notion API 단일 요청에 기본 30초 타임아웃을 추가하고, workflow의 `Sync data from Notion` 단계에는 10분 제한을 추가했다. 이는 오늘 실패의 직접 원인은 아니지만, Notion API 응답 지연이 다음 운영 장애에서 긴 무응답으로 보이지 않게 하기 위한 방어다.

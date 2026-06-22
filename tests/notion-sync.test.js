@@ -9,6 +9,8 @@ const {
     buildSyncedData,
     extractPairsFromBlocks,
     formatNotionApiError,
+    notionGetJson,
+    parseFetchTimeoutMs,
     parseDayKey
 } = require('../scripts/sync-notion-data');
 
@@ -235,6 +237,35 @@ test('formatNotionApiError explains missing page connection', () => {
     assert.match(message, /Notion 페이지를 찾지 못했습니다/);
     assert.match(message, /Connections/);
     assert.match(message, /integration/);
+});
+
+test('parseFetchTimeoutMs validates configured request timeout', () => {
+    assert.equal(parseFetchTimeoutMs(undefined), 30000);
+    assert.equal(parseFetchTimeoutMs('1500'), 1500);
+    assert.throws(
+        () => parseFetchTimeoutMs('0'),
+        /NOTION_FETCH_TIMEOUT_MS는 양의 정수 밀리초여야 합니다/
+    );
+});
+
+test('notionGetJson fails slow requests with a clear timeout error', async () => {
+    const fetchImpl = (_url, options) => new Promise((_resolve, reject) => {
+        options.signal.addEventListener('abort', () => {
+            const error = new Error('aborted');
+            error.name = 'AbortError';
+            reject(error);
+        });
+    });
+
+    await assert.rejects(
+        () => notionGetJson(
+            'https://api.notion.com/v1/blocks/test/children',
+            'secret-token',
+            '2022-06-28',
+            { fetchImpl, timeoutMs: 1 }
+        ),
+        /Notion API 요청이 1ms 안에 끝나지 않았습니다/
+    );
 });
 
 test('CLI rejects --data without a file path before reading secrets', () => {

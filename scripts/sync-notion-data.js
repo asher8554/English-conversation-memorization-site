@@ -4,6 +4,7 @@ const path = require('node:path');
 
 const DEFAULT_NOTION_PAGE_ID = '32f3d76f88748069b726d6b6d47f5afd';
 const DEFAULT_NOTION_VERSION = '2022-06-28';
+const DEFAULT_NOTION_FETCH_TIMEOUT_MS = 30000;
 const SECTION_NAMES = ['Model Examples', 'Small talk', 'Further Studies'];
 
 function normalizeText(text) {
@@ -297,13 +298,40 @@ function formatNotionApiError(status, body) {
     return `Notion API 요청 실패: ${status} ${body}`;
 }
 
-async function notionGetJson(url, token, notionVersion) {
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Notion-Version': notionVersion
+function parseFetchTimeoutMs(value) {
+    if (!value) return DEFAULT_NOTION_FETCH_TIMEOUT_MS;
+
+    const timeoutMs = Number(value);
+    if (!Number.isInteger(timeoutMs) || timeoutMs <= 0) {
+        throw new Error('NOTION_FETCH_TIMEOUT_MS는 양의 정수 밀리초여야 합니다.');
+    }
+
+    return timeoutMs;
+}
+
+async function notionGetJson(url, token, notionVersion, options = {}) {
+    const fetchTimeoutMs = options.timeoutMs || DEFAULT_NOTION_FETCH_TIMEOUT_MS;
+    const fetchImpl = options.fetchImpl || fetch;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), fetchTimeoutMs);
+    let response;
+
+    try {
+        response = await fetchImpl(url, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Notion-Version': notionVersion
+            },
+            signal: controller.signal
+        });
+    } catch (error) {
+        if (controller.signal.aborted || error.name === 'AbortError') {
+            throw new Error(`Notion API 요청이 ${fetchTimeoutMs}ms 안에 끝나지 않았습니다.`);
         }
-    });
+        throw error;
+    } finally {
+        clearTimeout(timeoutId);
+    }
 
     if (!response.ok) {
         const body = await response.text();
@@ -324,7 +352,9 @@ async function readBlockChildren(blockId, options) {
             url.searchParams.set('start_cursor', startCursor);
         }
 
-        const page = await notionGetJson(url, options.token, options.notionVersion);
+        const page = await notionGetJson(url, options.token, options.notionVersion, {
+            timeoutMs: options.fetchTimeoutMs
+        });
         children.push(...page.results);
         startCursor = page.has_more ? page.next_cursor : null;
     } while (startCursor);
@@ -368,13 +398,14 @@ async function main(argv = process.argv.slice(2), env = process.env) {
     const token = env.NOTION_TOKEN;
     const pageId = env.NOTION_PAGE_ID || DEFAULT_NOTION_PAGE_ID;
     const notionVersion = env.NOTION_VERSION || DEFAULT_NOTION_VERSION;
+    const fetchTimeoutMs = parseFetchTimeoutMs(env.NOTION_FETCH_TIMEOUT_MS);
 
     if (!token) {
         throw new Error('NOTION_TOKEN secret이 필요합니다.');
     }
 
     const existingData = JSON.parse(fs.readFileSync(args.dataPath, 'utf8'));
-    const notionBlocks = await readBlockChildren(pageId, { token, notionVersion });
+    const notionBlocks = await readBlockChildren(pageId, { token, notionVersion, fetchTimeoutMs });
     const nextData = buildSyncedData(existingData, notionBlocks);
     const currentJson = `${JSON.stringify(existingData, null, 2)}\n`;
     const nextJson = `${JSON.stringify(nextData, null, 2)}\n`;
@@ -408,6 +439,8 @@ module.exports = {
     extractPairsFromBlocks,
     formatNotionApiError,
     getBlockText,
+    notionGetJson,
+    parseFetchTimeoutMs,
     parseDayKey,
     splitSectionGroups
 };

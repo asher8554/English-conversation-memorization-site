@@ -39,6 +39,7 @@ jobs:
           fi
 
       - name: Sync data from Notion
+        timeout-minutes: 10
         run: node scripts/sync-notion-data.js
 
       - name: Run tests
