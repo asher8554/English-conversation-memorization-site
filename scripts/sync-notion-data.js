@@ -231,10 +231,7 @@ function buildBasicVerbsCourseFromBlocks(blocks, existingCourse = {}) {
 
         if (sectionedCards.length === 0) continue;
 
-        data[dayKey] = [
-            { q: sectionedCards[0].q, a: sectionedCards[0].a },
-            ...sectionedCards
-        ];
+        data[dayKey] = sectionedCards;
         dayMainSentences[dayKey] = extractDayMainSentence(dayText) || sectionedCards[0].a;
     }
 

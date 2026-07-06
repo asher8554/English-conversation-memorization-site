@@ -121,9 +121,7 @@ test('buildBasicVerbsCourseFromBlocks creates ordered sectioned cards and skips 
 
     assert.deepEqual(Object.keys(course.data), ['Day 001', 'Day 002']);
     assert.equal(course.dayMainSentences['Day 001'], '[Have] Do you have any pets?');
-    assert.equal(course.data['Day 001'][0].section, undefined);
     assert.deepEqual(course.data['Day 001'].map(card => card.section || null), [
-        null,
         'Model Examples',
         'Model Examples',
         'Small talk',
@@ -166,7 +164,6 @@ test('buildBasicVerbsCourseFromBlocks reads section labels inside Notion column 
 
     assert.deepEqual(Object.keys(course.data), ['Day 001']);
     assert.deepEqual(course.data['Day 001'].map(card => card.section || null), [
-        null,
         'Model Examples',
         'Small talk',
         'Small talk',
@@ -178,6 +175,28 @@ test('buildBasicVerbsCourseFromBlocks reads section labels inside Notion column 
         a: 'She would choose an English lecture over any horror movie.',
         section: 'Further Studies'
     });
+});
+
+test('buildBasicVerbsCourseFromBlocks does not duplicate the first model example', () => {
+    const blocks = [
+        heading('Day001 [Have] : Do you have any pets?', [
+            columnList(
+                ['[Model Examples]', '내 조카는 거북이를 키운다.', '나는 시카고에 사는 친구들이 있다.'],
+                ['', 'My nephew has a turtle.', 'I have some friends living in Chicago.']
+            )
+        ])
+    ];
+
+    const course = buildBasicVerbsCourseFromBlocks(blocks, { title: '기본동사' });
+
+    assert.deepEqual(course.data['Day 001'].map(card => card.q), [
+        '내 조카는 거북이를 키운다.',
+        '나는 시카고에 사는 친구들이 있다.'
+    ]);
+    assert.deepEqual(course.data['Day 001'].map(card => card.section), [
+        'Model Examples',
+        'Model Examples'
+    ]);
 });
 
 test('buildSyncedData replaces only basic-verbs course', () => {
@@ -205,7 +224,7 @@ test('buildSyncedData replaces only basic-verbs course', () => {
     const synced = buildSyncedData(existing, blocks);
 
     assert.deepEqual(synced.courses.conversation, existing.courses.conversation);
-    assert.equal(synced.courses['basic-verbs'].data['Day 001'].length, 2);
+    assert.equal(synced.courses['basic-verbs'].data['Day 001'].length, 1);
     assert.equal(synced.courses['basic-verbs'].note, 'Notion 원문에서 생성했습니다. 빈 섹션과 Day00x 템플릿은 제외합니다.');
 });
 

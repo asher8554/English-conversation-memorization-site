@@ -63,6 +63,17 @@ test('basic-verbs skips blank question and answer placeholders', () => {
     });
 });
 
+test('basic-verbs does not repeat the same question in consecutive cards', () => {
+    const course = loadBasicVerbsCourse();
+
+    Object.entries(course.data).forEach(([day, cards]) => {
+        cards.forEach((card, index) => {
+            if (index === 0) return;
+            assert.notEqual(card.q, cards[index - 1].q, `${day} card ${index + 1} should not repeat the previous question`);
+        });
+    });
+});
+
 test('basic-verbs includes Further Studies cards through Day 026', () => {
     const course = loadBasicVerbsCourse();
 

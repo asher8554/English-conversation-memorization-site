@@ -26,7 +26,7 @@ const TTS_PREMIUM_KEYWORDS = [
     'apple', 'siri', 'jenny', 'aria', 'samantha'
 ];
 
-const DATA_VERSION = '10';
+const DATA_VERSION = '11';
 
 function buildDataUrl(search = window.location.search) {
     const params = new URLSearchParams(search);

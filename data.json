@@ -1498,10 +1498,6 @@
         "Day 001": [
           {
             "q": "내 조카는 거북이를 키운다.",
-            "a": "My nephew has a turtle."
-          },
-          {
-            "q": "내 조카는 거북이를 키운다.",
             "a": "My nephew has a turtle.",
             "section": "Model Examples"
           },
@@ -1577,10 +1573,6 @@
           }
         ],
         "Day 002": [
-          {
-            "q": "나는 아침으로 주로 시리얼을 먹는다.",
-            "a": "I usually have cereal for breakfast."
-          },
           {
             "q": "나는 아침으로 주로 시리얼을 먹는다.",
             "a": "I usually have cereal for breakfast.",
@@ -1665,10 +1657,6 @@
         "Day 003": [
           {
             "q": "우리는 지난주 일본에서 정말 좋은 시간을 보냈어요.",
-            "a": "We had a great time in Japan last week."
-          },
-          {
-            "q": "우리는 지난주 일본에서 정말 좋은 시간을 보냈어요.",
             "a": "We had a great time in Japan last week.",
             "section": "Model Examples"
           },
@@ -1744,10 +1732,6 @@
           }
         ],
         "Day 004": [
-          {
-            "q": "제가 이번 주말에 집들이를 합니다.",
-            "a": "I’m having a housewarming party this weekend."
-          },
           {
             "q": "제가 이번 주말에 집들이를 합니다.",
             "a": "I’m having a housewarming party this weekend.",
@@ -1847,10 +1831,6 @@
         "Day 005": [
           {
             "q": "할 일이 산더미같이 쌓여 있다.",
-            "a": "I have tons of work to do."
-          },
-          {
-            "q": "할 일이 산더미같이 쌓여 있다.",
             "a": "I have tons of work to do.",
             "section": "Model Examples"
           },
@@ -1931,10 +1911,6 @@
           }
         ],
         "Day 006": [
-          {
-            "q": "이 컵은 손잡이가 독특하다.",
-            "a": "This cup has a unique handle."
-          },
           {
             "q": "이 컵은 손잡이가 독특하다.",
             "a": "This cup has a unique handle.",
@@ -2034,10 +2010,6 @@
         "Day 007": [
           {
             "q": "나는 간단한 메모를 위해 항상 펜을 곁에 둔다.",
-            "a": "I always have a pen nearby to take quick notes."
-          },
-          {
-            "q": "나는 간단한 메모를 위해 항상 펜을 곁에 둔다.",
             "a": "I always have a pen nearby to take quick notes.",
             "section": "Model Examples"
           },
@@ -2125,10 +2097,6 @@
         "Day 008": [
           {
             "q": "(당근마켓에서의 거래) 남편한테 역 근처에서 만나라고 할게요.",
-            "a": "I’ll have my husband meet you near the station."
-          },
-          {
-            "q": "(당근마켓에서의 거래) 남편한테 역 근처에서 만나라고 할게요.",
             "a": "I’ll have my husband meet you near the station.",
             "section": "Model Examples"
           },
@@ -2209,10 +2177,6 @@
           }
         ],
         "Day 009": [
-          {
-            "q": "지난주에 이 핸드폰 샀어. (지난주에 이 핸드폰 선물로 받았어.)",
-            "a": "I got this phone last week."
-          },
           {
             "q": "지난주에 이 핸드폰 샀어. (지난주에 이 핸드폰 선물로 받았어.)",
             "a": "I got this phone last week.",
@@ -2297,10 +2261,6 @@
         "Day 010": [
           {
             "q": "드디어 서울 마라톤 대회 참가 자격을 얻었다.",
-            "a": "I finally managed to get a spot in the Seoul Marathon."
-          },
-          {
-            "q": "드디어 서울 마라톤 대회 참가 자격을 얻었다.",
             "a": "I finally managed to get a spot in the Seoul Marathon.",
             "section": "Model Examples"
           },
@@ -2366,10 +2326,6 @@
           }
         ],
         "Day 011": [
-          {
-            "q": "혹시 많이 안 바쁘시면, 언제 술이나 한잔해도 좋고요.",
-            "a": "If you’re not too busy, maybe we could get a drink sometime."
-          },
           {
             "q": "혹시 많이 안 바쁘시면, 언제 술이나 한잔해도 좋고요.",
             "a": "If you’re not too busy, maybe we could get a drink sometime.",
@@ -2469,10 +2425,6 @@
         "Day 012": [
           {
             "q": "레몬차 주시겠어요?",
-            "a": "Can I get a lemon tea, please?"
-          },
-          {
-            "q": "레몬차 주시겠어요?",
             "a": "Can I get a lemon tea, please?",
             "section": "Model Examples"
           },
@@ -2543,10 +2495,6 @@
           }
         ],
         "Day 013": [
-          {
-            "q": "나 방금 도착했어.",
-            "a": "I just got here."
-          },
           {
             "q": "나 방금 도착했어.",
             "a": "I just got here.",
@@ -2624,10 +2572,6 @@
           }
         ],
         "Day 014": [
-          {
-            "q": "이 수학 문제 이해가 안 돼요.",
-            "a": "I don’t get this math problem."
-          },
           {
             "q": "이 수학 문제 이해가 안 돼요.",
             "a": "I don’t get this math problem.",
@@ -2712,10 +2656,6 @@
         "Day 015": [
           {
             "q": "요즘 날씨가 더 추워지고 있다.",
-            "a": "It’s getting colder these days."
-          },
-          {
-            "q": "요즘 날씨가 더 추워지고 있다.",
             "a": "It’s getting colder these days.",
             "section": "Model Examples"
           },
@@ -2793,10 +2733,6 @@
         "Day 016": [
           {
             "q": "열대 지역으로 여행 가서 말라리아에 걸리는 사람들이 있다.",
-            "a": "Some people get malaria when they travel to tropical countries."
-          },
-          {
-            "q": "열대 지역으로 여행 가서 말라리아에 걸리는 사람들이 있다.",
             "a": "Some people get malaria when they travel to tropical countries.",
             "section": "Model Examples"
           },
@@ -2867,10 +2803,6 @@
           }
         ],
         "Day 017": [
-          {
-            "q": "여권이 만료되기 직전에 서류를 대사관에 보냈어요.",
-            "a": "I got my documents to the embassy right before my passport expired."
-          },
           {
             "q": "여권이 만료되기 직전에 서류를 대사관에 보냈어요.",
             "a": "I got my documents to the embassy right before my passport expired.",
@@ -2960,10 +2892,6 @@
         "Day 018": [
           {
             "q": "여름에는 관광객들이 이곳을 많이 찾아요.",
-            "a": "We get a lot of tourists in the summer."
-          },
-          {
-            "q": "여름에는 관광객들이 이곳을 많이 찾아요.",
             "a": "We get a lot of tourists in the summer.",
             "section": "Model Examples"
           },
@@ -3044,10 +2972,6 @@
           }
         ],
         "Day 019": [
-          {
-            "q": "강아지 생일이라 케이크를 사 줬어.",
-            "a": "I got my dog a cake for his birthday."
-          },
           {
             "q": "강아지 생일이라 케이크를 사 줬어.",
             "a": "I got my dog a cake for his birthday.",
@@ -3142,10 +3066,6 @@
         "Day 020": [
           {
             "q": "내 차의 앞 유리를 교체해야 한다.",
-            "a": "I need to get my windshield replaced on my car."
-          },
-          {
-            "q": "내 차의 앞 유리를 교체해야 한다.",
             "a": "I need to get my windshield replaced on my car.",
             "section": "Model Examples"
           },
@@ -3221,10 +3141,6 @@
           }
         ],
         "Day 021": [
-          {
-            "q": "어떻게 남편이 담배 끊게 만든 거야?",
-            "a": "How did you get your husband to quit smoking?"
-          },
           {
             "q": "어떻게 남편이 담배 끊게 만든 거야?",
             "a": "How did you get your husband to quit smoking?",
@@ -3309,10 +3225,6 @@
         "Day 022": [
           {
             "q": "아내가 이 목도리를 만들어 줬어요.",
-            "a": "My wife made me this scarf."
-          },
-          {
-            "q": "아내가 이 목도리를 만들어 줬어요.",
             "a": "My wife made me this scarf.",
             "section": "Model Examples"
           },
@@ -3388,10 +3300,6 @@
           }
         ],
         "Day 023": [
-          {
-            "q": "팬데믹(코로나)으로 온라인 학습이 새로운 표준이 되었다.",
-            "a": "The pandemic made online learning the new norm."
-          },
           {
             "q": "팬데믹(코로나)으로 온라인 학습이 새로운 표준이 되었다.",
             "a": "The pandemic made online learning the new norm.",
@@ -3474,10 +3382,6 @@
           }
         ],
         "Day 024": [
-          {
-            "q": "(여름 캠프에 가기 싫은 아들이 하는 말) 엄마가 저를 강제로 보낼 순 없어요.",
-            "a": "You can’t make me go."
-          },
           {
             "q": "(여름 캠프에 가기 싫은 아들이 하는 말) 엄마가 저를 강제로 보낼 순 없어요.",
             "a": "You can’t make me go.",
@@ -3567,10 +3471,6 @@
         "Day 025": [
           {
             "q": "달리기를 하면 기분 전환이 된다.",
-            "a": "Running usually makes me feel better."
-          },
-          {
-            "q": "달리기를 하면 기분 전환이 된다.",
             "a": "Running usually makes me feel better.",
             "section": "Model Examples"
           },
@@ -3651,10 +3551,6 @@
           }
         ],
         "Day 026": [
-          {
-            "q": "얘들아, 안녕. (오늘) 점심 식사에 못 갈 것 같아.",
-            "a": "Hey, guys. I don’t think I can make it to lunch."
-          },
           {
             "q": "얘들아, 안녕. (오늘) 점심 식사에 못 갈 것 같아.",
             "a": "Hey, guys. I don’t think I can make it to lunch.",
@@ -3739,10 +3635,6 @@
         "Day 027": [
           {
             "q": "당연히, 당신은 좋은 선생님이 될 거예요.",
-            "a": "Of course, you will make a good teacher."
-          },
-          {
-            "q": "당연히, 당신은 좋은 선생님이 될 거예요.",
             "a": "Of course, you will make a good teacher.",
             "section": "Model Examples"
           },
@@ -3798,10 +3690,6 @@
           }
         ],
         "Day 028": [
-          {
-            "q": "나 대신 이 재킷 세탁소에 좀 가져다줄래?",
-            "a": "Could you take this jacket to the dry cleaners for me?"
-          },
           {
             "q": "나 대신 이 재킷 세탁소에 좀 가져다줄래?",
             "a": "Could you take this jacket to the dry cleaners for me?",
@@ -3896,10 +3784,6 @@
         "Day 029": [
           {
             "q": "죄송하지만 저희는 예약을 하지 않은 손님은 받지 않습니다.",
-            "a": "Sorry, we don’t take walk-ins."
-          },
-          {
-            "q": "죄송하지만 저희는 예약을 하지 않은 손님은 받지 않습니다.",
             "a": "Sorry, we don’t take walk-ins.",
             "section": "Model Examples"
           },
@@ -3982,10 +3866,6 @@
         "Day 030": [
           {
             "q": "그녀에게 차를 태워 주겠다고 했더니, 좋다고 했다.",
-            "a": "I offered her a ride, and she took it."
-          },
-          {
-            "q": "그녀에게 차를 태워 주겠다고 했더니, 좋다고 했다.",
             "a": "I offered her a ride, and she took it.",
             "section": "Model Examples"
           },
@@ -4061,10 +3941,6 @@
           }
         ],
         "Day 031": [
-          {
-            "q": "다이어트를 꾸준히 하려면 많은 절제가 필요하다.",
-            "a": "It takes a lot of discipline to stick to a diet."
-          },
           {
             "q": "다이어트를 꾸준히 하려면 많은 절제가 필요하다.",
             "a": "It takes a lot of discipline to stick to a diet.",
@@ -4152,10 +4028,6 @@
           }
         ],
         "Day 032": [
-          {
-            "q": "이 책을 쓰는 데 몇 달이 걸렸다.",
-            "a": "This book took me months to write."
-          },
           {
             "q": "이 책을 쓰는 데 몇 달이 걸렸다.",
             "a": "This book took me months to write.",
@@ -4250,10 +4122,6 @@
         "Day 033": [
           {
             "q": "칭찬으로 받아들일게.",
-            "a": "I’ll take that as a compliment."
-          },
-          {
-            "q": "칭찬으로 받아들일게.",
             "a": "I’ll take that as a compliment.",
             "section": "Model Examples"
           },
@@ -4341,10 +4209,6 @@
         "Day 034": [
           {
             "q": "나는 주말에 플라잉 요가를 한다.",
-            "a": "I do flying yoga on weekends."
-          },
-          {
-            "q": "나는 주말에 플라잉 요가를 한다.",
             "a": "I do flying yoga on weekends.",
             "section": "Model Examples"
           },
@@ -4420,10 +4284,6 @@
           }
         ],
         "Day 035": [
-          {
-            "q": "나는 TV 보면서 뭘 자주 먹곤 한다. (습관)",
-            "a": "I like to eat something while I watch TV."
-          },
           {
             "q": "나는 TV 보면서 뭘 자주 먹곤 한다. (습관)",
             "a": "I like to eat something while I watch TV.",
@@ -4513,10 +4373,6 @@
         "Day 036": [
           {
             "q": "저 새 봤어?",
-            "a": "Did you see that bird?"
-          },
-          {
-            "q": "저 새 봤어?",
             "a": "Did you see that bird?",
             "section": "Model Examples"
           },
@@ -4597,10 +4453,6 @@
           }
         ],
         "Day 037": [
-          {
-            "q": "여기서 멀지 않은 괜찮은 곳을 알아.",
-            "a": "I know a good place not far from here."
-          },
           {
             "q": "여기서 멀지 않은 괜찮은 곳을 알아.",
             "a": "I know a good place not far from here.",
@@ -4700,10 +4552,6 @@
         "Day 038": [
           {
             "q": "이 학습 방법은 아이들에게 너무 잘 맞는다.",
-            "a": "This learning method works really well with kids."
-          },
-          {
-            "q": "이 학습 방법은 아이들에게 너무 잘 맞는다.",
             "a": "This learning method works really well with kids.",
             "section": "Model Examples"
           },
@@ -4794,10 +4642,6 @@
           }
         ],
         "Day 039": [
-          {
-            "q": "누군가가 너를 억지로 사랑하게 만들 수는 없어. 사랑이라는 게 그런 게 아니잖아.",
-            "a": "You can’t force someone to love you - it doesn’t work that way."
-          },
           {
             "q": "누군가가 너를 억지로 사랑하게 만들 수는 없어. 사랑이라는 게 그런 게 아니잖아.",
             "a": "You can’t force someone to love you - it doesn’t work that way.",

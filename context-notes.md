@@ -112,3 +112,10 @@
 - 2026-06-22: 수정 커밋을 `main`에 fast-forward 병합하고 push한 뒤 수동 실행 `27945837355`를 시작했다. 해당 실행은 `Sync data from Notion` 단계에서 장시간 진행 중이며, 스크립트의 Notion `fetch` 호출에 명시적 타임아웃이 없어 API 응답 지연이 Actions 전체를 오래 붙잡을 수 있음을 추가 위험으로 확인했다.
 - 2026-06-22: 수동 실행 `27945837355`는 2분 53초 만에 성공했고, `fb1349d data: sync basic verbs from Notion` 커밋으로 `data.json`이 갱신되었다. 로컬과 live `data.json?refresh=...` 모두 기본동사 39일, 마지막 `Day 039`, 마지막 Day 20카드, 마지막 핵심 문장 `[Work] : Dating doesn’t work that way anymore. Times have changed.`로 확인했다.
 - 2026-06-22: 추가 보수로 Notion API 단일 요청에 기본 30초 타임아웃을 추가하고, workflow의 `Sync data from Notion` 단계에는 10분 제한을 추가했다. 이는 오늘 실패의 직접 원인은 아니지만, Notion API 응답 지연이 다음 운영 장애에서 긴 무응답으로 보이지 않게 하기 위한 방어다.
+
+## 2026-07-06 기본동사 카드 중복 검증 메모
+
+- 사용자가 제공한 스크린샷 기준으로 첫 카드는 Day 001 `[Have] : Do you have any pets?`의 `내 조카는 거북이를 키운다.`이고, Next 후에도 `Model Examples` 라벨과 같은 한국어가 다시 보입니다.
+- 우선 원인을 데이터와 렌더링으로 분리합니다. 같은 Day 안에 동일한 q가 여러 카드에 들어 있으면 데이터 문제이고, 서로 다른 q가 있는데 화면만 반복되면 렌더링 문제입니다.
+- 이 저장소는 GitHub Pages 정적 앱이고 `data.json?v=10` 캐시 전략을 사용합니다. 데이터 변경이 있으면 live 반영을 위해 `DATA_VERSION` 또는 배포 흐름도 확인해야 합니다.
+- 2026-07-06 재확인 결과 live `data.json`은 아직 Day 001의 1번 카드가 섹션 없는 중복이고, 로컬 수정본은 1번과 2번 카드가 서로 다른 `Model Examples`입니다. 사용자가 본 화면은 수정 전 live 배포본이 맞습니다.
