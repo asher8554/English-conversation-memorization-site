@@ -306,11 +306,16 @@ function parseFetchTimeoutMs(value) {
     return timeoutMs;
 }
 
+function isNotionFetchTimeout(error) {
+    return /^Notion API 요청이 \d+ms 안에 끝나지 않았습니다\.$/.test(error?.message || '');
+}
+
 async function notionGetJson(url, token, notionVersion, options = {}) {
     const fetchTimeoutMs = options.timeoutMs || DEFAULT_NOTION_FETCH_TIMEOUT_MS;
     const fetchImpl = options.fetchImpl || fetch;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), fetchTimeoutMs);
+    const startedAt = Date.now();
     let response;
 
     try {
@@ -328,6 +333,9 @@ async function notionGetJson(url, token, notionVersion, options = {}) {
         throw error;
     } finally {
         clearTimeout(timeoutId);
+        if (process.env.NOTION_SYNC_DEBUG === '1') {
+            console.log(`[notion-sync] ${new URL(url).pathname} ${Date.now() - startedAt}ms`);
+        }
     }
 
     if (!response.ok) {
@@ -425,6 +433,9 @@ async function main(argv = process.argv.slice(2), env = process.env) {
 if (require.main === module) {
     main().catch(error => {
         console.error(error.message);
+        if (isNotionFetchTimeout(error)) {
+            console.error('NOTION_FETCH_TIMEOUT');
+        }
         process.exit(1);
     });
 }
@@ -436,6 +447,7 @@ module.exports = {
     extractPairsFromBlocks,
     formatNotionApiError,
     getBlockText,
+    isNotionFetchTimeout,
     notionGetJson,
     parseFetchTimeoutMs,
     parseDayKey,

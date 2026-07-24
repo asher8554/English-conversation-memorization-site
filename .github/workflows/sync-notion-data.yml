@@ -38,9 +38,69 @@ jobs:
             exit 1
           fi
 
+      - name: Restore Notion timeout state
+        uses: actions/cache/restore@v4
+        with:
+          path: .notion-sync-state
+          key: notion-sync-timeout-${{ github.run_id }}
+          restore-keys: notion-sync-timeout-
+
       - name: Sync data from Notion
+        id: sync
         timeout-minutes: 10
-        run: node scripts/sync-notion-data.js
+        run: |
+          state_dir=.notion-sync-state
+          count_file="$state_dir/timeout-count"
+          log_file="$(mktemp)"
+          mkdir -p "$state_dir"
+          previous=0
+          if [ -f "$count_file" ] && grep -Eq '^[0-2]$' "$count_file"; then
+            previous=$(cat "$count_file")
+          fi
+
+          attempts=1
+          if [ "$previous" -ge 2 ]; then
+            attempts=2
+            echo "::warning::Notion API timeout이 2회 연속 발생해 요청 단계 로그와 1회 재시도를 사용합니다."
+          fi
+
+          exit_code=1
+          for attempt in $(seq 1 "$attempts"); do
+            : > "$log_file"
+            if [ "$attempts" -gt 1 ]; then
+              echo "Notion 동기화 진단 시도 $attempt/$attempts"
+              NOTION_SYNC_DEBUG=1 node scripts/sync-notion-data.js 2>&1 | tee "$log_file"
+            else
+              node scripts/sync-notion-data.js 2>&1 | tee "$log_file"
+            fi
+            exit_code=${PIPESTATUS[0]}
+            if [ "$exit_code" -eq 0 ]; then
+              break
+            fi
+          done
+
+          if [ "$exit_code" -eq 0 ]; then
+            next=0
+          elif grep -Fxq 'NOTION_FETCH_TIMEOUT' "$log_file"; then
+            next=$((previous + 1))
+            if [ "$next" -gt 2 ]; then next=2; fi
+          else
+            next=0
+          fi
+
+          printf '%s' "$next" > "$count_file"
+          echo "exit-code=$exit_code" >> "$GITHUB_OUTPUT"
+
+      - name: Save Notion timeout state
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .notion-sync-state
+          key: notion-sync-timeout-${{ github.run_id }}
+
+      - name: Fail after saving Notion timeout state
+        if: steps.sync.outputs.exit-code != '0'
+        run: exit ${{ steps.sync.outputs.exit-code }}
 
       - name: Run tests
         run: |

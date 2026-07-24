@@ -10,6 +10,7 @@ const {
     extractPairsFromBlocks,
     formatNotionApiError,
     notionGetJson,
+    isNotionFetchTimeout,
     parseFetchTimeoutMs,
     parseDayKey
 } = require('../scripts/sync-notion-data');
@@ -285,6 +286,11 @@ test('notionGetJson fails slow requests with a clear timeout error', async () =>
         ),
         /Notion API 요청이 1ms 안에 끝나지 않았습니다/
     );
+});
+
+test('isNotionFetchTimeout only matches the configured Notion timeout error', () => {
+    assert.equal(isNotionFetchTimeout(new Error('Notion API 요청이 30000ms 안에 끝나지 않았습니다.')), true);
+    assert.equal(isNotionFetchTimeout(new Error('Notion API 요청 실패: 401')), false);
 });
 
 test('CLI rejects --data without a file path before reading secrets', () => {
