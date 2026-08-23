@@ -2,6 +2,7 @@
 :root {
   --primary-color: #087f8c;
   --primary-hover: #05636e;
+  --primary-button-bg: #087f8c;
   --background-gradient: linear-gradient(135deg, #dff7f4 0%, #d7e4fb 48%, #f7e7dc 100%);
   --card-bg: rgba(255, 255, 255, 0.52);
   --surface-bg: rgba(255, 255, 255, 0.34);
@@ -17,6 +18,7 @@
 .dark-mode {
   --primary-color: #76e3dc;
   --primary-hover: #a0f2ea;
+  --primary-button-bg: #0b5f69;
   --background-gradient: linear-gradient(135deg, #112d38 0%, #17243d 52%, #352c3e 100%);
   --card-bg: rgba(24, 42, 58, 0.58);
   --surface-bg: rgba(255, 255, 255, 0.08);
@@ -118,6 +120,10 @@ body::after {
   color: var(--primary-color);
 }
 
+.dark-mode .course-btn[data-course-id="conversation"].active {
+  color: #12323a;
+}
+
 .course-btn[data-course-id="basic-verbs"].active {
   border-color: #ea580c;
   background: rgba(249, 115, 22, 0.78);
@@ -199,7 +205,7 @@ select:focus {
 }
 
 .btn-primary {
-  background: var(--primary-color);
+  background: var(--primary-button-bg);
   color: white;
   width: 100%;
   margin-bottom: 1.5rem;
