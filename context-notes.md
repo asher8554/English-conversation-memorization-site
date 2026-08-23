@@ -126,3 +126,11 @@
 - 우선 원인을 데이터와 렌더링으로 분리합니다. 같은 Day 안에 동일한 q가 여러 카드에 들어 있으면 데이터 문제이고, 서로 다른 q가 있는데 화면만 반복되면 렌더링 문제입니다.
 - 이 저장소는 GitHub Pages 정적 앱이고 `data.json?v=10` 캐시 전략을 사용합니다. 데이터 변경이 있으면 live 반영을 위해 `DATA_VERSION` 또는 배포 흐름도 확인해야 합니다.
 - 2026-07-06 재확인 결과 live `data.json`은 아직 Day 001의 1번 카드가 섹션 없는 중복이고, 로컬 수정본은 1번과 2번 카드가 서로 다른 `Model Examples`입니다. 사용자가 본 화면은 수정 전 live 배포본이 맞습니다.
+# 2026-08-23 글래스모피즘 디자인 및 Pretendard 적용
+
+- 기존 정적 HTML/CSS 구조를 유지하고 `style.css` 중심으로 수정한다.
+- Pretendard는 별도 패키지 설치 없이 jsDelivr의 정적 CSS를 `index.html`에서 로드한다.
+- 기존 다크 모드와 버튼 동작은 유지하며, 반투명 패널·얇은 테두리·배경 블러를 공통 토큰으로 통일한다.
+- 디자인 변경 후 `npm test`, `npm run check`, `git diff --check`를 실행한다.
+- `npm test`는 46개 전부 통과했고 `npm run check`와 `git diff --check`도 통과했다.
+- 환경에 Playwright/agent-browser가 없어 자동 스크린샷 검증은 생략했다.

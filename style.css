@@ -1,32 +1,30 @@
 /* CSS Variables */
 :root {
-  /* 라이트 모드 변수 */
-  --primary-color: #6366f1;
-  --primary-hover: #4f46e5;
-  --background-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  --card-bg: rgba(255, 255, 255, 0.8);
-  --text-color: #1f2937;
-  --text-secondary: #6b7280;
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --radius: 16px;
-  --font-family: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
-  --input-bg: white;
-  --input-border: #e5e7eb;
+  --primary-color: #087f8c;
+  --primary-hover: #05636e;
+  --background-gradient: linear-gradient(135deg, #dff7f4 0%, #d7e4fb 48%, #f7e7dc 100%);
+  --card-bg: rgba(255, 255, 255, 0.52);
+  --surface-bg: rgba(255, 255, 255, 0.34);
+  --text-color: #16333a;
+  --text-secondary: #5d747a;
+  --shadow-lg: 0 24px 60px rgba(41, 79, 92, 0.18);
+  --radius: 24px;
+  --font-family: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
+  --input-bg: rgba(255, 255, 255, 0.48);
+  --input-border: rgba(255, 255, 255, 0.72);
 }
 
 .dark-mode {
-  /* 다크 모드 변수 */
-  --primary-color: #818cf8; /* 어두운 배경을 위한 밝은 인디고 */
-  --primary-hover: #6366f1;
-  --background-gradient: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-  --card-bg: rgba(31, 41, 55, 0.8); /* 투명도가 있는 짙은 회색 */
-  --text-color: #f3f4f6; /* 밝은 회색 텍스트 */
+  --primary-color: #76e3dc;
+  --primary-hover: #a0f2ea;
+  --background-gradient: linear-gradient(135deg, #112d38 0%, #17243d 52%, #352c3e 100%);
+  --card-bg: rgba(24, 42, 58, 0.58);
+  --surface-bg: rgba(255, 255, 255, 0.08);
+  --text-color: #edfafa;
   --text-secondary: #9ca3af;
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
-    0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --input-bg: #374151;
-  --input-border: #4b5563;
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.3);
+  --input-bg: rgba(255, 255, 255, 0.1);
+  --input-border: rgba(255, 255, 255, 0.2);
 }
 
 * {
@@ -43,8 +41,34 @@ body {
   justify-content: center;
   align-items: flex-start;
   color: var(--text-color);
-  padding: 20px 10px;
+  padding: 88px 16px 28px;
+  position: relative;
+  overflow-x: hidden;
   transition: background 0.3s ease, color 0.3s ease;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+  filter: blur(12px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+body::before {
+  top: -5rem;
+  left: -5rem;
+  background: #89ddd2;
+}
+
+body::after {
+  right: -6rem;
+  bottom: -5rem;
+  background: #f0b68c;
 }
 
 .container {
@@ -57,7 +81,9 @@ body {
   max-width: 500px;
   padding: 1.5rem 1.5rem 1rem 1.5rem;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  position: relative;
+  z-index: 1;
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
@@ -69,10 +95,10 @@ body {
 }
 
 .course-btn {
-  border: 2px solid #4b5563;
-  background: #374151;
-  color: #f9fafb;
-  border-radius: 12px;
+  border: 1px solid var(--input-border);
+  background: var(--surface-bg);
+  color: var(--text-color);
+  border-radius: 14px;
   padding: 0.75rem 0.5rem;
   font-family: inherit;
   font-size: 1rem;
@@ -82,20 +108,19 @@ body {
 }
 
 .course-btn:not(.active):hover {
-  border-color: #6b7280;
-  background: #4b5563;
-  color: white;
+  border-color: rgba(8, 127, 140, 0.4);
+  background: rgba(255, 255, 255, 0.58);
 }
 
 .course-btn[data-course-id="conversation"].active {
   border-color: var(--primary-color);
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.82);
   color: var(--primary-color);
 }
 
 .course-btn[data-course-id="basic-verbs"].active {
   border-color: #ea580c;
-  background: #f97316;
+  background: rgba(249, 115, 22, 0.78);
   color: white;
 }
 
@@ -113,7 +138,7 @@ select {
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
-  border: 2px solid var(--input-border);
+  border: 1px solid var(--input-border);
   background-color: var(--input-bg);
   font-size: 1rem;
   color: var(--text-color);
@@ -125,7 +150,7 @@ select {
 select:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 4px rgba(8, 127, 140, 0.14);
 }
 
 .section-label {
@@ -165,7 +190,7 @@ select:focus {
 .btn {
   padding: 12px 24px;
   border-radius: 12px;
-  border: none;
+  border: 1px solid transparent;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -178,13 +203,13 @@ select:focus {
   color: white;
   width: 100%;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 10px 24px rgba(8, 127, 140, 0.22);
 }
 
 .btn-primary:hover {
   background: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 8px -1px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 14px 28px rgba(8, 127, 140, 0.3);
 }
 
 .btn-primary:active {
@@ -201,20 +226,14 @@ select:focus {
 }
 
 .btn-secondary {
-  background: #f3f4f6;
-  color: #1f2937; /* 다크 모드에서도 대비를 위해 보조 버튼에 일관된 어두운 텍스트 색상 사용 */
+  background: var(--surface-bg);
+  color: var(--text-color);
   flex: 1;
-}
-.dark-mode .btn-secondary {
-  background: #4b5563;
-  color: #f3f4f6;
+  border-color: var(--input-border);
 }
 
 .btn-secondary:hover {
-  background: #e5e7eb;
-}
-.dark-mode .btn-secondary:hover {
-  background: #6b7280;
+  background: rgba(255, 255, 255, 0.62);
 }
 
 .btn-secondary:disabled {
@@ -261,9 +280,11 @@ select:focus {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: none;
-  background: var(--input-bg);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--input-border);
+  background: var(--surface-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 20px rgba(41, 79, 92, 0.14);
   font-size: 1.5rem;
   cursor: pointer;
   display: flex;
@@ -294,7 +315,7 @@ select:focus {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(17, 45, 56, 0.32);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   align-items: center;
@@ -318,7 +339,7 @@ select:focus {
   position: relative;
   transform: translateY(20px);
   transition: transform 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.68);
 }
 
 .modal.show .modal-content {
