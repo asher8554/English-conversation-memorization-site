@@ -49,7 +49,7 @@ GitHub 저장소에 다음 값을 설정합니다.
 
 - Secret. `NOTION_TOKEN`. Notion integration token입니다.
 - Variable. `NOTION_PAGE_ID`. 기본동사 Notion 페이지 ID입니다. 생략하면 현재 기본 페이지 ID `32f3d76f88748069b726d6b6d47f5afd`를 사용합니다.
-- Actions 설정. Workflow permissions에서 `Read and write permissions`가 허용되어야 `GITHUB_TOKEN`이 `data.json`을 커밋할 수 있습니다.
+- Actions 설정. 워크플로우 파일이 자체적으로 `permissions: contents: write`를 선언하므로, 저장소 Settings → Actions → Workflow permissions은 더 안전한 기본값인 `Read repository contents`로 유지해도 됩니다.
 
 수동 실행 경로입니다.
 

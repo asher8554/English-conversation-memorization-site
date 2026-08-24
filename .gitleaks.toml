@@ -1,0 +1,14 @@
+# gitleaks 기본 규칙 세트를 확장하여 사용합니다.
+# 로컬 실행: gitleaks detect --source . --report-path gitleaks-report.json
+[extend]
+useDefault = true
+
+[allowlist]
+description = "예시/플레이스홀더 값 허용"
+paths = [
+    '''(^|/)(tests?|__tests__)/''',
+    '''\.example$''',
+]
+regexes = [
+    '''(?i)(changeme|your[-_](token|secret|key)|xxx+)''',
+]

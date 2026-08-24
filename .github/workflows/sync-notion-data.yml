@@ -20,14 +20,15 @@ jobs:
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       NOTION_PAGE_ID: ${{ vars.NOTION_PAGE_ID || '32f3d76f88748069b726d6b6d47f5afd' }}
       NOTION_VERSION: '2022-06-28'
+      NOTION_FETCH_TIMEOUT_MS: '60000'
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6.4.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: '24'
 
@@ -39,7 +40,7 @@ jobs:
           fi
 
       - name: Restore Notion timeout state
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: .notion-sync-state
           key: notion-sync-timeout-${{ github.run_id }}
@@ -93,7 +94,7 @@ jobs:
 
       - name: Save Notion timeout state
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: .notion-sync-state
           key: notion-sync-timeout-${{ github.run_id }}

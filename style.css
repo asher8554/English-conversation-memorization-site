@@ -257,6 +257,11 @@ select:focus {
   box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.4);
 }
 
+.reset-stats-btn {
+  margin-top: 1rem;
+  width: 100%;
+}
+
 /* 애니메이션 */
 @keyframes fadeIn {
   from {
