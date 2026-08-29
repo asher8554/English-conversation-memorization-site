@@ -39,19 +39,19 @@ jobs:
             exit 1
           fi
 
-      - name: Restore Notion timeout state
+      - name: Restore Notion retry state
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .notion-sync-state
-          key: notion-sync-timeout-${{ github.run_id }}
-          restore-keys: notion-sync-timeout-
+          key: notion-sync-retry-${{ github.run_id }}
+          restore-keys: notion-sync-retry-
 
       - name: Sync data from Notion
         id: sync
         timeout-minutes: 10
         run: |
           state_dir=.notion-sync-state
-          count_file="$state_dir/timeout-count"
+          count_file="$state_dir/retry-count"
           log_file="$(mktemp)"
           mkdir -p "$state_dir"
           previous=0
@@ -62,7 +62,7 @@ jobs:
           attempts=1
           if [ "$previous" -ge 2 ]; then
             attempts=2
-            echo "::warning::Notion API timeout이 2회 연속 발생해 요청 단계 로그와 1회 재시도를 사용합니다."
+            echo "::warning::Notion API 일시 오류가 2회 연속 발생해 요청 단계 로그와 1회 재시도를 사용합니다."
           fi
 
           exit_code=1
@@ -78,11 +78,15 @@ jobs:
             if [ "$exit_code" -eq 0 ]; then
               break
             fi
+            if [ "$attempt" -lt "$attempts" ]; then
+              echo "Notion 동기화 재시도 전 20초 대기합니다."
+              sleep 20
+            fi
           done
 
           if [ "$exit_code" -eq 0 ]; then
             next=0
-          elif grep -Fxq 'NOTION_FETCH_TIMEOUT' "$log_file"; then
+          elif grep -Eqx 'NOTION_FETCH_TIMEOUT|NOTION_RATE_LIMIT' "$log_file"; then
             next=$((previous + 1))
             if [ "$next" -gt 2 ]; then next=2; fi
           else
@@ -92,14 +96,14 @@ jobs:
           printf '%s' "$next" > "$count_file"
           echo "exit-code=$exit_code" >> "$GITHUB_OUTPUT"
 
-      - name: Save Notion timeout state
+      - name: Save Notion retry state
         if: always()
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .notion-sync-state
-          key: notion-sync-timeout-${{ github.run_id }}
+          key: notion-sync-retry-${{ github.run_id }}
 
-      - name: Fail after saving Notion timeout state
+      - name: Fail after saving Notion retry state
         if: steps.sync.outputs.exit-code != '0'
         run: exit ${{ steps.sync.outputs.exit-code }}
 

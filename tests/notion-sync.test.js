@@ -11,6 +11,7 @@ const {
     formatNotionApiError,
     notionGetJson,
     isNotionFetchTimeout,
+    isNotionRateLimit,
     parseFetchTimeoutMs,
     parseDayKey
 } = require('../scripts/sync-notion-data');
@@ -259,6 +260,16 @@ test('formatNotionApiError explains missing page connection', () => {
     assert.match(message, /integration/);
 });
 
+test('formatNotionApiError omits raw Notion response details from workflow logs', () => {
+    const rawError = JSON.stringify({
+        code: 'validation_error',
+        message: 'Could not find block with ID: private-block-id'
+    });
+
+    assert.equal(formatNotionApiError(400, rawError), 'Notion API 요청 실패: HTTP 400.');
+    assert.doesNotMatch(formatNotionApiError(404, rawError), /private-block-id/);
+});
+
 test('parseFetchTimeoutMs validates configured request timeout', () => {
     assert.equal(parseFetchTimeoutMs(undefined), 30000);
     assert.equal(parseFetchTimeoutMs('1500'), 1500);
@@ -291,6 +302,50 @@ test('notionGetJson fails slow requests with a clear timeout error', async () =>
 test('isNotionFetchTimeout only matches the configured Notion timeout error', () => {
     assert.equal(isNotionFetchTimeout(new Error('Notion API 요청이 30000ms 안에 끝나지 않았습니다.')), true);
     assert.equal(isNotionFetchTimeout(new Error('Notion API 요청 실패: 401')), false);
+});
+
+test('notionGetJson respects Notion retry_after before retrying rate limits', async () => {
+    let calls = 0;
+    const delays = [];
+    const fetchImpl = async () => {
+        calls++;
+        if (calls === 1) {
+            return {
+                ok: false,
+                status: 429,
+                headers: { get: name => name === 'retry-after' ? '2' : null },
+                text: async () => JSON.stringify({ code: 'rate_limited' })
+            };
+        }
+        return { ok: true, json: async () => ({ results: [] }) };
+    };
+
+    const result = await notionGetJson('https://api.notion.com/v1/blocks/test/children', 'token', '2022-06-28', {
+        fetchImpl,
+        sleepImpl: (resolve, milliseconds) => {
+            delays.push(milliseconds);
+            resolve();
+        }
+    });
+
+    assert.deepEqual(result, { results: [] });
+    assert.equal(calls, 2);
+    assert.deepEqual(delays, [2000]);
+});
+
+test('isNotionRateLimit identifies an exhausted rate-limit response', async () => {
+    await assert.rejects(
+        () => notionGetJson('https://api.notion.com/v1/blocks/test/children', 'token', '2022-06-28', {
+            fetchImpl: async () => ({
+                ok: false,
+                status: 429,
+                headers: { get: () => null },
+                text: async () => JSON.stringify({ code: 'rate_limited' })
+            }),
+            maxRateLimitRetries: 0
+        }),
+        error => isNotionRateLimit(error)
+    );
 });
 
 test('CLI rejects --data without a file path before reading secrets', () => {

@@ -272,6 +272,35 @@ test('QuizApp updates cards without reading layout synchronously', () => {
     assert.equal(elements.questionText.textContent, '두 번째 질문');
 });
 
+test('QuizApp explains when a review can be recorded and confirms completion', () => {
+    const { QuizApp, elements } = createQuizContext();
+    const app = new QuizApp({
+        defaultCourse: 'basic-verbs',
+        courses: {
+            'basic-verbs': {
+                title: 'Basic Verbs',
+                data: {
+                    'Day 001': [
+                        { q: '첫 질문', a: 'First answer.' },
+                        { q: '마지막 질문', a: 'Last answer.' }
+                    ]
+                }
+            }
+        }
+    });
+
+    assert.equal(app.reviewStatus.style.display, 'none');
+
+    elements.nextBtn.click();
+
+    assert.equal(app.reviewStatus.style.display, 'block');
+    assert.match(app.reviewStatus.textContent, /Review Complete/);
+
+    app.reviewCompleteBtn.click();
+
+    assert.match(app.reviewStatus.textContent, /review recorded/);
+});
+
 test('QuizApp replays the Korean question when the question text is clicked', () => {
     const { QuizApp, elements, spoken } = createQuizContext({
         voices: [

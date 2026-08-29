@@ -465,7 +465,17 @@ test('storage-backed managers tolerate unavailable localStorage', () => {
     const reviewManager = new context.ReviewManager('conversation');
 
     assert.doesNotThrow(() => reviewManager.incrementReview('Day 001'));
-    assert.equal(reviewManager.getAllReviews()['Day 001'].count, 1);
+    assert.equal(reviewManager.incrementReview('Day 001'), false);
+    assert.equal(reviewManager.getAllReviews()['Day 001'], undefined);
+});
+
+test('ReviewManager only keeps a review after localStorage saves it', () => {
+    const { ReviewManager, storage } = createClassContext();
+    const manager = new ReviewManager('conversation');
+
+    assert.equal(manager.incrementReview('Day 001'), true);
+    assert.equal(manager.getAllReviews()['Day 001'].count, 1);
+    assert.equal(JSON.parse(storage.get('reviewStats:conversation'))['Day 001'].count, 1);
 });
 
 test('ReviewManager ignores corrupted localStorage stats instead of crashing', () => {
