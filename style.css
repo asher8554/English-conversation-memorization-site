@@ -541,6 +541,13 @@ select:focus {
   box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
 }
 
+.review-status {
+  margin: 1rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 .btn-complete:hover {
   background: #059669;
   box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.4);

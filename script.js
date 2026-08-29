@@ -945,19 +945,28 @@ class ReviewManager {
      * @param {string} day - 완료한 Day (예: "Day 001")
      */
     incrementReview(day) {
-        if (!this.reviews[day]) {
-            this.reviews[day] = { count: 0, lastReviewed: null };
+        const previousReview = this.reviews[day];
+        const nextReview = {
+            count: (previousReview ? previousReview.count : 0) + 1,
+            lastReviewed: new Date().toISOString()
+        };
+
+        this.reviews[day] = nextReview;
+        if (this.saveReviews()) return true;
+
+        if (previousReview) {
+            this.reviews[day] = previousReview;
+        } else {
+            delete this.reviews[day];
         }
-        this.reviews[day].count++;
-        this.reviews[day].lastReviewed = new Date().toISOString();
-        this.saveReviews();
+        return false;
     }
 
     /**
      * 리뷰 데이터를 로컬 스토리지에 저장합니다.
      */
     saveReviews() {
-        setStorageItem(this.storageKey, JSON.stringify(this.reviews));
+        return setStorageItem(this.storageKey, JSON.stringify(this.reviews));
     }
 
     /**
@@ -1101,12 +1110,19 @@ class QuizApp {
     }
 
     createReviewCompleteBtn() {
+        this.reviewStatus = document.createElement('p');
+        this.reviewStatus.id = 'reviewStatus';
+        this.reviewStatus.className = 'review-status';
+        this.reviewStatus.setAttribute('role', 'status');
+        this.reviewStatus.style.display = 'none';
+
         this.reviewCompleteBtn = document.createElement('button');
         this.reviewCompleteBtn.id = 'reviewCompleteBtn';
         this.reviewCompleteBtn.className = 'btn btn-complete';
         this.reviewCompleteBtn.textContent = '✅ Review Complete';
         this.reviewCompleteBtn.style.display = 'none';
 
+        this.cardContent.appendChild(this.reviewStatus);
         this.cardContent.appendChild(this.reviewCompleteBtn);
 
         this.reviewCompleteBtn.addEventListener('click', () => {
@@ -1116,12 +1132,17 @@ class QuizApp {
 
     handleReviewComplete() {
         const currentDay = this.daySelect.value;
-        this.reviewManager.incrementReview(currentDay);
+        const wasSaved = this.reviewManager.incrementReview(currentDay);
 
-        alert(`Good job! "${currentDay}" review recorded.`);
+        if (!wasSaved) {
+            this.reviewStatus.textContent = 'Review could not be saved. Check browser storage permissions and try again.';
+            alert('Review could not be saved. Check browser storage permissions and try again.');
+            return;
+        }
 
         this.reviewCompleteBtn.disabled = true;
         this.reviewCompleteBtn.textContent = 'Review Recorded';
+        this.reviewStatus.textContent = `"${currentDay}" review recorded. Open Statistics to view your progress.`;
     }
 
     /**
@@ -1320,10 +1341,13 @@ class QuizApp {
 
         // 리뷰 완료 버튼 초기화 및 표시 여부 결정
         if (isLastCard) {
+            this.reviewStatus.style.display = 'block';
+            this.reviewStatus.textContent = 'Last card: select Review Complete below to save this session.';
             this.reviewCompleteBtn.style.display = 'block';
             this.reviewCompleteBtn.disabled = false;
             this.reviewCompleteBtn.textContent = '✅ Review Complete';
         } else {
+            this.reviewStatus.style.display = 'none';
             this.reviewCompleteBtn.style.display = 'none';
         }
 
