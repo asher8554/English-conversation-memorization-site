@@ -1016,6 +1016,17 @@ class QuizApp {
     }
 
     getInitialCourseId(defaultCourse) {
+        try {
+            const saved = JSON.parse(getStorageItem('lastCompletedChapter'));
+            if (saved && typeof saved.courseId === 'string' && typeof saved.day === 'string' &&
+                Object.hasOwn(this.courses, saved.courseId) &&
+                Object.hasOwn(this.courses[saved.courseId].data, saved.day)) {
+                this.completedChapter = saved;
+                return saved.courseId;
+            }
+        } catch (error) {
+            // 손상된 저장값은 무시하고 기존 초기 과정으로 시작한다.
+        }
         const courseIds = Object.keys(this.courses);
         return [getStorageItem('selectedCourseId'), defaultCourse, courseIds[0]]
             .find(courseId => this.courses[courseId]);
@@ -1108,6 +1119,10 @@ class QuizApp {
         this.randomOrderCheckbox.checked = false;
         this.populateDaySelect();
         this.originalOptions = Array.from(this.daySelect.options);
+        if (!shouldPersist && this.completedChapter &&
+            this.originalOptions.some(option => option.value === this.completedChapter.day)) {
+            this.daySelect.value = this.completedChapter.day;
+        }
         this.loadDay(this.daySelect.value);
     }
 
@@ -1144,7 +1159,13 @@ class QuizApp {
 
         this.reviewCompleteBtn.disabled = true;
         this.reviewCompleteBtn.textContent = 'Review Recorded';
-        this.reviewStatus.textContent = `"${currentDay}" review recorded. Open Statistics to view your progress.`;
+        const chapterSaved = setStorageItem('lastCompletedChapter', JSON.stringify({
+            courseId: this.currentCourseId,
+            day: currentDay
+        }));
+        this.reviewStatus.textContent = chapterSaved
+            ? `"${currentDay}" review recorded. This chapter will open on your next visit.`
+            : `"${currentDay}" review recorded, but your starting chapter could not be saved. Check browser storage permissions.`;
     }
 
     /**

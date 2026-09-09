@@ -62,7 +62,7 @@ function createElementStub(id) {
     };
 }
 
-function createQuizContext({ voices = [], throwOnOffsetWidth = false } = {}) {
+function createQuizContext({ voices = [], throwOnOffsetWidth = false, storage } = {}) {
     const elements = {};
     const spoken = [];
     [
@@ -114,7 +114,7 @@ function createQuizContext({ voices = [], throwOnOffsetWidth = false } = {}) {
 
     const context = {
         console,
-        localStorage: {
+        localStorage: storage || {
             getItem() {
                 return null;
             },
@@ -202,6 +202,59 @@ function createQuizContext({ voices = [], throwOnOffsetWidth = false } = {}) {
         spoken
     };
 }
+
+test('completed chapter survives a new app instance and invalid or failed saves are handled', () => {
+    const values = new Map();
+    let blockedKey;
+    const storage = {
+        getItem: key => values.get(key) ?? null,
+        setItem(key, value) {
+            if (key === blockedKey) throw new Error('Storage unavailable');
+            values.set(key, String(value));
+        }
+    };
+    const data = { defaultCourse: 'conversation', courses: {
+        conversation: { title: '영어회화', data: { 'Day 001': [{ q: '처음', a: 'First.' }] } },
+        'basic-verbs': { title: '기본동사', data: {
+            'Day 001': [{ q: '시작', a: 'Start.' }],
+            'Day 002': [{ q: '복원할 첫 카드', a: 'Resume.' }, { q: '마지막', a: 'Last.' }]
+        } }
+    } };
+    const first = createQuizContext({ storage });
+    const app = new first.QuizApp(data);
+    app.switchCourse('basic-verbs');
+    first.elements.daySelect.value = 'Day 002';
+    app.loadDay('Day 002', true);
+    app.reviewCompleteBtn.click();
+    assert.deepEqual(JSON.parse(values.get('lastCompletedChapter')), { courseId: 'basic-verbs', day: 'Day 002' });
+    app.switchCourse('conversation');
+    const reopened = createQuizContext({ storage });
+    const restored = new reopened.QuizApp(data);
+    assert.equal(restored.currentCourseId, 'basic-verbs');
+    assert.equal(reopened.elements.daySelect.value, 'Day 002');
+    assert.equal(reopened.elements.questionText.textContent, '복원할 첫 카드');
+    assert.equal(restored.currentIndex, 0);
+
+    for (const invalid of ['broken json', 'null', '{"courseId":"missing","day":"Day 002"}',
+        '{"courseId":"basic-verbs","day":"Day 999"}', '{"courseId":{},"day":[]}']) {
+        values.set('lastCompletedChapter', invalid);
+        const fresh = createQuizContext({ storage });
+        assert.equal(new fresh.QuizApp(data).currentCourseId, 'conversation');
+        assert.equal(fresh.elements.daySelect.value, 'Day 001');
+    }
+    values.delete('lastCompletedChapter');
+    const failure = createQuizContext({ storage });
+    const failureApp = new failure.QuizApp(data);
+    blockedKey = failureApp.reviewManager.storageKey;
+    failureApp.reviewCompleteBtn.click();
+    assert.equal(values.has('lastCompletedChapter'), false);
+    assert.match(failureApp.reviewStatus.textContent, /Review could not be saved/);
+    blockedKey = 'lastCompletedChapter';
+    failureApp.reviewCompleteBtn.click();
+    assert.equal(values.has('lastCompletedChapter'), false);
+    assert.match(failureApp.reviewStatus.textContent, /starting chapter could not be saved/);
+    assert.equal(failureApp.reviewCompleteBtn.disabled, true);
+});
 
 test('chapter buttons skip cards, respect list order and stop at boundaries including empty days', () => {
     const { QuizApp, elements } = createQuizContext();
