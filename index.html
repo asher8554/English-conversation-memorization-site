@@ -9,7 +9,7 @@
     <title>English Conversation Memorization</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" integrity="sha384-SN6A48CJQjx946+DRb8wsoifC4a8ur9ZS6R+HCTgnBHOKCa6GLXAR3Qn8d1jztxg" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="stylesheet" href="style.css?v=12">
 </head>
 
 <body>
@@ -96,6 +96,10 @@
             <button id="basicVerbsCourseBtn" type="button" class="course-btn" data-course-id="basic-verbs" aria-pressed="false">기본동사</button>
         </div>
         <div id="courseMeta" class="course-meta"></div>
+        <div class="navigation chapter-navigation" role="group" aria-label="챕터 이동">
+            <button id="prevDayBtn" type="button" class="btn btn-secondary" disabled>&laquo; 이전 챕터</button>
+            <button id="nextDayBtn" type="button" class="btn btn-secondary" disabled>다음 챕터 &raquo;</button>
+        </div>
 
         <div class="controls">
             <select id="daySelect" aria-label="Select Day"></select>
@@ -121,7 +125,7 @@
         </div>
     </div>
 
-    <script src="script.js?v=24"></script>
+    <script src="script.js?v=25"></script>
 </body>
 
 </html>

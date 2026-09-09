@@ -263,3 +263,7 @@ git commit -m "docs: translate hardening report to Korean"
 - 기본동사 Day 001에서 Next 후 두 번째 카드는 첫 카드와 다른 한국어 질문을 표시합니다.
 - 기본동사 전체 Day와 영어회화 전체 Day에 빈 q/a와 의심스러운 연속 중복이 없습니다.
 - `npm test`, `npm run check`, Playwright 브라우저 검증, Computer Use 화면 검증을 통과합니다.
+
+## 2026-09-10 챕터 이동 버튼.
+과정 정보 아래 이전·다음 챕터 버튼을 추가하고 기존 Day 선택 및 loadDay를 재사용한다. 현재 정렬을 따르며 각 챕터 첫 카드로 이동한다.
+검증은 Node 테스트와 정적 검사, 데스크톱·모바일 실제 렌더링 및 키보드 조작으로 수행한다.

@@ -137,6 +137,24 @@ body::after {
   margin-bottom: 0.75rem;
 }
 
+.chapter-navigation .btn {
+  padding: 12px;
+}
+
+.chapter-navigation .btn:enabled:hover {
+  background: var(--input-bg);
+  border-color: var(--primary-color);
+}
+
+.chapter-navigation .btn:disabled:hover {
+  background: var(--surface-bg);
+}
+
+.chapter-navigation .btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
 
 
 select {

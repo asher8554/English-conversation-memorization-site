@@ -73,6 +73,8 @@ function createQuizContext({ voices = [], throwOnOffsetWidth = false } = {}) {
         'showAnswerBtn',
         'prevBtn',
         'nextBtn',
+        'prevDayBtn',
+        'nextDayBtn',
         'cardContent',
         'reverseOrder',
         'randomOrder',
@@ -200,6 +202,40 @@ function createQuizContext({ voices = [], throwOnOffsetWidth = false } = {}) {
         spoken
     };
 }
+
+test('chapter buttons skip cards, respect list order and stop at boundaries including empty days', () => {
+    const { QuizApp, elements } = createQuizContext();
+    const app = new QuizApp({
+        courses: { conversation: { title: '영어회화', data: {
+            'Day 001': [{ q: '첫 질문', a: 'First.' }, { q: '둘째 질문', a: 'Second.' }],
+            'Day 002': [{ q: '다음 챕터', a: 'Next chapter.' }],
+            'Day 003': []
+        } } }
+    });
+    Object.defineProperty(elements.daySelect, 'value', {
+        get() { return this.options[this.selectedIndex]?.value || ''; }
+    });
+    assert.equal(elements.prevDayBtn.disabled, true);
+    elements.prevDayBtn.click();
+    assert.equal(elements.daySelect.selectedIndex, 0);
+    elements.nextDayBtn.click();
+    assert.equal(elements.questionText.textContent, '다음 챕터');
+    elements.nextDayBtn.click();
+    assert.equal(elements.nextDayBtn.disabled, true);
+    assert.equal(elements.prevDayBtn.disabled, false);
+    elements.nextDayBtn.click();
+    assert.equal(elements.daySelect.selectedIndex, 2);
+    elements.prevDayBtn.click();
+    elements.prevDayBtn.click();
+    assert.equal(elements.questionText.textContent, '첫 질문');
+    assert.equal(app.currentIndex, 0);
+    elements.daySelect.options.reverse();
+    elements.daySelect.selectedIndex = 1;
+    app.loadDay(elements.daySelect.value);
+    elements.nextDayBtn.click();
+    assert.equal(elements.questionText.textContent, '첫 질문');
+    assert.equal(elements.nextDayBtn.disabled, true);
+});
 
 test('QuizApp renders the current card section label', () => {
     const { QuizApp, elements } = createQuizContext();

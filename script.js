@@ -1032,6 +1032,8 @@ class QuizApp {
         this.showAnswerBtn = document.getElementById('showAnswerBtn');
         this.prevBtn = document.getElementById('prevBtn');
         this.nextBtn = document.getElementById('nextBtn');
+        this.prevDayBtn = document.getElementById('prevDayBtn');
+        this.nextDayBtn = document.getElementById('nextDayBtn');
         this.cardContent = document.getElementById('cardContent');
         this.reverseOrderCheckbox = document.getElementById('reverseOrder');
         this.randomOrderCheckbox = document.getElementById('randomOrder');
@@ -1164,6 +1166,8 @@ class QuizApp {
 
         this.prevBtn.addEventListener('click', () => this.handlePrev());
         this.nextBtn.addEventListener('click', () => this.handleNext());
+        this.prevDayBtn.addEventListener('click', () => this.moveDay(-1));
+        this.nextDayBtn.addEventListener('click', () => this.moveDay(1));
 
         this.reverseOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.randomOrderCheckbox));
         this.randomOrderCheckbox.addEventListener('change', (e) => this.handleSortChange(e, this.reverseOrderCheckbox));
@@ -1312,6 +1316,7 @@ class QuizApp {
     loadDay(day, startAtEnd = false) {
         this.currentDayData = this.data[day] || [];
         this.currentIndex = startAtEnd && this.currentDayData.length > 0 ? this.currentDayData.length - 1 : 0;
+        this.updateNavButtons();
         this.updateCard();
     }
 
@@ -1406,6 +1411,9 @@ class QuizApp {
      * 이전/다음 버튼의 활성화 상태를 업데이트합니다.
      */
     updateNavButtons() {
+        this.prevDayBtn.disabled = this.daySelect.selectedIndex <= 0;
+        this.nextDayBtn.disabled = this.daySelect.selectedIndex < 0 ||
+            this.daySelect.selectedIndex >= this.daySelect.options.length - 1;
         const isFirstQuestion = this.currentIndex === 0;
         const isFirstDay = this.daySelect.selectedIndex === 0;
         this.prevBtn.disabled = isFirstQuestion && isFirstDay;
@@ -1413,6 +1421,13 @@ class QuizApp {
         const isLastQuestion = this.currentIndex === this.currentDayData.length - 1;
         const isLastDay = this.daySelect.selectedIndex === this.daySelect.options.length - 1;
         this.nextBtn.disabled = isLastQuestion && isLastDay;
+    }
+
+    moveDay(offset) {
+        const index = this.daySelect.selectedIndex + offset;
+        if (index < 0 || index >= this.daySelect.options.length) return;
+        this.daySelect.selectedIndex = index;
+        this.loadDay(this.daySelect.value);
     }
 
     /**
