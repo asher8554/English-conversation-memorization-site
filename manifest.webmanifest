@@ -1,0 +1,11 @@
+{
+  "name": "English Conversation Memorization",
+  "short_name": "English Study",
+  "description": "English conversation memorization practice",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "lang": "ko-KR"
+}
