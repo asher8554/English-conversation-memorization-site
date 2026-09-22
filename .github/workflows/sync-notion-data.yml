@@ -48,7 +48,7 @@ jobs:
 
       - name: Sync data from Notion
         id: sync
-        timeout-minutes: 10
+        timeout-minutes: 20
         run: |
           state_dir=.notion-sync-state
           count_file="$state_dir/retry-count"

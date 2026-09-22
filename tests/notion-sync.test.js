@@ -293,7 +293,7 @@ test('notionGetJson fails slow requests with a clear timeout error', async () =>
             'https://api.notion.com/v1/blocks/test/children',
             'secret-token',
             '2022-06-28',
-            { fetchImpl, timeoutMs: 1 }
+            { fetchImpl, timeoutMs: 1, maxTransientRetries: 0 }
         ),
         /Notion API 요청이 1ms 안에 끝나지 않았습니다/
     );
@@ -302,6 +302,59 @@ test('notionGetJson fails slow requests with a clear timeout error', async () =>
 test('isNotionFetchTimeout only matches the configured Notion timeout error', () => {
     assert.equal(isNotionFetchTimeout(new Error('Notion API 요청이 30000ms 안에 끝나지 않았습니다.')), true);
     assert.equal(isNotionFetchTimeout(new Error('Notion API 요청 실패: 401')), false);
+});
+
+test('notionGetJson retries transient failures on the same request, including slow bodies', async () => {
+    for (const failure of ['timeout', 'body-timeout', 'network', 500, 502, 503, 504]) {
+        let calls = 0;
+        const delays = [];
+        const result = await notionGetJson('https://api.notion.com/v1/blocks/test/children', 'token', '2022-06-28', {
+            timeoutMs: 5,
+            sleepImpl: (resolve, ms) => { delays.push(ms); resolve(); },
+            fetchImpl: async (_url, { signal }) => {
+                if (++calls > 1) return { ok: true, json: async () => ({ results: ['retained'] }) };
+                const slow = () => new Promise((_resolve, reject) => {
+                    signal.addEventListener('abort', () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' })));
+                });
+                if (failure === 'timeout') return slow();
+                if (failure === 'body-timeout') return { ok: true, json: slow };
+                if (failure === 'network') throw new TypeError('fetch failed');
+                return { ok: false, status: failure, text: async () => '{}' };
+            }
+        });
+        assert.deepEqual(result, { results: ['retained'] }, String(failure));
+        assert.equal(calls, 2);
+        assert.deepEqual(delays, [1000]);
+    }
+});
+
+test('notionGetJson bounds transient retries and never retries permanent errors', async () => {
+    for (const status of [401, 403, 404, 400, 503]) {
+        let calls = 0;
+        const delays = [];
+        await assert.rejects(() => notionGetJson('https://api.notion.com/v1/blocks/test/children', 'token', '2022-06-28', {
+            sleepImpl: (resolve, ms) => { delays.push(ms); resolve(); },
+            fetchImpl: async () => {
+                calls++;
+                return { ok: false, status, text: async () => '{}' };
+            }
+        }));
+        assert.equal(calls, status === 503 ? 3 : 1);
+        assert.deepEqual(delays, status === 503 ? [1000, 2000] : []);
+    }
+});
+
+test('notionGetJson preserves timeout classification after exhausting retries', async () => {
+    let calls = 0;
+    await assert.rejects(() => notionGetJson('https://api.notion.com/v1/blocks/test/children', 'token', '2022-06-28', {
+        timeoutMs: 1,
+        sleepImpl: resolve => resolve(),
+        fetchImpl: (_url, { signal }) => new Promise((_resolve, reject) => {
+            calls++;
+            signal.addEventListener('abort', () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' })));
+        })
+    }), isNotionFetchTimeout);
+    assert.equal(calls, 3);
 });
 
 test('notionGetJson respects Notion retry_after before retrying rate limits', async () => {

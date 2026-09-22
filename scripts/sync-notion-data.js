@@ -335,14 +335,19 @@ async function notionGetJson(url, token, notionVersion, options = {}) {
     const fetchTimeoutMs = options.timeoutMs || DEFAULT_NOTION_FETCH_TIMEOUT_MS;
     const fetchImpl = options.fetchImpl || fetch;
     const maxRateLimitRetries = options.maxRateLimitRetries ?? NOTION_RATE_LIMIT_RETRIES;
+    const maxTransientRetries = options.maxTransientRetries ?? 2;
+    let transientRetries = 0;
+    let rateLimitRetries = 0;
 
-    for (let attempt = 0; attempt <= maxRateLimitRetries; attempt++) {
+    for (;;) {
         await waitForRequestSlot(options);
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), fetchTimeoutMs);
         const startedAt = Date.now();
         let response;
+        let body;
+        let transientError;
 
         try {
             response = await fetchImpl(url, {
@@ -352,11 +357,19 @@ async function notionGetJson(url, token, notionVersion, options = {}) {
                 },
                 signal: controller.signal
             });
+            if (response.ok) return await response.json();
+            body = await response.text();
+            if ([500, 502, 503, 504].includes(response.status)) {
+                transientError = new Error(formatNotionApiError(response.status, body));
+            }
         } catch (error) {
             if (controller.signal.aborted || error.name === 'AbortError') {
-                throw new Error(`Notion API 요청이 ${fetchTimeoutMs}ms 안에 끝나지 않았습니다.`);
+                transientError = new Error(`Notion API 요청이 ${fetchTimeoutMs}ms 안에 끝나지 않았습니다.`);
+            } else if (error instanceof TypeError && error.message === 'fetch failed') {
+                transientError = error;
+            } else {
+                throw error;
             }
-            throw error;
         } finally {
             clearTimeout(timeoutId);
             if (process.env.NOTION_SYNC_DEBUG === '1') {
@@ -364,12 +377,15 @@ async function notionGetJson(url, token, notionVersion, options = {}) {
             }
         }
 
-        if (response.ok) {
-            return response.json();
+        if (transientError) {
+            if (transientRetries >= maxTransientRetries) throw transientError;
+            const delayMs = 1000 * 2 ** transientRetries++;
+            console.warn(`Notion API 일시 오류로 ${delayMs / 1000}초 후 같은 요청을 재시도합니다. (${transientRetries}/${maxTransientRetries})`);
+            await wait(delayMs, options.sleepImpl);
+            continue;
         }
 
-        const body = await response.text();
-        if (response.status === 429 && attempt < maxRateLimitRetries) {
+        if (response.status === 429 && rateLimitRetries < maxRateLimitRetries) {
             let retryAfterSeconds = Number(response.headers?.get?.('retry-after'));
             if (!Number.isFinite(retryAfterSeconds)) {
                 try {
@@ -381,7 +397,7 @@ async function notionGetJson(url, token, notionVersion, options = {}) {
             const retryAfterMs = Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
                 ? retryAfterSeconds * 1000
                 : 1000;
-            console.warn(`Notion API 요청 제한으로 ${retryAfterMs / 1000}초 후 재시도합니다. (${attempt + 1}/${maxRateLimitRetries})`);
+            console.warn(`Notion API 요청 제한으로 ${retryAfterMs / 1000}초 후 재시도합니다. (${++rateLimitRetries}/${maxRateLimitRetries})`);
             await wait(retryAfterMs, options.sleepImpl);
             continue;
         }
