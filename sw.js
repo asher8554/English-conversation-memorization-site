@@ -1,11 +1,16 @@
-const CACHE_NAME = 'english-study-shell-v1';
+const CACHE_NAME = 'english-study-shell-v2';
 const APP_SHELL = [
   './',
   './index.html',
   './style.css',
   './script.js',
   './data.json',
-  './manifest.webmanifest'
+  './manifest.webmanifest',
+  './assets/icons/favicon.ico',
+  './assets/icons/favicon-32.png',
+  './assets/icons/apple-touch-icon.png',
+  './assets/icons/icon-192.png',
+  './assets/icons/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
