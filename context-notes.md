@@ -193,3 +193,7 @@
 - 영어회화 원문 https://www.notion.so/2c63d76f887480e9a373d924affa523e 본문도 조회했다. Day 토글과 한국어/영어 컬럼 구조가 존재한다. 양 코스 갱신 여부는 사용자의 2차 답변을 기다린다.
 - 코드에서 현재 진도는 코스별 reviewStats:<courseId>의 Day별 count·lastReviewed와 lastCompletedChapter의 courseId·day임을 확인했다. 진행 중인 카드 위치는 현재 저장하지 않는다. 기록 확대와 브라우저 기록 이전 여부는 2차 인터뷰 항목이다.
 - 전환 전 기준선으로 npm test 58/58 및 npm run check가 통과했다. ADB devices -l은 다시 비어 있었으며 실기기 실행 검증은 진행하지 않았다.
+- 2차 인터뷰에서 두 코스 모두 Notion 갱신, 기존 수준의 복습 횟수·최근 복습 시각·마지막 완료 챕터 저장, 삼성 인터넷 통계·설정·완료 챕터 이전을 확정했다. 공부 중 카드 위치 저장은 추가하지 않는다.
+- docs/android-app-plan.md에 짧은 요구사항, 제안 구조와 Phase 1 검증 계획을 작성했다. 화면 WebView 재사용 또는 네이티브 UI, Notion 진도 저장 위치는 마지막 인터뷰 질문으로 남겼다. 계획 문서는 구현 승인이나 검증 완료로 취급하지 않는다.
+- 영어 인덱스 본문에는 두 교재가 자식 페이지로 있는 것을 확인했다. 새 진도 DB를 그 아래 만드는 안을 제안했으나 아직 생성하지 않았다. 앱 자체 integration 인증은 현재 채팅의 Notion 연결과 별개다.
+- 기존 다른 Android 프로젝트의 SDK 경로와 설치된 android-35·android-37.0 플랫폼, build-tools 36.0.0, Android Studio JBR·Gradle 도구를 읽기만 했다. 기존 프로젝트 설정은 수정하지 않았다. 앱의 빌드 버전은 구현 단계에서 호환성을 확인해 고른다.
