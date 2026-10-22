@@ -40,6 +40,26 @@ class StudyFlowTest {
     }
     @After fun close() { scenario.close() }
 
+    @Test fun courseSyncCompletionClosesDialogAndFailureOrReopeningKeepsItOpen() {
+        compose.onNodeWithContentDescription("Notion 자료와 진도 동기화").performClick()
+        compose.onNodeWithText("Notion 동기화").assertIsDisplayed()
+        scenario.recreate()
+        compose.onNodeWithText("Notion 동기화").assertIsDisplayed()
+        compose.runOnIdle { model.fetchNotionCourses() }
+        compose.waitUntil { !model.syncing && model.syncStatus.isNotBlank() }
+        compose.onNodeWithText("Notion 동기화").assertIsDisplayed()
+        compose.runOnIdle { model.connection.markSynced("progressSyncedAt", "2026-10-22T05:00:00Z") }
+        scenario.recreate()
+        compose.onNodeWithText("Notion 동기화").assertIsDisplayed()
+        // 저장 완료 시각이 갱신된 상태에서 복원돼도 기존 닫기와 같은 화면으로 돌아간다.
+        compose.runOnIdle { model.connection.markSynced("dataSyncedAt", "2026-10-22T05:00:01Z") }
+        scenario.recreate()
+        compose.onNodeWithText("Notion 동기화").assertDoesNotExist()
+        compose.onNodeWithText("Show Answer").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Notion 자료와 진도 동기화").performClick()
+        compose.onNodeWithText("Notion 동기화").assertIsDisplayed()
+    }
+
     @Test fun syncKeepsActivityAndDialogAwakeAndReleasesBothWindows() {
         val syncing = mutableStateOf(false)
         val showDialog = mutableStateOf(true)

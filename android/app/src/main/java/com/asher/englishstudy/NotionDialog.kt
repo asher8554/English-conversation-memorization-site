@@ -7,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.window.DialogWindowProvider
@@ -20,6 +21,10 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun NotionDialog(model: StudyModel, openUrl: (String) -> Unit, close: () -> Unit) {
     var token by remember { mutableStateOf("") }
+    val previousDataSync = rememberSaveable { model.connection.dataSyncedAt }
+    LaunchedEffect(model.syncing) {
+        if (!model.syncing && model.connection.dataSyncedAt != previousDataSync) close()
+    }
     fun time(value: String) = if (value.isBlank()) "아직 없음" else runCatching {
         DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm").withZone(ZoneId.systemDefault()).format(Instant.parse(value))
     }.getOrDefault("확인 필요")
