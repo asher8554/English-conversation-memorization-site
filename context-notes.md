@@ -179,3 +179,13 @@
 - Chrome에서 5종 아이콘 이미지 디코딩과 서비스 워커 캐시 수록을 확인했다. 데스크톱·모바일 캡처, 다크 모드, Pretendard 실제 로드, 12px 블러, 버튼 포커스와 가로 넘침 없음을 확인했다.
 - 실제 휴대폰 홈 화면 설치 및 운영체제의 기존 아이콘 캐시 갱신은 미검증이다.
 - 31e1aa3 커밋의 GitHub Pages 빌드가 built로 완료됐다. 공개 HTML의 아이콘 링크 3개와 manifest 아이콘 2개, 5개 이미지 응답의 HTTP 200 및 로컬 파일과 바이트 일치를 검증했다. 공개 512px 아이콘도 Chrome에서 렌더링해 확인했다.
+
+## 2026-10-22 Android 앱 전환 사전 조사.
+
+- 사용자는 연결해 둔 Z 폴드8에서 삼성 인터넷으로 Pages를 여는 대신 설치형 앱을 원한다. 기존 기본 동작을 유지하며 앱 안에서 Notion 데이터를 조회·갱신하고, 확인할 요구는 인터뷰하도록 요청했다. 아직 앱 기술과 동기화 방향은 결정하지 않았다.
+- 현재 HTML/CSS/Vanilla JS 앱은 영어회화·기본동사 코스, Day/카드 이동, 역순·무작위, 한국어·영어 TTS, 음성 속도·자동 읽기, 글자 크기·테마, 복습 통계와 마지막 완료 챕터 저장을 제공한다. 진도·설정은 브라우저 localStorage에 있으며 앱으로 자동 이전된다고 가정하지 않는다.
+- README, workflow, sync 스크립트 확인 결과 기본동사만 Notion 원문에서 자동 동기화한다. 6시간 주기의 GitHub Actions가 data.json을 갱신하며 웹 Refresh는 배포 JSON을 다시 읽는다. 영어회화 원문 동기화는 현재 스크립트에 없다.
+- Notion의 https://www.notion.so/3d63d76f887480bc8598fc48eefd34b2 본문에서 이전/다음 챕터와 공부 위치 기록 요구를 확인했다. 기본동사 원문 https://www.notion.so/32f3d76f88748069b726d6b6d47f5afd 에서 Day 토글과 한국어/영어 컬럼 구조를 확인했다. Notion은 읽기만 수행했다.
+- PATH와 기본 SDK 경로에는 adb가 없었다. 기존 프로젝트 E:/Github/Record-Health-Connect/.tools/sdk/platform-tools/adb.exe 를 찾아 devices -l을 실행했으나 목록이 비어 있었다. USB 연결·디버깅 승인과 실제 모델·OS는 미확인이다. 다른 프로젝트 파일과 설정은 수정하지 않았다.
+- 기존 Pretendard는 외부 CDN에서 로드하므로 오프라인 폰트는 추가 검토가 필요하다. 기존 speechSynthesis가 Android 앱에서도 같은 음성·동작을 제공한다고 가정하지 않는다. Notion 인증정보를 소스나 APK에 고정 삽입하지 않는 연결 방식은 인터뷰 후 설계한다.
+- 기존 미추적 output/playwright/icon-*.png 4개는 보존했다. 이번 단계는 사전 조사와 인터뷰이며 실행 코드·학습 데이터·현재 배포는 변경하지 않았다.
