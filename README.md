@@ -87,6 +87,18 @@ workflow는 6시간마다 한 번 실행되고, `data.json`이 바뀐 경우에�
 
 오프라인 음성 재생에는 기기의 한국어·영어 음성 데이터 설치가 필요합니다. 네이티브 앱 구현과 실제 Notion 연결의 검증 상태는 `checklist.md`와 `context-notes.md`를 따릅니다.
 
+앱의 🔄에서 개인 integration 키를 직접 입력합니다. 두 교재와 [영어 학습 진도 DB](https://www.notion.so/ed28537cbbdb4b26a49b6ad249989d32)에 같은 integration의 접근 권한이 있어야 합니다. 키는 Android Keystore로 암호화하며 기록 내보내기에는 포함하지 않습니다.
+
+- **두 코스 자료 가져오기**는 영어회화·기본동사를 모두 조회한 뒤 정상 자료만 교체합니다. 원문 크기에 따라 시간이 걸리며 실패하면 마지막 저장 자료를 유지합니다.
+- **학습 진도 보내기**는 현재 복습 횟수·최근 복습·마지막 완료 챕터를 전용 DB에 저장하고 다시 조회합니다. 같은 기록을 재전송해 횟수를 더하지 않으며, 서버 기록이 더 많거나 최신이면 덮어쓰기를 중단합니다.
+- 앱 시작 시 자동으로 Notion에 연결하지 않습니다. 자료 갱신과 진도 전송은 각각 수동으로 실행합니다.
+
+개인 release 빌드는 `android/.tools/signing/english-study.jks`와 `password`가 있으면 해당 키로 서명합니다. 이 두 파일은 Git에서 제외하며 외부에 공개하지 말고 별도로 보관해야 기존 앱의 업데이트 설치를 유지할 수 있습니다.
+
+```powershell
+.\android\gradlew.bat -p android :app:testDebugUnitTest :app:assembleRelease
+```
+
 ## 📝 라이선스
 
 **All rights reserved. 사전 서면 허락 없는 사용을 허용하지 않습니다.**

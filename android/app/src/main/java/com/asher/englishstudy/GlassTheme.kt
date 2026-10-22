@@ -30,8 +30,8 @@ private val Pretendard = FontFamily(Font(R.font.pretendard_regular))
 fun StudyTheme(dark: Boolean, content: @Composable () -> Unit) {
     val base = Typography()
     fun androidx.compose.ui.text.TextStyle.face() = copy(fontFamily = Pretendard)
-    MaterialTheme(colorScheme = if (dark) darkColorScheme(primary = Color(0xFF91E3D3), onPrimary = Color(0xFF07372E),
-        background = Color(0xFF101722), surface = Color(0xFF182331), onSurface = Color(0xFFF0F3F7))
+    MaterialTheme(colorScheme = if (dark) darkColorScheme(primary = Color(0xFF76E3DC), onPrimary = Color(0xFF12323A),
+        background = Color(0xFF17243D), surface = Color(0xFF182A3A), onSurface = Color(0xFFEDFAFA), onSurfaceVariant = Color(0xFF9CA3AF))
         else lightColorScheme(primary = Color(0xFF00695C), surface = Color(0xFFF2F6F8), onSurface = Color(0xFF182736)),
         typography = Typography(displayLarge = base.displayLarge.face(), displayMedium = base.displayMedium.face(),
             displaySmall = base.displaySmall.face(), headlineLarge = base.headlineLarge.face(), headlineMedium = base.headlineMedium.face(),
@@ -44,14 +44,14 @@ fun StudyTheme(dark: Boolean, content: @Composable () -> Unit) {
 }
 
 private fun DrawScope.backdrop(full: Size, dark: Boolean) {
-    drawRect(if (dark) Color(0xFF101722) else Color(0xFFDCEAEF), size = full)
     if (full.width <= 0f) return
-    val teal = Offset(full.width * .92f, full.height * .23f)
-    val purple = Offset(full.width * .05f, full.height * .76f)
-    drawCircle(Brush.radialGradient(listOf(Color(0xFF247F80), Color.Transparent), teal, full.width * .78f), full.width * .78f, teal)
-    drawCircle(Brush.radialGradient(listOf(Color(0xFF535185).copy(alpha = .85f), Color.Transparent), purple, full.width * .85f), full.width * .85f, purple)
-    drawLine(Color(0xFF99EBDD).copy(alpha = .4f), Offset(full.width * .40f, 0f), Offset(full.width, full.height * .73f), 3.dp.toPx())
-    drawCircle(Color(0xFFA6B2EF).copy(alpha = .25f), full.width * .13f, Offset(full.width * .17f, full.height * .38f), style = androidx.compose.ui.graphics.drawscope.Stroke(2.dp.toPx()))
+    drawRect(Brush.linearGradient(if (dark) listOf(Color(0xFF112D38), Color(0xFF17243D), Color(0xFF352C3E))
+        else listOf(Color(0xFFDFF7F4), Color(0xFFD7E4FB), Color(0xFFF7E7DC)), Offset.Zero, Offset(full.width, full.height)), size = full)
+    val radius = 144.dp.toPx()
+    val teal = Offset(64.dp.toPx(), 64.dp.toPx())
+    val orange = Offset(full.width - 48.dp.toPx(), full.height - 64.dp.toPx())
+    drawCircle(Brush.radialGradient(listOf(Color(0xFF89DDD2).copy(alpha = .45f), Color.Transparent), teal, radius), radius, teal)
+    drawCircle(Brush.radialGradient(listOf(Color(0xFFF0B68C).copy(alpha = .45f), Color.Transparent), orange, radius), radius, orange)
 }
 
 @Composable
@@ -63,6 +63,9 @@ fun GlassBackground(dark: Boolean, content: @Composable (Size, Offset) -> Unit) 
     }) {
         Canvas(Modifier.matchParentSize()) { backdrop(size, dark) }
         content(size, origin)
+        Box(Modifier.fillMaxWidth().windowInsetsTopHeight(WindowInsets.statusBars).background(Color.Black))
+        Box(Modifier.align(androidx.compose.ui.Alignment.BottomCenter).fillMaxWidth()
+            .windowInsetsBottomHeight(WindowInsets.navigationBars).background(Color.Black))
     }
 }
 
@@ -73,9 +76,10 @@ fun GlassPanel(full: Size, origin: Offset, dark: Boolean, content: @Composable C
     Box(Modifier.fillMaxWidth().onGloballyPositioned { offset = it.positionInRoot() - origin }
         .clip(shape).border(1.dp, if (dark) Color.White.copy(alpha = .20f) else Color.White.copy(alpha = .7f), shape)) {
         // 패널 뒤 배경만 같은 좌표로 다시 그려 흐리고 콘텐츠는 별도 레이어에 둔다.
-        Canvas(Modifier.matchParentSize().blur(22.dp)) { translate(-offset.x, -offset.y) { backdrop(full, dark) } }
-        Column(Modifier.fillMaxWidth().background(if (dark) Color(0xFF172333).copy(alpha = .68f) else Color.White.copy(alpha = .80f))
-            .padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp), content = content)
+        Canvas(Modifier.matchParentSize().blur(12.dp)) { translate(-offset.x, -offset.y) { backdrop(full, dark) } }
+        Column(Modifier.fillMaxWidth().background(if (dark) Color(0xFF182A3A).copy(alpha = .58f) else Color.White.copy(alpha = .52f))
+            .padding(24.dp), verticalArrangement = Arrangement.spacedBy(14.dp),
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally, content = content)
     }
 }
 

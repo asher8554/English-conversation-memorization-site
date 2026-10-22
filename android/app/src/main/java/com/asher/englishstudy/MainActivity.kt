@@ -3,11 +3,13 @@ package com.asher.englishstudy
 
 import android.os.Bundle
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import androidx.core.view.WindowCompat
 
 class MainActivity : ComponentActivity() {
     private lateinit var model: StudyModel
@@ -29,12 +31,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
+        }
         model = ViewModelProvider(this)[StudyModel::class.java]
         setContent {
             StudyTheme(model.dark) {
                 StudyScreen(model, onImport = { importFile.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
                     onExport = { exportFile.launch("english-study-backup.json") },
-                    onTtsSettings = {
+                    onOpenUrl = { url ->
+                        runCatching { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
+                            .onFailure { model.notice = "링크를 열 앱이 없습니다." }
+                    }, onTtsSettings = {
                         runCatching { startActivity(Intent("com.android.settings.TTS_SETTINGS")) }
                             .onFailure { model.notice = "기기 설정에서 텍스트 음성 변환과 오프라인 음성 데이터를 확인해주세요." }
                     })

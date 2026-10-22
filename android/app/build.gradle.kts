@@ -15,6 +15,16 @@ android {
     }
     buildFeatures { compose = true }
     buildTypes { debug { applicationIdSuffix = ".debug" } }
+    val signingFolder = rootProject.file(".tools/signing")
+    if (signingFolder.resolve("english-study.jks").exists()) {
+        signingConfigs.create("personal") {
+            storeFile = signingFolder.resolve("english-study.jks")
+            storePassword = signingFolder.resolve("password").readText().trim()
+            keyAlias = "english-study"
+            keyPassword = storePassword
+        }
+        buildTypes.getByName("release").signingConfig = signingConfigs.getByName("personal")
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

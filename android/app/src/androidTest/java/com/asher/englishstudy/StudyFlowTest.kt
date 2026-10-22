@@ -23,6 +23,7 @@ class StudyFlowTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         check(context.packageName.endsWith(".debug")) { "테스트는 별도 debug 앱에서만 실행합니다." }
         context.getSharedPreferences("study", 0).edit().clear().commit()
+        context.getSharedPreferences("notion", 0).edit().clear().commit()
         start()
     }
     private fun start() {
@@ -32,15 +33,15 @@ class StudyFlowTest {
     @After fun close() { scenario.close() }
 
     @Test fun chapterAndCardNavigationSurviveRecreationAndCompletionIsRecordedOnce() {
-        compose.onNodeWithText("이전 · Prev").assertIsNotEnabled()
-        compose.onNodeWithText("정답 보기 · Show Answer").performClick()
+        compose.onNodeWithText("« Prev").assertIsNotEnabled()
+        compose.onNodeWithText("Show Answer").performClick()
         compose.runOnIdle { assertTrue(model.revealed) }
-        compose.onNodeWithText("다음 · Next").performScrollTo().performClick()
+        compose.onNodeWithText("Next »").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(1, model.index); assertFalse(model.revealed) }
         scenario.recreate()
         compose.waitForIdle()
         compose.runOnIdle { assertEquals(1, model.index) }
-        compose.onNodeWithText("다음 챕터").performScrollTo().performClick()
+        compose.onNodeWithText("다음 챕터 »").performScrollTo().performClick()
         compose.runOnIdle {
             assertEquals("Day 002", model.day)
             while (!model.lastCard) model.moveCard(1)
@@ -71,6 +72,40 @@ class StudyFlowTest {
             model.prepareImport("{invalid}")
             assertNull(model.pendingImport)
             assertEquals("Day 002", model.day)
+        }
+    }
+
+    @Test fun courseAndSortControlsKeepExistingChapterNavigationRules() {
+        compose.onNodeWithText("기본동사").performClick()
+        compose.onNodeWithText("기본동사").assertIsSelected()
+        compose.runOnIdle { model.selectDay("Day 002") }
+        compose.onNodeWithContentDescription("역순 정렬").performClick()
+        compose.runOnIdle {
+            assertEquals("Day 002", model.day)
+            assertEquals(model.course.days.keys.reversed(), model.days)
+        }
+        compose.onNodeWithContentDescription("무작위 정렬").performClick()
+        compose.runOnIdle {
+            assertEquals(model.course.days.keys.toSet(), model.days.toSet())
+            assertEquals(model.days.first(), model.day)
+        }
+        compose.onNodeWithText("영어회화").performClick()
+        compose.runOnIdle { assertEquals("기본", model.order); assertEquals("Day 001", model.day) }
+    }
+
+    @Test fun connectionKeyIsEncryptedAndNeverIncludedInProgressBackup() {
+        compose.runOnIdle {
+            val context = ApplicationProvider.getApplicationContext<Context>()
+            val connection = NotionConnection(context)
+            val value = "local-test-value-with-no-network-use"
+            connection.saveToken(value)
+            val prefs = context.getSharedPreferences("notion", 0)
+            val firstCipher = prefs.getString("secret", "")!!
+            assertFalse(firstCipher.contains(value))
+            assertEquals(value, connection.token())
+            connection.saveToken(value)
+            assertNotEquals(firstCipher, prefs.getString("secret", ""))
+            assertFalse(writeBackup(model.values).contains(value))
         }
     }
 }

@@ -3,6 +3,7 @@ package com.asher.englishstudy
 
 import org.json.JSONObject
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 data class Card(val question: String, val answer: String, val section: String)
 data class Course(val id: String, val title: String, val days: Map<String, List<Card>>, val sentences: Map<String, String>)
@@ -97,7 +98,7 @@ fun incrementReview(values: Map<String, String>, chapter: Chapter, now: Instant)
     val stats = reviews(values, chapter.course)
     val count = stats.optJSONObject(chapter.day)?.optInt("count") ?: 0
     require(count < 1000000) { "복습 횟수의 저장 한도에 도달했습니다." }
-    stats.put(chapter.day, JSONObject().put("count", count + 1).put("lastReviewed", now.toString()))
+    stats.put(chapter.day, JSONObject().put("count", count + 1).put("lastReviewed", now.truncatedTo(ChronoUnit.MILLIS).toString()))
     return values + mapOf("reviewStats:${chapter.course}" to stats.toString(),
         "lastCompletedChapter" to JSONObject().put("courseId", chapter.course).put("day", chapter.day).toString())
 }
