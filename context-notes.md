@@ -236,3 +236,5 @@
 - NotionDialog에 rememberSaveable로 창이 열릴 때의 dataSyncedAt을 저장하고 syncing 종료 시 새 완료 시각이면 기존 close 콜백을 실행하도록 5줄을 추가했다. 화면 회전 후에도 완료 신호를 처리하며 이미 완료된 창을 새로 열면 자동으로 닫히지 않는다. 오류와 진도 전송 시각 갱신은 창을 유지한다.
 - Android 단위 10개·화면 6개가 통과했다. 새 회귀 검사는 인증 키가 없는 실제 실패, 진도 완료 시각만 변경, 자료 완료 시각 모의 신호 수신 후 Activity 복원, 재열기 동작을 확인한다. 이 변경 검증에서 실제 Notion 전체 다운로드는 다시 실행하지 않았다.
 - 최종 release를 에뮬레이터에 설치·실행하고 output/playwright/native-auto-close-check.png에서 기존 화면을 확인했다. 사용자가 가져오기 진행 중이 아니라고 확인하여 mDNS로 재발견한 192.168.35.244:41119에 -r 업데이트 설치했다. 사용자 자료·설정·키를 초기화하거나 화면을 캡처하지 않았다. 최신 output/android/English-Study.apk SHA256은 46D83287919B6F7D57BB8B2D697FAC4A5E3443E1360B46F8D7FD4C1C76F0070E이다.
+
+- push 시 원격 자동 자료 동기화 d9034fc가 선행되어 거절됐다. 강제 push 없이 fetch·merge로 data.json의 기본동사 42일 자료를 보존했고 Node 60개·Android 단위 10개·화면 6개·release 빌드를 다시 통과했다. 다시 빌드한 최종 release를 에뮬레이터에서 실행·캡처하고 휴대폰의 동기화 플래그가 꺼져 있음을 확인한 뒤 -r 설치했다. 최종 APK SHA256은 4372892AEAD1DC9D5E4E5745A51DEFF4751BF375201D396A834BB4F5733E37A9이며 직전 값은 이전 빌드다.
