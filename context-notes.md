@@ -189,3 +189,7 @@
 - PATH와 기본 SDK 경로에는 adb가 없었다. 기존 프로젝트 E:/Github/Record-Health-Connect/.tools/sdk/platform-tools/adb.exe 를 찾아 devices -l을 실행했으나 목록이 비어 있었다. USB 연결·디버깅 승인과 실제 모델·OS는 미확인이다. 다른 프로젝트 파일과 설정은 수정하지 않았다.
 - 기존 Pretendard는 외부 CDN에서 로드하므로 오프라인 폰트는 추가 검토가 필요하다. 기존 speechSynthesis가 Android 앱에서도 같은 음성·동작을 제공한다고 가정하지 않는다. Notion 인증정보를 소스나 APK에 고정 삽입하지 않는 연결 방식은 인터뷰 후 설계한다.
 - 기존 미추적 output/playwright/icon-*.png 4개는 보존했다. 이번 단계는 사전 조사와 인터뷰이며 실행 코드·학습 데이터·현재 배포는 변경하지 않았다.
+- 1차 인터뷰 답변으로 개인 갤럭시에 APK 직접 설치, Notion 자료 가져오기와 학습 진도 저장, 오프라인 학습과 수동 자료 갱신을 확정했다. 자동 자료 갱신·스토어 배포·학습 자료 편집은 현재 범위에 없다. 진도 업로드 시점은 아직 확정하지 않았으며 2차 질문에서 수동 동기화를 제안했다.
+- 영어회화 원문 https://www.notion.so/2c63d76f887480e9a373d924affa523e 본문도 조회했다. Day 토글과 한국어/영어 컬럼 구조가 존재한다. 양 코스 갱신 여부는 사용자의 2차 답변을 기다린다.
+- 코드에서 현재 진도는 코스별 reviewStats:<courseId>의 Day별 count·lastReviewed와 lastCompletedChapter의 courseId·day임을 확인했다. 진행 중인 카드 위치는 현재 저장하지 않는다. 기록 확대와 브라우저 기록 이전 여부는 2차 인터뷰 항목이다.
+- 전환 전 기준선으로 npm test 58/58 및 npm run check가 통과했다. ADB devices -l은 다시 비어 있었으며 실기기 실행 검증은 진행하지 않았다.
