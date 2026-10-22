@@ -12,12 +12,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -35,11 +35,6 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, onTtsSettings: () -> Unit, onOpenUrl: (String) -> Unit) {
     var dialog by rememberSaveable { mutableStateOf("") }
-    val view = LocalView.current
-    DisposableEffect(model.syncing) {
-        view.keepScreenOn = model.syncing
-        onDispose { view.keepScreenOn = false }
-    }
     val snackbar = remember { SnackbarHostState() }
     LaunchedEffect(model.notice) {
         if (model.notice.isNotEmpty()) {
@@ -56,11 +51,11 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
             Box(Modifier.fillMaxSize().safeDrawingPadding(), contentAlignment = Alignment.TopCenter) {
                 Column(Modifier.widthIn(max = 532.dp).fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(2.dp, Alignment.End), verticalAlignment = Alignment.CenterVertically) {
                         ToolButton("🔄", "Notion 자료와 진도 동기화") { dialog = "notion" }
                         ToolButton("📊", "복습 통계") { dialog = "stats" }
                         ToolButton("⚙️", "음성 설정과 기록 이전") { dialog = "settings" }
-                        ToolButton(if (model.dark) "☀️" else "🌙", "다크 모드 전환") { model.setting("useDarkMode", (!model.dark).toString()) }
+                        ToolButton(if (model.dark) "🌙" else "☀️", "다크 모드 전환") { model.setting("useDarkMode", (!model.dark).toString()) }
                         ToolButton("−", "글자 작게") { model.resize(-.2f) }
                         ToolButton("+", "글자 크게") { model.resize(.2f) }
                     }
@@ -68,49 +63,60 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             model.courses.forEach { course ->
                                 val active = course.id == model.courseId
-                                val bg = if (active && course.id == "basic-verbs") Color(0xFFF97316).copy(alpha = .78f)
+                                val bg = if (active && course.id == "basic-verbs") (if (model.dark) Color(0xFF8B2C18) else Color(0xFFF97316).copy(alpha = .78f))
                                     else if (active) Color.White.copy(alpha = .82f) else MaterialTheme.colorScheme.onSurface.copy(alpha = .08f)
                                 val fg = if (active && course.id == "conversation") Color(0xFF12323A)
-                                    else if (active) Color.White else MaterialTheme.colorScheme.onSurface
-                                OutlinedButton(onClick = { model.selectCourse(course.id) }, modifier = focusRing().weight(1f).heightIn(min = 46.dp).semantics { selected = active },
+                                    else MaterialTheme.colorScheme.onSurface
+                                OutlinedButton(onClick = { model.selectCourse(course.id) }, modifier = focusRing().weight(1f).height(44.dp).semantics { selected = active },
                                     shape = RoundedCornerShape(14.dp), colors = ButtonDefaults.outlinedButtonColors(containerColor = bg, contentColor = fg),
-                                    border = BorderStroke(1.dp, if (active && course.id == "basic-verbs") Color(0xFFEA580C) else MaterialTheme.colorScheme.onSurface.copy(alpha = .20f))) {
+                                    border = BorderStroke(.75.dp, if (active && course.id == "basic-verbs") (if (model.dark) Color(0xFFB33D1B) else Color(0xFFEA580C)) else MaterialTheme.colorScheme.onSurface.copy(alpha = .20f))) {
                                     Text(course.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                 }
                             }
                         }
-                        Text("${model.course.title} · ${model.course.days.size} Days", style = MaterialTheme.typography.bodyMedium,
+                        Spacer(Modifier.height(12.dp))
+                        Text("${model.course.title} · ${model.course.days.size} Days", fontSize = 14.4.sp, lineHeight = 18.72.sp, modifier = Modifier.heightIn(min = 20.dp),
                             color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Spacer(Modifier.height(12.dp))
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                             StudyButton("« 이전 챕터", Modifier.weight(1f), model.days.indexOf(model.day) > 0) { model.moveChapter(-1) }
                             StudyButton("다음 챕터 »", Modifier.weight(1f), model.days.indexOf(model.day) < model.days.lastIndex) { model.moveChapter(1) }
                         }
-                        Row(Modifier.fillMaxWidth().padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                            OutlinedButton(onClick = { dialog = "days" }, modifier = focusRing().weight(1f).heightIn(min = 48.dp),
+                        Spacer(Modifier.height(32.dp))
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                            OutlinedButton(onClick = { dialog = "days" }, modifier = focusRing().weight(1f).height(46.dp),
                                 shape = RoundedCornerShape(12.dp), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+                                border = BorderStroke(.75.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = .20f)),
                                 colors = ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .10f), contentColor = MaterialTheme.colorScheme.onSurface)) {
                                 Text("${model.day} - ${model.course.sentences[model.day].orEmpty()}", maxLines = 1, overflow = TextOverflow.Ellipsis,
                                     textAlign = TextAlign.Start, modifier = Modifier.fillMaxWidth())
                             }
-                            Column {
+                            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 listOf("역순", "무작위").forEach { mode ->
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Checkbox(checked = model.order == mode, onCheckedChange = { model.sort(if (it) mode else "기본") },
-                                            modifier = Modifier.semantics { contentDescription = "$mode 정렬" })
-                                        Text(mode, style = MaterialTheme.typography.bodyMedium)
+                                    Row(Modifier.height(22.dp).toggleable(value = model.order == mode, role = Role.Checkbox,
+                                        onValueChange = { model.sort(if (it) mode else "기본") })
+                                        .semantics { contentDescription = "$mode 정렬" }, verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+                                            Checkbox(checked = model.order == mode, onCheckedChange = null, modifier = Modifier.size(16.dp),
+                                                colors = CheckboxDefaults.colors(uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant))
+                                        }
+                                        Text(mode, fontSize = 16.sp, lineHeight = 20.sp)
                                     }
                                 }
                             }
                         }
+                        Spacer(Modifier.height(20.dp))
                         if (model.card.section.isNotBlank()) {
-                            Text(model.card.section, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                            Text(model.card.section, fontSize = 13.12.sp, lineHeight = 17.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.background(Color(0xFF6366F1).copy(alpha = .12f), CircleShape).padding(horizontal = 10.dp, vertical = 4.dp))
+                            Spacer(Modifier.height(12.dp))
                         }
                         Text(model.card.question, fontSize = (model.questionSize * 16).sp, lineHeight = (model.questionSize * 20.8f).sp,
                             textAlign = TextAlign.Center, fontWeight = FontWeight.ExtraBold,
                             modifier = focusRing().fillMaxWidth().clickable(role = Role.Button, onClickLabel = "한국어 문장 다시 듣기") {
                                 model.speech.speak(model.card.question, "ko", model.values)
-                            }.padding(top = 4.dp, bottom = 12.dp))
+                            }.padding(bottom = 24.dp))
                         if (model.revealed) {
                             Text(model.card.answer, fontSize = (model.answerSize * 16).sp, lineHeight = (model.answerSize * 20.8f).sp,
                                 textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary,
@@ -120,17 +126,19 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
                         } else Button(onClick = {
                             model.reveal()
                             if (model.flag("ttsAutoAnswer")) model.speech.speak(model.card.answer, "en", model.values)
-                        }, modifier = focusRing().fillMaxWidth().heightIn(min = 46.dp), shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = if (model.dark) Color(0xFF0B5F69) else Color(0xFF087F8C), contentColor = Color.White)) {
+                        }, modifier = focusRing().fillMaxWidth().height(44.dp), shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = if (model.dark) Color(0xFF20535F) else Color(0xFF087F8C),
+                                contentColor = if (model.dark) MaterialTheme.colorScheme.onSurface else Color.White)) {
                             Text("Show Answer", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                         }
                         if (model.lastCard) {
+                            Spacer(Modifier.height(16.dp))
                             Text(if (model.recorded) "복습을 기록했습니다. 다음 실행 시 이 챕터부터 시작합니다."
                                 else "마지막 카드입니다. 복습 완료를 눌러 이번 학습을 기록하세요.", style = MaterialTheme.typography.bodyMedium)
                             Button(onClick = model::complete, enabled = !model.recorded,
                                 modifier = focusRing().fillMaxWidth()) { Text(if (model.recorded) "기록 완료" else "복습 완료 · Review Complete") }
                         }
-                        Row(Modifier.fillMaxWidth().padding(top = 16.dp, bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Row(Modifier.fillMaxWidth().padding(top = 32.dp, bottom = 20.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                             StudyButton("« Prev", Modifier.weight(1f), model.canPrev) { model.moveCard(-1) }
                             StudyButton("Next »", Modifier.weight(1f), model.canNext) { model.moveCard(1) }
                         }
@@ -173,17 +181,20 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
 
 @Composable
 private fun ToolButton(icon: String, label: String, click: () -> Unit) {
-    IconButton(onClick = click, modifier = focusRing().size(48.dp).padding(4.dp)
-        .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = .20f), CircleShape)
-        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = .08f), CircleShape)
-        .semantics { contentDescription = label }) { Text(icon, fontSize = 24.sp, color = MaterialTheme.colorScheme.primary) }
+    Box(focusRing().size(48.dp).semantics { contentDescription = label }.clickable(role = Role.Button, onClick = click),
+        contentAlignment = Alignment.Center) {
+        Box(Modifier.size(40.dp).border(.75.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = .20f), CircleShape)
+            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = .08f), CircleShape), contentAlignment = Alignment.Center) {
+            Text(icon, fontSize = 24.sp, color = MaterialTheme.colorScheme.primary)
+        }
+    }
 }
 
 @Composable
 private fun StudyButton(label: String, modifier: Modifier, enabled: Boolean, click: () -> Unit) {
-    OutlinedButton(onClick = click, enabled = enabled, modifier = focusRing().then(modifier).heightIn(min = 46.dp), shape = RoundedCornerShape(12.dp),
+    OutlinedButton(onClick = click, enabled = enabled, modifier = focusRing().then(modifier).height(44.dp), shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .08f),
-            contentColor = MaterialTheme.colorScheme.onSurface), border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = .20f))) {
+            contentColor = MaterialTheme.colorScheme.onSurface), border = BorderStroke(.75.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = .20f))) {
         Text(label, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
     }
 }
