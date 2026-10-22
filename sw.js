@@ -1,9 +1,10 @@
-const CACHE_NAME = 'english-study-shell-v2';
+const CACHE_NAME = 'english-study-shell-v3';
 const APP_SHELL = [
   './',
   './index.html',
   './style.css',
   './script.js',
+  './backup.js',
   './data.json',
   './manifest.webmanifest',
   './assets/icons/favicon.ico',

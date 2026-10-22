@@ -1,0 +1,10 @@
+<!-- 학습 앱의 시스템 창과 시작 화면 테마를 지정한다. -->
+<resources>
+    <style name="Theme.EnglishStudy" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowBackground">#101722</item>
+        <item name="android:colorAccent">#85DCCF</item>
+    </style>
+</resources>

@@ -67,6 +67,26 @@ node scripts/sync-notion-data.js --dry-run
 
 workflow는 6시간마다 한 번 실행되고, `data.json`이 바뀐 경우에만 커밋합니다. Pages 배포 후 사이트에서 Refresh 버튼을 누르면 새로 배포된 JSON을 캐시 없이 다시 요청합니다.
 
+## Android 네이티브 앱.
+
+`android/`는 Kotlin·Jetpack Compose로 구현하는 개인용 APK 프로젝트입니다. WebView를 사용하지 않으며 현재 `data.json`과 Pretendard를 앱에 포함합니다. 지원 범위는 Android 12 이상입니다. 요구사항과 단계별 검증 기준은 [Android 앱 계획](docs/android-app-plan.md)에 기록합니다.
+
+빌드에는 JDK 17 이상과 Android SDK가 필요합니다. `android/local.properties`에 로컬 `sdk.dir`를 지정한 뒤 실행합니다. 이 파일과 빌드 캐시·개인 키는 Git에 포함하지 않습니다.
+
+```powershell
+.\android\gradlew.bat -p android :app:testDebugUnitTest :app:assembleDebug
+```
+
+테스트용 APK는 `com.asher.englishstudy.debug`를 사용합니다. 화면 테스트는 이 별도 앱의 테스트 기록만 초기화합니다.
+
+```powershell
+.\android\gradlew.bat -p android :app:connectedDebugAndroidTest
+```
+
+삼성 인터넷에서 기존 학습 사이트의 💾 버튼을 누르면 통계·설정·마지막 완료 챕터가 JSON 파일로 저장됩니다. 앱의 설정 → 브라우저 기록 가져오기에서 해당 파일을 선택하고 미리보기를 확인합니다. 삼성 인터넷의 원본 기록은 삭제하지 않으며, 가져오기 전 앱 기록도 내부 백업으로 보관합니다. 목소리 식별자가 앱의 음성 목록과 다르면 같은 언어의 설치된 오프라인 음성으로 재생하므로 음성 설정에서 다시 확인합니다.
+
+오프라인 음성 재생에는 기기의 한국어·영어 음성 데이터 설치가 필요합니다. 네이티브 앱 구현과 실제 Notion 연결의 검증 상태는 `checklist.md`와 `context-notes.md`를 따릅니다.
+
 ## 📝 라이선스
 
 **All rights reserved. 사전 서면 허락 없는 사용을 허용하지 않습니다.**

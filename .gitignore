@@ -4,3 +4,13 @@ node_modules/
 .vscode/
 .gstack/
 .notion-sync-state/
+android/.gradle/
+android/.kotlin/
+android/.android/
+android/local.properties
+android/**/build/
+android/.tools/
+.playwright-cli/
+output/playwright/native-*.png
+output/playwright/android-*.png
+output/android/
