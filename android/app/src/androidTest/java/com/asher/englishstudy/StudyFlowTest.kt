@@ -2,6 +2,14 @@
 package com.asher.englishstudy
 
 import android.content.Context
+import android.view.Window
+import android.view.WindowManager
+import androidx.activity.compose.setContent
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.window.DialogWindowProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -31,6 +39,35 @@ class StudyFlowTest {
         scenario.onActivity { model = ViewModelProvider(it)[StudyModel::class.java] }
     }
     @After fun close() { scenario.close() }
+
+    @Test fun syncKeepsActivityAndDialogAwakeAndReleasesBothWindows() {
+        val syncing = mutableStateOf(false)
+        val showDialog = mutableStateOf(true)
+        var activityWindow: Window? = null
+        var dialogWindow: Window? = null
+        scenario.onActivity { activity ->
+            activityWindow = activity.window
+            activity.setContent {
+                KeepScreenOnWhileSyncing(activity.window, syncing.value)
+                StudyTheme(true) {
+                    if (showDialog.value) AlertDialog(onDismissRequest = {}, confirmButton = {}, text = {
+                        val window = (LocalView.current.parent as DialogWindowProvider).window
+                        KeepScreenOnWhileSyncing(window, syncing.value)
+                        SideEffect { dialogWindow = window }
+                        Text("동기화 화면 유지 검증")
+                    })
+                }
+            }
+        }
+        fun awake(window: Window?) = window!!.attributes.flags and WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON != 0
+        compose.runOnIdle { assertNotNull(dialogWindow); assertFalse(awake(activityWindow)); assertFalse(awake(dialogWindow)); syncing.value = true }
+        compose.runOnIdle { assertTrue(awake(activityWindow)); assertTrue(awake(dialogWindow)); showDialog.value = false }
+        compose.runOnIdle { assertTrue(awake(activityWindow)); assertFalse(awake(dialogWindow)); showDialog.value = true }
+        compose.runOnIdle { assertTrue(awake(dialogWindow)); syncing.value = false }
+        compose.runOnIdle { assertFalse(awake(activityWindow)); assertFalse(awake(dialogWindow)); syncing.value = true }
+        compose.runOnIdle { assertTrue(awake(activityWindow)); assertTrue(awake(dialogWindow)); syncing.value = false }
+        compose.runOnIdle { assertFalse(awake(activityWindow)); assertFalse(awake(dialogWindow)) }
+    }
 
     @Test fun chapterAndCardNavigationSurviveRecreationAndCompletionIsRecordedOnce() {
         compose.onNodeWithText("« Prev").assertIsNotEnabled()
@@ -79,6 +116,9 @@ class StudyFlowTest {
         compose.onNodeWithText("기본동사").performClick()
         compose.onNodeWithText("기본동사").assertIsSelected()
         compose.runOnIdle { model.selectDay("Day 002") }
+        val density = ApplicationProvider.getApplicationContext<Context>().resources.displayMetrics.density
+        val touchBounds = compose.onNodeWithContentDescription("역순 정렬").fetchSemanticsNode().touchBoundsInRoot
+        assertTrue("작게 표시한 체크박스도 터치 영역은 48dp 이상이어야 합니다.", touchBounds.height >= 48 * density - 1)
         compose.onNodeWithContentDescription("역순 정렬").performClick()
         compose.runOnIdle {
             assertEquals("Day 002", model.day)

@@ -10,6 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.core.view.WindowCompat
+import android.view.Window
+import android.view.WindowManager
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 
 class MainActivity : ComponentActivity() {
     private lateinit var model: StudyModel
@@ -37,6 +41,7 @@ class MainActivity : ComponentActivity() {
         }
         model = ViewModelProvider(this)[StudyModel::class.java]
         setContent {
+            KeepScreenOnWhileSyncing(window, model.syncing)
             StudyTheme(model.dark) {
                 StudyScreen(model, onImport = { importFile.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
                     onExport = { exportFile.launch("english-study-backup.json") },
@@ -52,4 +57,13 @@ class MainActivity : ComponentActivity() {
     }
     override fun onStop() { if (::model.isInitialized) model.speech.stop(); super.onStop() }
     override fun onResume() { super.onResume(); if (::model.isInitialized && model.speech.ready) model.speech.refresh() }
+}
+
+@Composable
+internal fun KeepScreenOnWhileSyncing(window: Window?, syncing: Boolean) {
+    DisposableEffect(window, syncing) {
+        if (syncing) window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        else window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        onDispose { window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+    }
 }

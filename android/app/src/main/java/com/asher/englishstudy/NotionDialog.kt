@@ -8,6 +8,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,8 @@ fun NotionDialog(model: StudyModel, openUrl: (String) -> Unit, close: () -> Unit
         DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm").withZone(ZoneId.systemDefault()).format(Instant.parse(value))
     }.getOrDefault("확인 필요")
     AlertDialog(onDismissRequest = close, title = { Text("Notion 동기화") }, text = {
+        // Compose Dialog는 Activity와 별도 창이므로 화면 유지 플래그도 따로 설정한다.
+        KeepScreenOnWhileSyncing((LocalView.current.parent as? DialogWindowProvider)?.window, model.syncing)
         Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("영어회화·기본동사 자료를 가져오고 복습 진도를 보냅니다. 버튼을 누를 때만 인터넷에 연결합니다.")
             Text(if (model.connectionConfigured) "연결 키 저장됨 · 동기화로 접근 권한을 확인하세요." else "처음 한 번 Notion integration 키를 입력해주세요.",
@@ -41,7 +45,7 @@ fun NotionDialog(model: StudyModel, openUrl: (String) -> Unit, close: () -> Unit
                 modifier = Modifier.fillMaxWidth()) { Text("학습 진도 Notion에 보내기") }
             if (model.syncing) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                Text("조회가 끝날 때까지 앱을 열어두세요. 학습 화면으로 돌아가 계속 공부할 수 있습니다.", style = MaterialTheme.typography.bodySmall)
+                Text("동기화 중에는 화면이 자동으로 꺼지지 않습니다. 앱을 열어두세요. 학습 화면으로 돌아가 계속 공부할 수 있습니다.", style = MaterialTheme.typography.bodySmall)
             }
             if (model.syncStatus.isNotBlank()) Text(model.syncStatus)
             Text("자료 갱신 · ${time(model.connection.dataSyncedAt)}\n진도 전송 · ${time(model.connection.progressSyncedAt)}", style = MaterialTheme.typography.bodySmall)
