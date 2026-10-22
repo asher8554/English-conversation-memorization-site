@@ -1,4 +1,4 @@
-# English Conversation Memorization Helper
+# 영어 회화 암기 도우미
 
 영어 회화 문장 암기를 돕기 위한 심플한 웹 애플리케이션입니다.
 매일 반복적인 복습을 통해 문장을 장기 기억에 저장하도록 설계되었습니다.
@@ -14,8 +14,8 @@
 
 ## 🛠 기술 스택
 
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **Storage**: Browser localStorage
+- **프런트엔드.** HTML5, CSS3, JavaScript(별도 프레임워크 없이 사용).
+- **저장 방식.** 브라우저 localStorage.
 
 ## 📦 설치 및 실행 방법
 
