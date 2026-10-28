@@ -238,3 +238,10 @@
 - 최종 release를 에뮬레이터에 설치·실행하고 output/playwright/native-auto-close-check.png에서 기존 화면을 확인했다. 사용자가 가져오기 진행 중이 아니라고 확인하여 mDNS로 재발견한 192.168.35.244:41119에 -r 업데이트 설치했다. 사용자 자료·설정·키를 초기화하거나 화면을 캡처하지 않았다. 최신 output/android/English-Study.apk SHA256은 46D83287919B6F7D57BB8B2D697FAC4A5E3443E1360B46F8D7FD4C1C76F0070E이다.
 
 - push 시 원격 자동 자료 동기화 d9034fc가 선행되어 거절됐다. 강제 push 없이 fetch·merge로 data.json의 기본동사 42일 자료를 보존했고 Node 60개·Android 단위 10개·화면 6개·release 빌드를 다시 통과했다. 다시 빌드한 최종 release를 에뮬레이터에서 실행·캡처하고 휴대폰의 동기화 플래그가 꺼져 있음을 확인한 뒤 -r 설치했다. 최종 APK SHA256은 4372892AEAD1DC9D5E4E5745A51DEFF4751BF375201D396A834BB4F5733E37A9이며 직전 값은 이전 빌드다.
+
+- 2026-10-29 사용자는 동기화에 한정하지 않고 앱 사용 중 화면이 절전으로 꺼지지 않게 요청했다. KeepScreenOnWhileSyncing의 조건을 제거하고 Activity와 앱 대화상자의 FLAG_KEEP_SCREEN_ON을 창 생명주기에 연결한다. 설정 토글이나 기기 전체 절전 변경은 추가하지 않는다. 초기 ADB 조회에는 연결된 휴대폰과 에뮬레이터가 없다.
+- KeepScreenOn으로 기존 함수를 단순화하고 Activity·Notion·학습 설정·복습 통계·챕터 선택·초기화 확인·기록 가져오기 대화상자에 적용했다. 동기화 상태와 무관하게 앱 창이 표시되는 동안 켜짐을 유지한다. 회귀 테스트는 동기화 없이 시작·Activity 재생성 후 유지, Dialog 열기·닫기, 창 제거 시 해제를 확인한다.
+- Notion에서 같은 폴드 기기의 화면 설정 기록 https://www.notion.so/4073d76f8874816cab88e7b0f16ebe6f 를 읽었다. 이번 요청은 앱의 화면 유지에 한정하므로 해당 기록의 회전·앱 호환 설정은 변경하지 않았다. 원격 자동 자료 갱신 77a1b56을 먼저 fetch·merge해 기본동사 55일 자료를 보존했다.
+- Node 60개·Android 단위 10개·화면 6개가 통과했다. 서명 release APK SHA256은 BD24807142EE2A4FA899B1C7204FE0279920427BFAE78118D3388A609CA1AA8B이며 인증서 SHA256은 기존 b151fa31a77c5e468b618a4f3b845bba9aaef988e72a5b0d7edda3ba48d6c691과 같다. 최종 output/android/English-Study.apk를 에뮬레이터에서 직접 실행했다.
+- 실제 대기 검증은 에뮬레이터에만 임시 자동 꺼짐 15000ms·충전 중 화면 유지 해제를 적용했다. 앱 화면을 20초 이상 두어 Awake를 확인하고 홈으로 나간 뒤 Asleep를 확인했다. 초기 캡처에는 System UI 응답 없음 창이 있어 Wait 후 다시 검증·캡처했다. output/playwright/native-always-awake.png는 창 없이 앱을 확인한 최종 release 화면이다. 테스트 뒤 기존 에뮬레이터 전원 설정을 복원했다. 휴대폰의 절전·회전 설정은 변경하지 않았다.
+- 휴대폰 무선 연결이 일시 끊겨 사용자에게 현재 주소를 요청했고 같은 192.168.35.139:38469로 다시 연결됐다. 구버전 창의 동기화 플래그가 꺼져 있음을 확인한 뒤 -r 업데이트 설치·시작에 성공했다. 새 앱 Window fl=81810180에서 0x80을 확인했다. 다만 기기는 잠금 화면/AOD 상태였고 Wakeup 뒤 NotificationShade와 mDreamingLockscreen=true가 확인돼 잠금 해제는 시도하지 않았다. 실기기에서 잠금 해제 후 장시간 자동 꺼짐 방지는 아직 직접 확인하지 않았다. 사용자 기기 화면·키는 캡처하거나 조회하지 않았다.

@@ -14,6 +14,8 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.window.DialogWindowProvider
 
 class MainActivity : ComponentActivity() {
     private lateinit var model: StudyModel
@@ -41,7 +43,7 @@ class MainActivity : ComponentActivity() {
         }
         model = ViewModelProvider(this)[StudyModel::class.java]
         setContent {
-            KeepScreenOnWhileSyncing(window, model.syncing)
+            KeepScreenOn(window)
             StudyTheme(model.dark) {
                 StudyScreen(model, onImport = { importFile.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
                     onExport = { exportFile.launch("english-study-backup.json") },
@@ -60,10 +62,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-internal fun KeepScreenOnWhileSyncing(window: Window?, syncing: Boolean) {
-    DisposableEffect(window, syncing) {
-        if (syncing) window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        else window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+internal fun KeepScreenOn(window: Window? = (LocalView.current.parent as? DialogWindowProvider)?.window) {
+    DisposableEffect(window) {
+        window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         onDispose { window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
     }
 }

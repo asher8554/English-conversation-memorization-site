@@ -151,6 +151,7 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
 
     when (dialog) {
         "days" -> AlertDialog(onDismissRequest = { dialog = "" }, title = { Text("챕터 선택") }, text = {
+            KeepScreenOn()
             LazyColumn(Modifier.heightIn(max = 420.dp)) {
                 items(model.days) { day ->
                     TextButton(onClick = { model.selectDay(day); dialog = "" }, modifier = focusRing().fillMaxWidth()) {
@@ -162,7 +163,7 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
         "settings" -> SettingsDialog(model, onImport, onExport, onTtsSettings) { dialog = "" }
         "stats" -> StatsDialog(model, onReset = { dialog = "reset" }) { dialog = "" }
         "reset" -> AlertDialog(onDismissRequest = { dialog = "stats" }, title = { Text("${model.course.title} 복습 통계를 초기화할까요?") },
-            text = { Text("이 코스의 복습 횟수와 최근 복습 시각이 지워집니다. 먼저 설정에서 기록 백업을 저장할 수 있습니다.") },
+            text = { KeepScreenOn(); Text("이 코스의 복습 횟수와 최근 복습 시각이 지워집니다. 먼저 설정에서 기록 백업을 저장할 수 있습니다.") },
             confirmButton = { TextButton(onClick = { model.resetCurrentStats(); dialog = "stats" }) { Text("초기화") } },
             dismissButton = { TextButton(onClick = { dialog = "stats" }) { Text("취소") } })
         "notion" -> NotionDialog(model, onOpenUrl) { dialog = "" }
@@ -173,7 +174,7 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
             stats.keys().asSequence().sumOf { stats.getJSONObject(it).getInt("count") }
         }
         AlertDialog(onDismissRequest = model::cancelImport, title = { Text("브라우저 기록 가져오기") },
-            text = { Text("${incoming.size}개 설정·기록, 총 ${total}회 복습 기록을 가져옵니다. 같은 항목은 파일의 값으로 바뀝니다. 현재 앱 기록은 내부 백업으로 보관하고 삼성 인터넷의 원본은 유지합니다.") },
+            text = { KeepScreenOn(); Text("${incoming.size}개 설정·기록, 총 ${total}회 복습 기록을 가져옵니다. 같은 항목은 파일의 값으로 바뀝니다. 현재 앱 기록은 내부 백업으로 보관하고 삼성 인터넷의 원본은 유지합니다.") },
             confirmButton = { TextButton(onClick = model::confirmImport) { Text("가져오기") } },
             dismissButton = { TextButton(onClick = model::cancelImport) { Text("취소") } })
     }
@@ -202,6 +203,7 @@ private fun StudyButton(label: String, modifier: Modifier, enabled: Boolean, cli
 @Composable
 private fun SettingsDialog(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, onTtsSettings: () -> Unit, close: () -> Unit) {
     AlertDialog(onDismissRequest = close, title = { Text("학습 설정") }, text = {
+        KeepScreenOn()
         Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             SettingSwitch("다크 모드", model.dark) { model.setting("useDarkMode", it.toString()) }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -261,6 +263,7 @@ private fun StatsDialog(model: StudyModel, onReset: () -> Unit, close: () -> Uni
     val stats = reviews(model.values, model.courseId)
     val count = stats.keys().asSequence().sumOf { stats.getJSONObject(it).optInt("count") }
     AlertDialog(onDismissRequest = close, title = { Text("${model.course.title} 복습 통계 · $count 회") }, text = {
+        KeepScreenOn()
         LazyColumn(Modifier.heightIn(max = 420.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             items(model.course.days.keys.toList()) { day ->
                 val entry = stats.optJSONObject(day)

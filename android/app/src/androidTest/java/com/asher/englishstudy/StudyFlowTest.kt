@@ -60,32 +60,35 @@ class StudyFlowTest {
         compose.onNodeWithText("Notion 동기화").assertIsDisplayed()
     }
 
-    @Test fun syncKeepsActivityAndDialogAwakeAndReleasesBothWindows() {
-        val syncing = mutableStateOf(false)
+    @Test fun studyAndDialogWindowsStayAwakeWithoutSyncAndReleaseOnDisposal() {
+        fun awake(window: Window?) = window!!.attributes.flags and WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON != 0
+        compose.waitForIdle()
+        scenario.onActivity { assertFalse(model.syncing); assertTrue(awake(it.window)) }
+        scenario.recreate()
+        compose.waitForIdle()
+        scenario.onActivity { assertFalse(model.syncing); assertTrue(awake(it.window)) }
+        val showActivity = mutableStateOf(true)
         val showDialog = mutableStateOf(true)
         var activityWindow: Window? = null
         var dialogWindow: Window? = null
         scenario.onActivity { activity ->
             activityWindow = activity.window
             activity.setContent {
-                KeepScreenOnWhileSyncing(activity.window, syncing.value)
+                if (showActivity.value) KeepScreenOn(activity.window)
                 StudyTheme(true) {
                     if (showDialog.value) AlertDialog(onDismissRequest = {}, confirmButton = {}, text = {
                         val window = (LocalView.current.parent as DialogWindowProvider).window
-                        KeepScreenOnWhileSyncing(window, syncing.value)
+                        KeepScreenOn()
                         SideEffect { dialogWindow = window }
-                        Text("동기화 화면 유지 검증")
+                        Text("앱 사용 중 화면 유지 검증")
                     })
                 }
             }
         }
-        fun awake(window: Window?) = window!!.attributes.flags and WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON != 0
-        compose.runOnIdle { assertNotNull(dialogWindow); assertFalse(awake(activityWindow)); assertFalse(awake(dialogWindow)); syncing.value = true }
         compose.runOnIdle { assertTrue(awake(activityWindow)); assertTrue(awake(dialogWindow)); showDialog.value = false }
         compose.runOnIdle { assertTrue(awake(activityWindow)); assertFalse(awake(dialogWindow)); showDialog.value = true }
-        compose.runOnIdle { assertTrue(awake(dialogWindow)); syncing.value = false }
-        compose.runOnIdle { assertFalse(awake(activityWindow)); assertFalse(awake(dialogWindow)); syncing.value = true }
-        compose.runOnIdle { assertTrue(awake(activityWindow)); assertTrue(awake(dialogWindow)); syncing.value = false }
+        compose.runOnIdle { assertTrue(awake(dialogWindow)); showActivity.value = false }
+        compose.runOnIdle { assertFalse(awake(activityWindow)); assertTrue(awake(dialogWindow)); showDialog.value = false }
         compose.runOnIdle { assertFalse(awake(activityWindow)); assertFalse(awake(dialogWindow)) }
     }
 
