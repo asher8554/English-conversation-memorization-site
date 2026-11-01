@@ -6069,6 +6069,103 @@
             "a": "I don’t smell anything.",
             "section": "Further Studies"
           }
+        ],
+        "Day 056": [
+          {
+            "q": "지갑을 안 가져왔네요. 나중에 돈 드려도 되나요?",
+            "a": "I didn’t bring my wallet. Can I pay you back later?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "이 쿠키 정말 맛있어. 같이 먹게 사무실에 가져갈게.",
+            "a": "These cookies are great. I’ll bring them to the office to share.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "너 주려고 커피 가져왔어.",
+            "a": "I brought you a coffee.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "담요 가져다 줄게. 추워 보이네.",
+            "a": "Let me bring you a blanket — you look cold.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "(베트남에 가는 친구에게 하는 말) 말린 망고 좀 사다 줄 수 있어?",
+            "a": "Could you bring me some dried mangoes from Vietnam?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "미나가 오늘 또 개를 회사에 데리고 왔어.",
+            "a": "Mina brought her dog to work again today.",
+            "section": "Small talk"
+          },
+          {
+            "q": "나도 봤어. 거의 30분마다 일어나서 개를 데리고 나가네.",
+            "a": "I saw that. She gets up to take it outside, like, every 30minutes.",
+            "section": "Small talk"
+          },
+          {
+            "q": "(싱가포르에 사는 친구에게) 싱가포르 여행 짐 싸고 있어.",
+            "a": "I’m packing for my trip to Singapore.",
+            "section": "Small talk"
+          },
+          {
+            "q": "재미있겠다. 노트북 가져올 거야?",
+            "a": "That’s fun. Are you going to bring your laptop?",
+            "section": "Small talk"
+          },
+          {
+            "q": "잘 모르겠어. 무겁긴 한데 한가할 때 일을 좀 할 수도 있어서.",
+            "a": "I’m not sure. It’s heavy, but I might want to do some work in my downtime.",
+            "section": "Small talk"
+          },
+          {
+            "q": "그냥 가져와. 싱가포르에서는 걸어 다닐 일이 많지 않을 테니까.",
+            "a": "Just bring it. You won’t have to walk around too much in Singapore.",
+            "section": "Small talk"
+          },
+          {
+            "q": "우리 동네는 어쩐 일로 온 거야?",
+            "a": "What brings you over to my neighborhood?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "한국 음식을 너무 좋아해서 다시 한국에 오게 되었습니다.",
+            "a": "My love for Korean food brought me back to Seoul.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "켈리를 뽑아서 너무 다행이야",
+            "a": "I’m so glad we hired Kelly.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "켈리 덕분에 회사 분위기가 훨씬 활기 넘치지.",
+            "a": "She brings a lot of enthusiasm to the company.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "샐리와 보비 때문에 사무실이 늘 시끄럽다.",
+            "a": "Sally and Bobby bring a lot of drama to the office.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그 친구는 회사에 전혀 도움이 안 돼. 왜 뽑은 거야?",
+            "a": "He doesn’t bring much to the table. Why did they hire him?",
+            "section": "Further Studies"
+          },
+          {
+            "q": "나는 커피 한 잔으로도 행복해진다.",
+            "a": "A good cup of coffee brings me joy.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그녀의 말이 내게 위안이 되었다.",
+            "a": "Her words brought me comfort.",
+            "section": "Further Studies"
+          }
         ]
       },
       "dayMainSentences": {
@@ -6126,7 +6223,8 @@
         "Day 052": "[Keep] : Wow, how do you keep your bathroom so clean?",
         "Day 053": "[Leave] : I’m leaving on the first flight out tomorrow.",
         "Day 054": "[Leave] : I left you some pizza over there if you’re hungry.",
-        "Day 055": "[Leave] : Do you want me to leave the door open?"
+        "Day 055": "[Leave] : Do you want me to leave the door open?",
+        "Day 056": "[Bring] : Do you mind if I bring Nick with me?"
       },
       "note": "Notion 원문에서 생성했습니다. 빈 섹션과 Day00x 템플릿은 제외합니다."
     }
