@@ -42,8 +42,12 @@ fun NotionDialog(model: StudyModel, openUrl: (String) -> Unit, close: () -> Unit
                 style = MaterialTheme.typography.bodySmall)
             TextButton(onClick = { openUrl("https://www.notion.so/profile/integrations") }) { Text("Notion integration 설정 열기") }
             HorizontalDivider()
-            Button(onClick = model::fetchNotionCourses, enabled = model.connectionConfigured && !model.syncing,
+            Button(onClick = { model.fetchNotionCourses() }, enabled = model.connectionConfigured && !model.syncing,
                 modifier = Modifier.fillMaxWidth()) { Text("두 코스 자료 가져오기") }
+            TextButton(onClick = { model.fetchNotionCourses(full = true) }, enabled = model.connectionConfigured && !model.syncing,
+                modifier = Modifier.fillMaxWidth()) { Text("전체 새로 가져오기") }
+            Text("가져오기는 바뀌지 않은 코스와 Day를 건너뜁니다. 기존 Day 안의 문장만 고쳤는데 반영되지 않으면 ‘전체 새로 가져오기’를 눌러주세요.",
+                style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = model::sendNotionProgress, enabled = model.connectionConfigured && !model.syncing,
                 modifier = Modifier.fillMaxWidth()) { Text("학습 진도 Notion에 보내기") }
             if (model.syncing) {

@@ -34,6 +34,17 @@ class NotionDataTest {
         assertEquals(courses, parseCourses(encodeCourses(courses)))
     }
 
+    @Test fun `slim block cache keeps everything the parser needs`() {
+        val blocks = listOf(block("heading_2", "Day 001 Hello", listOf(
+            columns(listOf("[Model Examples]", "안녕"), listOf("", "Hello"))))
+            .put("id", "a").put("last_edited_time", "2026-11-01T00:00:00.000Z").put("archived", false))
+        val slim = blocks.map(::slimBlock)
+        assertFalse(slim.first().has("archived"))
+        assertEquals("2026-11-01T00:00:00.000Z", slim.first().getString("last_edited_time"))
+        val cached = JSONArray(slim.toString()).objects()
+        assertEquals(courseFromNotion("conversation", "교재", blocks), courseFromNotion("conversation", "교재", cached))
+    }
+
     @Test fun `ambiguous or empty source fails instead of replacing saved course`() {
         val mismatched = block("heading_2", "Day 001", listOf(columns(listOf("Model Examples", "질문"), listOf("Answer", "Extra answer"))))
         assertThrows(IllegalArgumentException::class.java) { courseFromNotion("conversation", "교재", listOf(mismatched)) }

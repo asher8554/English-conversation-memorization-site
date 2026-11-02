@@ -86,11 +86,14 @@ class StudyModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun fetchNotionCourses() {
+    fun fetchNotionCourses(full: Boolean = false) {
         val current = courses
         notionJob { client ->
-            val next = client.fetchCourses(current)
             val app = getApplication<Application>()
+            val cacheFile = AtomicFile(File(app.filesDir, "notion-blocks.json"))
+            val cache = if (full) null else runCatching { JSONObject(cacheFile.openRead().bufferedReader().use { it.readText() }) }.getOrNull()
+            val result = client.fetchCourses(current, cache, full)
+            val next = result.courses
             val file = AtomicFile(File(app.filesDir, "notion-data.json"))
             File(app.filesDir, "before-notion-update.json").writeBytes(if (file.baseFile.exists() || File(file.baseFile.path + ".bak").exists())
                 file.openRead().use { it.readBytes() } else encodeCourses(current).toByteArray(Charsets.UTF_8))
@@ -109,8 +112,21 @@ class StudyModel(application: Application) : AndroidViewModel(application) {
                 }
                 selectDay(previousDay.takeIf { it in days } ?: days.first())
             }
+            // 캐시 저장 실패는 다음 가져오기가 느려질 뿐이므로 자료 저장 결과를 막지 않는다.
+            runCatching {
+                val cacheStream = cacheFile.startWrite()
+                try {
+                    cacheStream.write(result.cache.toString().toByteArray(Charsets.UTF_8))
+                    cacheFile.finishWrite(cacheStream)
+                } catch (e: Exception) { cacheFile.failWrite(cacheStream); throw e }
+            }
             connection.markSynced("dataSyncedAt", Instant.now().toString())
-            "두 코스의 Notion 자료를 저장했습니다. 영어회화 ${next[0].days.size}일·기본동사 ${next[1].days.size}일입니다."
+            val skipped = buildList {
+                if (result.skippedCourses > 0) add("변경 없는 코스 ${result.skippedCourses}개")
+                if (result.reusedBlocks > 0) add("변경 없는 Day ${result.reusedBlocks}개")
+            }.joinToString("·")
+            "두 코스의 Notion 자료를 저장했습니다. 영어회화 ${next[0].days.size}일·기본동사 ${next[1].days.size}일입니다." +
+                if (skipped.isNotEmpty()) " ($skipped 건너뜀)" else ""
         }
     }
 

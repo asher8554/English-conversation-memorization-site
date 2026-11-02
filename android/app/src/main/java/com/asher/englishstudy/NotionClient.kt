@@ -1,6 +1,7 @@
 // Notion 원문을 읽고 전용 데이터베이스에 챕터별 진도를 수동 전송한다.
 package com.asher.englishstudy
 
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -67,7 +68,10 @@ class NotionClient(private val token: String, private val report: (String) -> Un
         error("Notion 요청을 완료하지 못했습니다.")
     }
 
-    private fun readChildren(blockId: String, depth: Int = 0): List<JSONObject> {
+    private var reusedCount = 0
+
+    // reuse에는 이전 동기화의 최상위 블록이 들어 있고, 수정 시각이 같은 블록은 하위 블록을 다시 조회하지 않는다.
+    private fun readChildren(blockId: String, depth: Int = 0, reuse: Map<String, JSONObject> = emptyMap()): List<JSONObject> {
         require(depth <= 30) { "Notion 중첩 구조가 너무 깊습니다." }
         val blocks = mutableListOf<JSONObject>()
         var cursor: String? = null
@@ -77,9 +81,16 @@ class NotionClient(private val token: String, private val report: (String) -> Un
             val items = page.getJSONArray("results").objects()
             blockCount += items.size
             require(blockCount <= 50000) { "조회할 Notion 블록이 너무 많습니다. 기존 자료를 유지합니다." }
-            report("학습 자료를 읽고 있습니다. ${blockCount}개 블록 확인")
-            for (block in items) {
-                if (block.optBoolean("has_children")) block.put("children", org.json.JSONArray(readChildren(block.getString("id"), depth + 1)))
+            report("학습 자료를 읽고 있습니다. ${blockCount}개 블록 확인" + if (reusedCount > 0) " · 변경 없는 ${reusedCount}개 건너뜀" else "")
+            for (raw in items) {
+                val block = slimBlock(raw)
+                if (raw.optBoolean("has_children")) {
+                    val cached = reuse[block.getString("id")]
+                    val children = if (cached != null && cached.optString("last_edited_time") == block.optString("last_edited_time") &&
+                        cached.optJSONArray("children") != null) { reusedCount++; cached.getJSONArray("children") }
+                    else JSONArray(readChildren(block.getString("id"), depth + 1))
+                    block.put("children", children)
+                }
                 blocks += block
             }
             cursor = if (page.optBoolean("has_more")) page.getString("next_cursor") else null
@@ -87,10 +98,33 @@ class NotionClient(private val token: String, private val report: (String) -> Un
         return blocks
     }
 
-    fun fetchCourses(existing: List<Course>): List<Course> = existing.map { course ->
-        report("${course.title} 원문을 조회합니다.")
-        courseFromNotion(course.id, course.title, readChildren(notionSources.getValue(course.id)))
-    }.also { parseCourses(encodeCourses(it)) }
+    class FetchResult(val courses: List<Course>, val cache: JSONObject, val skippedCourses: Int, val reusedBlocks: Int)
+
+    /** full=false이면 페이지가 그대로일 때 코스 전체를, 바뀌었을 때는 수정되지 않은 Day 블록을 이전 결과로 재사용한다. */
+    fun fetchCourses(existing: List<Course>, cache: JSONObject? = null, full: Boolean = false): FetchResult {
+        val nextCache = JSONObject().put("version", BLOCK_CACHE_VERSION)
+        val usable = cache?.takeIf { !full && it.optInt("version") == BLOCK_CACHE_VERSION }
+        var skipped = 0
+        val courses = existing.map { course ->
+            val pageId = notionSources.getValue(course.id)
+            report("${course.title} 변경 여부를 확인합니다.")
+            val edited = request("pages/${id(pageId)}").optString("last_edited_time")
+            val previous = usable?.optJSONObject(course.id)
+            val previousBlocks = previous?.optJSONArray("blocks")?.objects()
+            val blocks = if (previousBlocks != null && edited.isNotBlank() && previous?.optString("pageEdited") == edited) {
+                skipped++
+                report("${course.title}은 마지막 가져오기 이후 바뀌지 않아 건너뜁니다.")
+                previousBlocks
+            } else {
+                report("${course.title} 원문을 조회합니다.")
+                readChildren(pageId, reuse = previousBlocks.orEmpty().associateBy { it.optString("id") })
+            }
+            nextCache.put(course.id, JSONObject().put("pageEdited", edited).put("blocks", JSONArray(blocks)))
+            courseFromNotion(course.id, course.title, blocks)
+        }
+        parseCourses(encodeCourses(courses))
+        return FetchResult(courses, nextCache, skipped, reusedCount)
+    }
 
     private fun existingProgress(): Map<String, JSONObject> {
         val rows = mutableMapOf<String, JSONObject>()

@@ -24,6 +24,22 @@ private fun section(text: String): String? = sections.find {
 }
 private fun JSONObject.section(): String? = section(text()) ?: children().firstNotNullOfOrNull { it.section() }
 
+const val BLOCK_CACHE_VERSION = 1
+
+/** 변환과 재사용 판단에 필요한 값만 남겨 블록 캐시 크기를 줄인다. */
+fun slimBlock(block: JSONObject): JSONObject {
+    val type = block.optString("type")
+    val out = JSONObject().put("id", block.optString("id")).put("type", type)
+        .put("has_children", block.optBoolean("has_children")).put("last_edited_time", block.optString("last_edited_time"))
+    block.optJSONObject(type)?.optJSONArray("rich_text")?.let { parts ->
+        out.put(type, JSONObject().put("rich_text", JSONArray().apply {
+            parts.objects().forEach { put(JSONObject().put("plain_text", it.optString("plain_text", it.optJSONObject("text")?.optString("content").orEmpty()))) }
+        }))
+    }
+    block.optJSONArray("children")?.let { out.put("children", JSONArray(it.objects().map(::slimBlock))) }
+    return out
+}
+
 fun courseFromNotion(id: String, title: String, blocks: List<JSONObject>): Course {
     val days = sortedMapOf<String, List<Card>>()
     val sentences = sortedMapOf<String, String>()
