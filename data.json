@@ -1557,7 +1557,7 @@
             "section": "Further Studies"
           },
           {
-            "q": "어떤사람들은 기구를 살 때 가격보다 품질을 중시한다.",
+            "q": "어떤 사람들은 가구를 살 때 가격보다 품질을 중시한다.",
             "a": "Some people choose quality over price when buying furniture.",
             "section": "Further Studies"
           },
@@ -2485,7 +2485,7 @@
           },
           {
             "q": "이 20달러 지폐를 잔돈으로 바꿔 주실 수 있을까요?",
-            "a": "Can I get change ofr this $20, please?",
+            "a": "Can I get change for this $20, please?",
             "section": "Further Studies"
           },
           {
@@ -3284,7 +3284,7 @@
             "section": "Further Studies"
           },
           {
-            "q": "혼자 먹으려고 요리하는 것보다 외식하는 게 더 싸서 요리를 잘 안해요.",
+            "q": "혼자 먹으려고 요리하는 것보다 외식하는 게 더 싸서 요리를 잘 안 해요.",
             "a": "I don’t cook much because it’s cheaper to go out and eat than to cook for one person.",
             "section": "Further Studies"
           },
@@ -3628,7 +3628,7 @@
           },
           {
             "q": "회의가 2주 조금 더 남아서 참석자 명단을 확인해야 합니다. 참석이 어려울 경우 가급적 빨리 회신 주시기 바랍니다.",
-            "a": "The conference is a little over two weeks away, and we need to verify our guest list. Please respond and let me know ASAP if you cannot make it",
+            "a": "The conference is a little over two weeks away, and we need to verify our guest list. Please respond and let me know ASAP if you cannot make it.",
             "section": "Further Studies"
           }
         ],
@@ -3803,7 +3803,7 @@
             "section": "Model Examples"
           },
           {
-            "q": "영수증이 없어도 교환이 가능한가요?",
+            "q": "영수증이 없어도 반품이 가능한가요?",
             "a": "Do you take returns without a receipt?",
             "section": "Model Examples"
           },
@@ -3931,7 +3931,7 @@
           },
           {
             "q": "월세가 3개월이나 밀려서, 너랑 유럽에 가는 건 꿈도 못 꿔.",
-            "a": "I’m three months be hind on rent, so there’s no way I can go with you to Europe.",
+            "a": "I’m three months behind on rent, so there’s no way I can go with you to Europe.",
             "section": "Further Studies"
           },
           {
@@ -4095,7 +4095,7 @@
           },
           {
             "q": "농장에서 일하는 건 힘들지만, 육체노동을 하면 마음이 편하다.",
-            "a": "Working on the farm is demanding, but it pus me at ease to work with my hands.",
+            "a": "Working on the farm is demanding, but it puts me at ease to work with my hands.",
             "section": "Further Studies"
           },
           {
@@ -4582,7 +4582,7 @@
           },
           {
             "q": "아니, 괜찮아. 난 밤늦게 공부하는 게 더 맞거든.",
-            "a": "No thanks, Studying late at night works better for me.",
+            "a": "No thanks. Studying late at night works better for me.",
             "section": "Small talk"
           },
           {
@@ -5887,7 +5887,7 @@
           },
           {
             "q": "자네가 이 일을 하기에는 스펙이 너무 좋다는 점이 문제야.",
-            "a": "The problem is your’re overqualified for this position.",
+            "a": "The problem is you’re overqualified for this position.",
             "section": "Further Studies"
           },
           {
@@ -6103,7 +6103,7 @@
           },
           {
             "q": "나도 봤어. 거의 30분마다 일어나서 개를 데리고 나가네.",
-            "a": "I saw that. She gets up to take it outside, like, every 30minutes.",
+            "a": "I saw that. She gets up to take it outside, like, every 30 minutes.",
             "section": "Small talk"
           },
           {
@@ -6137,7 +6137,7 @@
             "section": "Further Studies"
           },
           {
-            "q": "켈리를 뽑아서 너무 다행이야",
+            "q": "켈리를 뽑아서 너무 다행이야.",
             "a": "I’m so glad we hired Kelly.",
             "section": "Further Studies"
           },
@@ -6164,6 +6164,180 @@
           {
             "q": "그녀의 말이 내게 위안이 되었다.",
             "a": "Her words brought me comfort.",
+            "section": "Further Studies"
+          }
+        ],
+        "Day 057": [
+          {
+            "q": "우리 지금 공항으로 가.",
+            "a": "We’re heading to the airport now.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "북쪽으로 이동해서 길이 어디로 이어져 있는지 봅시다.",
+            "a": "Let’s head north and see where the road takes us.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "(카카오톡 메시지) 나 지금 나가. 5분 늦을지도 몰라.",
+            "a": "I’m heading out now. I might be five minutes late.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "퇴근하고 너희 집 쪽으로 데리러 갈게.",
+            "a": "I’ll head over to your place and pick you up after work.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "(파주 캠핑장에 가기로 한 상황) 베니랑 샐리가 퇴근하고 그쪽으로 이동할 거야.",
+            "a": "Benny and Sally are going to head up after they get off work.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "다음 달에 일본에 갈까 싶어.",
+            "a": "I’m thinking of heading over to Japan next month.",
+            "section": "Small talk"
+          },
+          {
+            "q": "멋지다! 일 때문에 가는 거야, 아니면 그냥 휴가차 가는 거야?",
+            "a": "That sounds awesome! Are you going for work or just a vacation?",
+            "section": "Small talk"
+          },
+          {
+            "q": "시간이 꽤 늦었네. 택시 불러서 집에 가야 할 것 같아.",
+            "a": "It’s getting pretty late. I guess I should call a taxi and head home.",
+            "section": "Small talk"
+          },
+          {
+            "q": "정말? 그 먼 수원까지 택시로 가면 엄청 비쌀 텐데.",
+            "a": "Are you sure? Taking a taxi all the way back to Suwon would be pretty expensive.",
+            "section": "Small talk"
+          },
+          {
+            "q": "어, 네 말이 맞네. 수원까지 그렇게 멀다는 생각을 못 했네.",
+            "a": "Yeah, you’re right. I didn’t realize how far it actually is.",
+            "section": "Small talk"
+          },
+          {
+            "q": "그냥 편하게 우리 집에서 자고 가.",
+            "a": "Feel free to just crash on my couch.",
+            "section": "Small talk"
+          },
+          {
+            "q": "퇴근 후 곧장 집으로 갔다.",
+            "a": "I went straight home after work.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "퇴근 후 (회식 장소가 아닌) 집으로 바로 갔다.",
+            "a": "I headed straight home after work.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "사무실로 복귀하기 전에 커피 한 잔 사려고 했는데, 안 되겠다. 줄 좀 봐.",
+            "a": "I wanted to grab a coffee before heading back to work, but I don’t think I can. Look at that line.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "(아내가 남편에게 보내는 메시지) 가게 좀 들렀다가 집에 갈 거야.",
+            "a": "I’ll head home after I stop by the store.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "(교수가 학생에게 보내는 메시지) 사무실에 있을 테니 수업 끝나고 시간 되면 오세요.",
+            "a": "I’ll be in my office if you want to head over after class.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "아시아 지역 총괄 이사는 서울에 도착하자 곧바로 삼성 반도체 공장으로 향했다.",
+            "a": "The Asia regional director landed in Seoul and headed straight to the Samsung semiconductor plant.",
+            "section": "Further Studies"
+          }
+        ],
+        "Day 058": [
+          {
+            "q": "내가 따라가도 되나요?",
+            "a": "Mind if I come along?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "마트에 내가 같이 가 줄까?",
+            "a": "Do you want me to come with you to the grocery store?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "내가 가서 그 문제 한번 살펴봐 줄까요?",
+            "a": "Do you want me to come over and take a look at the problem?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "아내분도 워크숍에 가시나요?",
+            "a": "Is your wife coming to the workshop, too?",
+            "section": "Model Examples"
+          },
+          {
+            "q": "오늘 밤 친구들이 (집에) 오기로 했다.",
+            "a": "My friends are coming over tonight.",
+            "section": "Model Examples"
+          },
+          {
+            "q": "(퇴근하며 동료에게) 우리는 퇴근해요. 오늘 야근할 거예요?",
+            "a": "We’re leaving. Are you going to stay late tonight?",
+            "section": "Small talk"
+          },
+          {
+            "q": "아뇨, 저도 같이 가요.",
+            "a": "No, I’ll come with you.",
+            "section": "Small talk"
+          },
+          {
+            "q": "나랑 내 여동생이 다음 주 금요일에 부산에 가.",
+            "a": "My sister and I are coming to Busan next Friday.",
+            "section": "Small talk"
+          },
+          {
+            "q": "와, 잘됐다. 오래 있을 거야?",
+            "a": "Oh, that’s great. Are you guys staying long?",
+            "section": "Small talk"
+          },
+          {
+            "q": "주말까지만 있어. 해운대 해변에 가 보고 싶대.",
+            "a": "Just the weekend. She wants to check out Haeundae Beach.",
+            "section": "Small talk"
+          },
+          {
+            "q": "너희 (해운대에) 언제 가는지 알려 줘. 너희 온다니 정말 기대된다.",
+            "a": "Let me know when you go. I’m really excited about you guys coming.",
+            "section": "Small talk"
+          },
+          {
+            "q": "매일 아침 수영하니 몸이 탄탄하게 유지된다.",
+            "a": "Swimming every morning keeps me fit.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "나는 여행을 즐긴다.",
+            "a": "I enjoy traveling.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "나는 외국어 배우는 것에 관심이 없다.",
+            "a": "I’m not interested in learning a foreign language.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "내가 가장 좋아하는 취미는 그림 그리기이다.",
+            "a": "My favorite hobby is drawing.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "그가 우리와 함께 저녁 식사 하러 온다는 게 너무 기쁘다.",
+            "a": "I’m really excited about him joining us for dinner.",
+            "section": "Further Studies"
+          },
+          {
+            "q": "LA 다저스의 월드 시리즈 우승 가능성은 꽤 높다.",
+            "a": "The chances of the LA Dodgers winning the World Series are pretty good.",
             "section": "Further Studies"
           }
         ]
@@ -6224,7 +6398,9 @@
         "Day 053": "[Leave] : I’m leaving on the first flight out tomorrow.",
         "Day 054": "[Leave] : I left you some pizza over there if you’re hungry.",
         "Day 055": "[Leave] : Do you want me to leave the door open?",
-        "Day 056": "[Bring] : Do you mind if I bring Nick with me?"
+        "Day 056": "[Bring] : Do you mind if I bring Nick with me?",
+        "Day 057": "[Head] : I’m heading down to Busan this weekend.",
+        "Day 058": "[Come] : Are you coming with us to the party?"
       },
       "note": "Notion 원문에서 생성했습니다. 빈 섹션과 Day00x 템플릿은 제외합니다."
     }
