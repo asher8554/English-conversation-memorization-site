@@ -82,4 +82,9 @@ class StudyDataTest {
         assertThrows(IllegalArgumentException::class.java) { validateValues(JSONObject().put("forgotCounts:conversation", "{\"Day 001|x\":0}")) }
         assertThrows(IllegalArgumentException::class.java) { validateValues(JSONObject().put("forgotCounts:conversation", "{\"bad\":1}")) }
     }
+
+    @Test fun `speech toggle is a backed up boolean setting`() {
+        assertEquals("false", readBackup(writeBackup(mapOf("speechEnabled" to "false")))["speechEnabled"])
+        assertThrows(IllegalArgumentException::class.java) { validateValues(JSONObject().put("speechEnabled", "off")) }
+    }
 }

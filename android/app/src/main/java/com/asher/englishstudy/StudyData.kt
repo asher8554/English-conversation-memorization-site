@@ -37,7 +37,7 @@ fun parseCourses(text: String): List<Course> {
 val backupKeys = setOf(
     "reviewStats", "reviewStats:conversation", "reviewStats:basic-verbs", "lastCompletedChapter",
     "selectedCourseId", "questionFontSize", "answerFontSize", "useDarkMode", "koVoiceURI", "enVoiceURI",
-    "koVoiceName", "enVoiceName", "ttsAutoQuestion", "ttsAutoAnswer", "ttsKoRate", "ttsEnRate",
+    "koVoiceName", "enVoiceName", "ttsAutoQuestion", "ttsAutoAnswer", "ttsKoRate", "ttsEnRate", "speechEnabled",
     "forgotCounts:conversation", "forgotCounts:basic-verbs"
 )
 
@@ -76,7 +76,7 @@ fun validateValues(values: JSONObject): Map<String, String> = values.keys().asSe
             require(chapter.getString("day").matches(Regex("Day \\d{3}")))
         }
         key == "selectedCourseId" -> require(value in listOf("conversation", "basic-verbs"))
-        key in setOf("useDarkMode", "ttsAutoQuestion", "ttsAutoAnswer") -> require(value in setOf("true", "false"))
+        key in setOf("useDarkMode", "ttsAutoQuestion", "ttsAutoAnswer", "speechEnabled") -> require(value in setOf("true", "false"))
         key.endsWith("FontSize") -> require(value.toFloat().isFinite() && value.toFloat() in .5f..6f)
         key in setOf("ttsKoRate", "ttsEnRate") -> require(value.toFloat().isFinite() && value.toFloat() in .6f..1.3f)
         else -> require(value.length <= 512)

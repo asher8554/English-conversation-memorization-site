@@ -174,6 +174,16 @@ class StudyModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setting(key: String, value: String) { save(values + (key to value)) }
+
+    /** 학습 화면의 모든 문장 읽기(자동 읽기·문장 눌러 듣기)를 한 번에 켜고 끈다. 자동 읽기 세부 설정은 그대로 둔다. */
+    val speechOn get() = flag("speechEnabled")
+    fun toggleSpeech() {
+        val next = !speechOn
+        if (!save(values + ("speechEnabled" to next.toString()))) return
+        if (!next) speech.stop()
+        notice = if (next) "음성 읽기를 켰습니다." else "음성 읽기를 껐습니다."
+    }
+    fun speakCard(text: String, language: String) { if (speechOn) speech.speak(text, language, values) }
     fun flag(key: String, fallback: Boolean = true) = values[key]?.toBooleanStrictOrNull() ?: fallback
     fun rate(key: String, fallback: Float) = values[key]?.toFloat() ?: fallback
 

@@ -65,7 +65,7 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
         }
     }
     LaunchedEffect(model.courseId, model.day, model.index, model.speech.ready) {
-        if (model.speech.ready && model.flag("ttsAutoQuestion")) model.speech.speak(model.card.question, "ko", model.values)
+        if (model.speech.ready && model.flag("ttsAutoQuestion")) model.speakCard(model.card.question, "ko")
     }
     Box(Modifier.fillMaxSize()) {
         GlassBackground(model.dark) { size, origin ->
@@ -76,6 +76,7 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
                         ToolButton("🔄", "Notion 자료와 진도 동기화") { dialog = "notion" }
                         ToolButton("📊", "복습 통계") { dialog = "stats" }
                         ToolButton("⚙️", "음성 설정과 기록 이전") { dialog = "settings" }
+                        ToolButton(if (model.speechOn) "🔊" else "🔇", if (model.speechOn) "음성 읽기 끄기" else "음성 읽기 켜기", model::toggleSpeech)
                         ToolButton(if (model.dark) "🌙" else "☀️", "다크 모드 전환") { model.setting("useDarkMode", (!model.dark).toString()) }
                         ToolButton("−", "글자 작게") { model.resize(-.2f) }
                         ToolButton("+", "글자 크게") { model.resize(.2f) }
@@ -136,17 +137,17 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
                         Text(model.card.question, fontSize = (model.questionSize * 16).sp, lineHeight = (model.questionSize * 20.8f).sp,
                             textAlign = TextAlign.Center, fontWeight = FontWeight.ExtraBold,
                             modifier = focusRing().fillMaxWidth().clickable(role = Role.Button, onClickLabel = "한국어 문장 다시 듣기") {
-                                model.speech.speak(model.card.question, "ko", model.values)
+                                model.speakCard(model.card.question, "ko")
                             }.padding(bottom = 24.dp))
                         if (model.revealed) {
                             Text(model.card.answer, fontSize = (model.answerSize * 16).sp, lineHeight = (model.answerSize * 20.8f).sp,
                                 textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary,
                                 modifier = focusRing().fillMaxWidth().clickable(role = Role.Button, onClickLabel = "영어 문장 다시 듣기") {
-                                    model.speech.speak(model.card.answer, "en", model.values)
+                                    model.speakCard(model.card.answer, "en")
                                 }.padding(vertical = 12.dp))
                         } else Button(onClick = {
                             model.reveal()
-                            if (model.flag("ttsAutoAnswer")) model.speech.speak(model.card.answer, "en", model.values)
+                            if (model.flag("ttsAutoAnswer")) model.speakCard(model.card.answer, "en")
                         }, modifier = focusRing().fillMaxWidth().height(44.dp), shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = if (model.dark) Color(0xFF20535F) else Color(0xFF087F8C),
                                 contentColor = if (model.dark) MaterialTheme.colorScheme.onSurface else Color.White)) {
