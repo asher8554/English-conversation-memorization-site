@@ -65,4 +65,21 @@ class StudyDataTest {
         course.getJSONObject("data").getJSONArray("Day 001").getJSONObject(0).put("a", " ")
         assertThrows(Exception::class.java) { parseCourses(source.toString()) }
     }
+
+    @Test fun `forgot counter accumulates per sentence, resets only that sentence and survives backup`() {
+        val a = Card("나는 시카고에 친구가 있다.", "I have friends in Chicago.", "Model Examples")
+        val b = Card("내 조카는 거북이를 키운다.", "My nephew has a turtle.", "Model Examples")
+        var values = mapOf("ttsEnRate" to "0.9")
+        repeat(3) { values = incrementForgot(values, "basic-verbs", "Day 001", a) }
+        values = incrementForgot(values, "basic-verbs", "Day 001", b)
+        assertEquals(3, forgotCount(values, "basic-verbs", "Day 001", a))
+        assertEquals(0, forgotCount(values, "conversation", "Day 001", a))
+        assertEquals(values, readBackup(writeBackup(values)))
+        values = resetForgot(values, "basic-verbs", "Day 001", a)
+        assertEquals(0, forgotCount(values, "basic-verbs", "Day 001", a))
+        assertEquals(1, forgotCount(values, "basic-verbs", "Day 001", b))
+        assertEquals("0.9", values["ttsEnRate"])
+        assertThrows(IllegalArgumentException::class.java) { validateValues(JSONObject().put("forgotCounts:conversation", "{\"Day 001|x\":0}")) }
+        assertThrows(IllegalArgumentException::class.java) { validateValues(JSONObject().put("forgotCounts:conversation", "{\"bad\":1}")) }
+    }
 }

@@ -220,6 +220,17 @@ class StudyModel(application: Application) : AndroidViewModel(application) {
             .onFailure { notice = it.message ?: "기록 저장에 실패했습니다." }
     }
 
+    val forgotCount get() = forgotCount(values, courseId, day, card)
+    fun markForgot() {
+        runCatching { incrementForgot(values, courseId, day, card) }
+            .onSuccess { save(it) }
+            .onFailure { notice = it.message ?: "기록 저장에 실패했습니다." }
+    }
+    fun resetForgot() {
+        if (forgotCount == 0) return
+        if (save(resetForgot(values, courseId, day, card))) notice = "이 문장의 기억 안 남 횟수를 초기화했습니다."
+    }
+
     fun resize(delta: Float) {
         if (questionSize + delta in 1f..4.01f) save(values + mapOf(
             "questionFontSize" to (questionSize + delta).toString(),

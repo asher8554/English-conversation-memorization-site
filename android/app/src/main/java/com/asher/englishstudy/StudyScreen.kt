@@ -28,6 +28,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -131,6 +152,8 @@ fun StudyScreen(model: StudyModel, onImport: () -> Unit, onExport: () -> Unit, o
                                 contentColor = if (model.dark) MaterialTheme.colorScheme.onSurface else Color.White)) {
                             Text("Show Answer", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                         }
+                        Spacer(Modifier.height(12.dp))
+                        ForgotButton(model.forgotCount, model.dark, onMark = model::markForgot, onReset = model::resetForgot)
                         if (model.lastCard) {
                             Spacer(Modifier.height(16.dp))
                             Text(if (model.recorded) "복습을 기록했습니다. 다음 실행 시 이 챕터부터 시작합니다."
@@ -187,6 +210,55 @@ private fun ToolButton(icon: String, label: String, click: () -> Unit) {
         Box(Modifier.size(40.dp).border(.75.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = .20f), CircleShape)
             .background(MaterialTheme.colorScheme.onSurface.copy(alpha = .08f), CircleShape), contentAlignment = Alignment.Center) {
             Text(icon, fontSize = 24.sp, color = MaterialTheme.colorScheme.primary)
+        }
+    }
+}
+
+private const val FORGOT_RESET_MS = 5000
+
+/** 짧게 누르면 기억 안 남 횟수를 1 올리고, 5초 이상 누르고 있으면 이 문장의 횟수를 0으로 되돌린다. */
+@Composable
+private fun ForgotButton(count: Int, dark: Boolean, onMark: () -> Unit, onReset: () -> Unit) {
+    val haptic = LocalHapticFeedback.current
+    val scope = rememberCoroutineScope()
+    val progress = remember { Animatable(0f) }
+    var holding by remember { mutableStateOf(false) }
+    val mark by rememberUpdatedState(onMark)
+    val reset by rememberUpdatedState(onReset)
+    val shape = RoundedCornerShape(12.dp)
+    val accent = if (dark) Color(0xFFE0A84E) else Color(0xFFB45309)
+    Box(focusRing().fillMaxWidth().height(48.dp).clip(shape)
+        .border(.75.dp, if (count > 0) accent.copy(alpha = .7f) else MaterialTheme.colorScheme.onSurface.copy(alpha = .20f), shape)
+        .background(if (count > 0) accent.copy(alpha = .14f) else MaterialTheme.colorScheme.onSurface.copy(alpha = .08f))
+        .semantics(mergeDescendants = true) {
+            role = Role.Button
+            contentDescription = "기억 안 남 표시, 현재 ${count}회. 5초 이상 누르면 초기화"
+            onClick(label = "기억 안 남 1회 추가") { mark(); true }
+            customActions = listOf(CustomAccessibilityAction("기억 안 남 횟수 초기화") { reset(); true })
+        }
+        .focusable()
+        .onKeyEvent { if (it.type == KeyEventType.KeyUp && (it.key == Key.Enter || it.key == Key.NumPadEnter || it.key == Key.Spacebar)) { mark(); true } else false }
+        .pointerInput(Unit) {
+            awaitEachGesture {
+                awaitFirstDown()
+                holding = true
+                val fill = scope.launch { progress.snapTo(0f); progress.animateTo(1f, tween(FORGOT_RESET_MS, easing = LinearEasing)) }
+                // null은 5초가 지난 것, false는 스크롤 등으로 취소된 것이다.
+                val released = withTimeoutOrNull(FORGOT_RESET_MS.toLong()) { waitForUpOrCancellation() != null }
+                fill.cancel()
+                scope.launch { progress.snapTo(0f) }
+                holding = false
+                when (released) {
+                    null -> { haptic.performHapticFeedback(HapticFeedbackType.LongPress); reset() }
+                    true -> mark()
+                    false -> Unit
+                }
+            }
+        }, contentAlignment = Alignment.CenterStart) {
+        Box(Modifier.fillMaxHeight().fillMaxWidth(progress.value).background(accent.copy(alpha = .30f)))
+        Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Text(if (holding) "계속 누르면 초기화됩니다" else "🤔 잘 기억 안 나요", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Text("${count}회", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = if (count > 0) accent else MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

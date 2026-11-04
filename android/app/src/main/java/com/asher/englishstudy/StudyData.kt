@@ -37,7 +37,8 @@ fun parseCourses(text: String): List<Course> {
 val backupKeys = setOf(
     "reviewStats", "reviewStats:conversation", "reviewStats:basic-verbs", "lastCompletedChapter",
     "selectedCourseId", "questionFontSize", "answerFontSize", "useDarkMode", "koVoiceURI", "enVoiceURI",
-    "koVoiceName", "enVoiceName", "ttsAutoQuestion", "ttsAutoAnswer", "ttsKoRate", "ttsEnRate"
+    "koVoiceName", "enVoiceName", "ttsAutoQuestion", "ttsAutoAnswer", "ttsKoRate", "ttsEnRate",
+    "forgotCounts:conversation", "forgotCounts:basic-verbs"
 )
 
 fun validateValues(values: JSONObject): Map<String, String> = values.keys().asSequence().associateWith { key ->
@@ -56,6 +57,17 @@ fun validateValues(values: JSONObject): Map<String, String> = values.keys().asSe
                     "복습 횟수가 올바르지 않습니다."
                 }
                 if (!entry.isNull("lastReviewed")) Instant.parse(entry.getString("lastReviewed"))
+            }
+        }
+        key.startsWith("forgotCounts:") -> {
+            val counts = JSONObject(value)
+            require(counts.length() <= 20000) { "기억 안 남 기록이 너무 많습니다." }
+            counts.keys().forEach { card ->
+                require(card.matches(Regex("Day \\d{3}\\|.+", RegexOption.DOT_MATCHES_ALL))) { "기억 안 남 기록 형식이 올바르지 않습니다." }
+                val count = counts.get(card)
+                require(count is Number && count.toDouble() in 1.0..1000000.0 && count.toDouble() % 1 == 0.0) {
+                    "기억 안 남 횟수가 올바르지 않습니다."
+                }
             }
         }
         key == "lastCompletedChapter" -> {
@@ -109,4 +121,28 @@ fun adjacentCard(days: List<String>, cards: Map<String, List<Card>>, day: String
     val nextDay = days.indexOf(day) + delta
     if (nextDay !in days.indices) return day to index
     return days[nextDay] to if (delta < 0) cards.getValue(days[nextDay]).lastIndex else 0
+}
+
+/** 카드 위치가 아니라 Day와 질문 문장으로 구분해 Notion 자료 순서가 바뀌어도 기록을 유지한다. */
+fun forgotKey(day: String, card: Card) = "$day|${card.question}"
+
+fun forgotCounts(values: Map<String, String>, course: String): JSONObject = JSONObject(values["forgotCounts:$course"] ?: "{}")
+
+fun forgotCount(values: Map<String, String>, course: String, day: String, card: Card): Int =
+    forgotCounts(values, course).optInt(forgotKey(day, card))
+
+fun incrementForgot(values: Map<String, String>, course: String, day: String, card: Card): Map<String, String> {
+    val counts = forgotCounts(values, course)
+    val key = forgotKey(day, card)
+    val count = counts.optInt(key)
+    require(count < 1000000) { "기억 안 남 횟수의 저장 한도에 도달했습니다." }
+    require(count > 0 || counts.length() < 20000) { "기억 안 남 기록이 너무 많습니다." }
+    counts.put(key, count + 1)
+    return values + ("forgotCounts:$course" to counts.toString())
+}
+
+fun resetForgot(values: Map<String, String>, course: String, day: String, card: Card): Map<String, String> {
+    val counts = forgotCounts(values, course)
+    counts.remove(forgotKey(day, card))
+    return values + ("forgotCounts:$course" to counts.toString())
 }
